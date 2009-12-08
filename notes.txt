@@ -1,0 +1,29 @@
+COLLISION DETECTION
+
+http://flipcode.com/archives/Basic_Collision_Detection.shtml
+
+Have we crossed the plane?
+
+int ClassifyPoint( CPlane3D *plane, CPoint3D *destPt )
+  {
+        scalar p = DotProduct( plane->normal, destPt ) + plane->distance;
+
+        if( p > 0.0f ) return PLANE_FRONT;
+        else
+        if( p < 0.0f ) return PLANE_BACK;
+
+        return PLANE_COINCIDE;
+  }
+ 
+What is the intersection point?
+
+  lx = start.x + (ray.x * t)
+  ly = start.y + (ray.y * t)
+  lz = start.z + (raz.z * t)
+
+t = a point along the line
+  t = - ( DotProduct( plane->normal, start) + plane->distance )   /
+          DotProduct( plane->normal, ray)
+        
+  CPoint3D intersect = start + (ray * t);
+
