@@ -1,0 +1,330 @@
+{\rtf1\adeflang1025\ansi\ansicpg1252\uc1\adeff0\deff0\stshfdbch0\stshfloch0\stshfhich0\stshfbi0\deflang1033\deflangfe1033{\fonttbl{\f0\froman\fcharset0\fprq2{\*\panose 02020603050405020304}Times New Roman;}{\f2\fmodern\fcharset0\fprq1{\*\panose 02070309020205020404}Courier New;}
+{\f3\froman\fcharset2\fprq2{\*\panose 05050102010706020507}Symbol;}{\f37\froman\fcharset238\fprq2 Times New Roman CE;}{\f38\froman\fcharset204\fprq2 Times New Roman Cyr;}{\f40\froman\fcharset161\fprq2 Times New Roman Greek;}
+{\f41\froman\fcharset162\fprq2 Times New Roman Tur;}{\f42\fbidi \froman\fcharset177\fprq2 Times New Roman (Hebrew);}{\f43\fbidi \froman\fcharset178\fprq2 Times New Roman (Arabic);}{\f44\froman\fcharset186\fprq2 Times New Roman Baltic;}
+{\f45\froman\fcharset163\fprq2 Times New Roman (Vietnamese);}{\f57\fmodern\fcharset238\fprq1 Courier New CE;}{\f58\fmodern\fcharset204\fprq1 Courier New Cyr;}{\f60\fmodern\fcharset161\fprq1 Courier New Greek;}
+{\f61\fmodern\fcharset162\fprq1 Courier New Tur;}{\f62\fbidi \fmodern\fcharset177\fprq1 Courier New (Hebrew);}{\f63\fbidi \fmodern\fcharset178\fprq1 Courier New (Arabic);}{\f64\fmodern\fcharset186\fprq1 Courier New Baltic;}
+{\f65\fmodern\fcharset163\fprq1 Courier New (Vietnamese);}}{\colortbl;\red0\green0\blue0;\red0\green0\blue255;\red0\green255\blue255;\red0\green255\blue0;\red255\green0\blue255;\red255\green0\blue0;\red255\green255\blue0;\red255\green255\blue255;
+\red0\green0\blue128;\red0\green128\blue128;\red0\green128\blue0;\red128\green0\blue128;\red128\green0\blue0;\red128\green128\blue0;\red128\green128\blue128;\red192\green192\blue192;}{\stylesheet{
+\ql \li0\ri0\nowidctlpar\wrapdefault\nooverflow\faauto\rin0\lin0\itap0 \rtlch\fcs1 \af0\afs20\alang1025 \ltrch\fcs0 \fs20\lang1033\langfe1033\kerning28\cgrid\langnp1033\langfenp1033 \snext0 \styrsid8726537 Normal;}{\*\cs10 \additive \ssemihidden 
+Default Paragraph Font;}{\*\ts11\tsrowd\trftsWidthB3\trpaddl108\trpaddr108\trpaddfl3\trpaddft3\trpaddfb3\trpaddfr3\trcbpat1\trcfpat1\tblind0\tblindtype3\tscellwidthfts0\tsvertalt\tsbrdrt\tsbrdrl\tsbrdrb\tsbrdrr\tsbrdrdgl\tsbrdrdgr\tsbrdrh\tsbrdrv 
+\ql \li0\ri0\widctlpar\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0 \rtlch\fcs1 \af0\afs20 \ltrch\fcs0 \fs20\lang1024\langfe1024\cgrid\langnp1024\langfenp1024 \snext11 \ssemihidden Normal Table;}{\s15\ql \li0\ri0\nowidctlpar
+\tqc\tx4320\tqr\tx8640\wrapdefault\nooverflow\faauto\rin0\lin0\itap0 \rtlch\fcs1 \af0\afs20\alang1025 \ltrch\fcs0 \fs20\lang1033\langfe1033\kerning28\cgrid\langnp1033\langfenp1033 \sbasedon0 \snext15 \styrsid12980763 header;}{\s16\ql \li0\ri0\nowidctlpar
+\tqc\tx4320\tqr\tx8640\wrapdefault\nooverflow\faauto\rin0\lin0\itap0 \rtlch\fcs1 \af0\afs20\alang1025 \ltrch\fcs0 \fs20\lang1033\langfe1033\kerning28\cgrid\langnp1033\langfenp1033 \sbasedon0 \snext16 \styrsid12980763 footer;}}
+{\*\latentstyles\lsdstimax156\lsdlockeddef0}{\*\pgptbl {\pgp\ipgp0\itap0\li0\ri0\sb0\sa0}}{\*\rsidtbl \rsid147877\rsid266813\rsid1771676\rsid3097109\rsid3352396\rsid3501110\rsid3628285\rsid3959994\rsid5113622\rsid5132308\rsid5448285\rsid5899918
+\rsid5908455\rsid6035364\rsid6241458\rsid6297777\rsid6385033\rsid6555301\rsid6912314\rsid7538004\rsid7553636\rsid7606284\rsid7880154\rsid8023416\rsid8726537\rsid8863232\rsid9114260\rsid9981490\rsid10116836\rsid10902077\rsid11545701\rsid12003110
+\rsid12075838\rsid12649640\rsid12730881\rsid12980763\rsid13458299\rsid14093087\rsid14488598\rsid14950144\rsid15020131\rsid15028810\rsid15410284\rsid16325982}{\*\generator Microsoft Word 11.0.0000;}{\info{\title 2009 Final Projects}
+{\author David R. Bostain}{\operator David R. Bostain}{\creatim\yr2005\mo12\dy4\hr21}{\revtim\yr2009\mo11\dy26\hr20\min25}{\printim\yr2008\mo11\dy30\hr8\min30}{\version43}{\edmins518}{\nofpages9}{\nofwords711}{\nofchars4057}{\*\company MCCC}
+{\nofcharsws4759}{\vern24615}{\*\password 00000000}}{\*\xmlnstbl {\xmlns1 http://schemas.microsoft.com/office/word/2003/wordml}}\paperw12240\paperh15840\margl1800\margr1800\margt1440\margb1440\gutter0\ltrsect 
+\widowctrl\ftnbj\aenddoc\donotembedsysfont0\donotembedlingdata1\grfdocevents0\validatexml0\showplaceholdtext0\ignoremixedcontent0\saveinvalidxml0\showxmlerrors0\noxlattoyen\expshrtn\noultrlspc\dntblnsbdb\nospaceforul\hyphcaps0\horzdoc\dghspace120
+\dgvspace120\dghorigin1701\dgvorigin1984\dghshow0\dgvshow3\jcompress\viewkind1\viewscale100\nolnhtadjtbl\rsidroot8726537 \fet0{\*\wgrffmtfilter 013f}\ilfomacatclnup0{\*\docvar {ColorPos}{-1}}{\*\docvar {ColorSet}{-1}}{\*\docvar {StylePos}{-1}}
+{\*\docvar {StyleSet}{-1}}{\*\ftnsep \ltrpar \pard\plain \ltrpar\ql \li0\ri0\nowidctlpar\wrapdefault\nooverflow\faauto\rin0\lin0\itap0 \rtlch\fcs1 \af0\afs20\alang1025 \ltrch\fcs0 \fs20\lang1033\langfe1033\kerning28\cgrid\langnp1033\langfenp1033 {
+\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid8726537 \chftnsep 
+\par }}{\*\ftnsepc \ltrpar \pard\plain \ltrpar\ql \li0\ri0\nowidctlpar\wrapdefault\nooverflow\faauto\rin0\lin0\itap0 \rtlch\fcs1 \af0\afs20\alang1025 \ltrch\fcs0 \fs20\lang1033\langfe1033\kerning28\cgrid\langnp1033\langfenp1033 {\rtlch\fcs1 \af0 \ltrch\fcs0 
+\insrsid8726537 \chftnsepc 
+\par }}{\*\aftnsep \ltrpar \pard\plain \ltrpar\ql \li0\ri0\nowidctlpar\wrapdefault\nooverflow\faauto\rin0\lin0\itap0 \rtlch\fcs1 \af0\afs20\alang1025 \ltrch\fcs0 \fs20\lang1033\langfe1033\kerning28\cgrid\langnp1033\langfenp1033 {\rtlch\fcs1 \af0 \ltrch\fcs0 
+\insrsid8726537 \chftnsep 
+\par }}{\*\aftnsepc \ltrpar \pard\plain \ltrpar\ql \li0\ri0\nowidctlpar\wrapdefault\nooverflow\faauto\rin0\lin0\itap0 \rtlch\fcs1 \af0\afs20\alang1025 \ltrch\fcs0 \fs20\lang1033\langfe1033\kerning28\cgrid\langnp1033\langfenp1033 {\rtlch\fcs1 \af0 \ltrch\fcs0 
+\insrsid8726537 \chftnsepc 
+\par }}\ltrpar \sectd \ltrsect\pgnrestart\linex0\footery2880\sectdefaultcl\sftnbj {\headerr \ltrpar \pard\plain \ltrpar\ql \li0\ri0\nowidctlpar\tqc\tx4320\tqr\tx8640\wrapdefault\nooverflow\faauto\rin0\lin0\itap0 \rtlch\fcs1 \af0\afs20\alang1025 \ltrch\fcs0 
+\fs20\lang1033\langfe1033\kerning28\cgrid\langnp1033\langfenp1033 {\rtlch\fcs1 \af0 \ltrch\fcs0 \kerning0\insrsid12980763 COS231 - Fall 200}{\rtlch\fcs1 \af0 \ltrch\fcs0 \kerning0\insrsid3501110 9}{\rtlch\fcs1 \af0 \ltrch\fcs0 \kerning0\insrsid8726537 
+ Final Project
+\par 
+\par }}{\footerr \ltrpar \pard\plain \ltrpar\qc \li0\ri0\nowidctlpar\tqc\tx4320\tqr\tx8640\wrapdefault\nooverflow\faauto\rin0\lin0\itap0 \rtlch\fcs1 \af0\afs20\alang1025 \ltrch\fcs0 \fs20\lang1033\langfe1033\kerning28\cgrid\langnp1033\langfenp1033 {
+\rtlch\fcs1 \af0 \ltrch\fcs0 \kerning0\insrsid8726537 Final Project is due NO LATER than }{\rtlch\fcs1 \af0 \ltrch\fcs0 \kerning0\insrsid3501110 Wednesday}{\rtlch\fcs1 \af0 \ltrch\fcs0 \kerning0\insrsid8726537 , December 1}{\rtlch\fcs1 \af0 \ltrch\fcs0 
+\kerning0\insrsid3501110 6}{\rtlch\fcs1 \af0 \ltrch\fcs0 \kerning0\insrsid8726537 , 200}{\rtlch\fcs1 \af0 \ltrch\fcs0 \kerning0\insrsid3501110 9}{\rtlch\fcs1 \af0 \ltrch\fcs0 \kerning0\insrsid8726537 .
+\par 
+\par KEEP A BACKUP COPY!
+\par 
+\par }}{\*\pnseclvl1\pnucrm\pnstart1\pnindent720\pnhang {\pntxta .}}{\*\pnseclvl2\pnucltr\pnstart1\pnindent720\pnhang {\pntxta .}}{\*\pnseclvl3\pndec\pnstart1\pnindent720\pnhang {\pntxta .}}{\*\pnseclvl4\pnlcltr\pnstart1\pnindent720\pnhang {\pntxta )}}
+{\*\pnseclvl5\pndec\pnstart1\pnindent720\pnhang {\pntxtb (}{\pntxta )}}{\*\pnseclvl6\pnlcltr\pnstart1\pnindent720\pnhang {\pntxtb (}{\pntxta )}}{\*\pnseclvl7\pnlcrm\pnstart1\pnindent720\pnhang {\pntxtb (}{\pntxta )}}{\*\pnseclvl8
+\pnlcltr\pnstart1\pnindent720\pnhang {\pntxtb (}{\pntxta )}}{\*\pnseclvl9\pnlcrm\pnstart1\pnindent720\pnhang {\pntxtb (}{\pntxta )}}\pard\plain \ltrpar\ql \li0\ri0\nowidctlpar\wrapdefault\nooverflow\faauto\rin0\lin0\itap0 \rtlch\fcs1 \af0\afs20\alang1025 
+\ltrch\fcs0 \fs20\lang1033\langfe1033\kerning28\cgrid\langnp1033\langfenp1033 {\rtlch\fcs1 \ab\af0\afs28 \ltrch\fcs0 \b\fs28\insrsid3501110\charrsid3501110 Scott Lettera }{\rtlch\fcs1 \ab\af0\afs28 \ltrch\fcs0 \b\fs28\insrsid8726537 - }{\rtlch\fcs1 
+\ab\af0\afs28 \ltrch\fcs0 \b\fs28\insrsid3501110 scott}{\rtlch\fcs1 \ab\af0\afs28 \ltrch\fcs0 \b\fs28\insrsid8726537 .asm
+\par 
+\par }{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid8726537 
+\par }{\rtlch\fcs1 \ab\af0\afs24 \ltrch\fcs0 \b\fs24\insrsid8726537 Project:}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid8726537  Number to Words
+\par 
+\par 
+\par Write a program that will convert a number (passed in as an input parameter) to English.
+\par (input numbers can range from 0 to 999999999999999)
+\par 
+\par 
+\par Example:
+\par }{\rtlch\fcs1 \af0\afs22 \ltrch\fcs0 \fs22\insrsid8726537 
+\par }\pard \ltrpar\ql \li720\ri0\nowidctlpar\wrapdefault\nooverflow\faauto\rin0\lin720\itap0 {\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8726537 C:\\>}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid3501110 scott}{\rtlch\fcs1 \af2\afs22 
+\ltrch\fcs0 \f2\fs22\insrsid8726537  1234
+\par }\pard \ltrpar\ql \li0\ri0\nowidctlpar\wrapdefault\nooverflow\faauto\rin0\lin0\itap0 {\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8726537     \tab One Thousand Two Hundred Thirty-Four
+\par \tab C:\\>}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid3501110 scott}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8726537  13000
+\par \tab Thirteen Thousand
+\par   \tab C:\\>}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid3501110 scott}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8726537  0
+\par \tab Zero
+\par \tab C:\\>}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid3501110 scott}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8726537  999999999999999
+\par }\pard \ltrpar\ql \li720\ri0\nowidctlpar\wrapdefault\nooverflow\faauto\rin0\lin720\itap0 {\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8726537 
+Nine Hundred Ninety-Nine Trillion Nine Hundred Ninety-Nine Billion Nine Hundred Ninety-Nine Million Nine Hundred Ninety-Nine Thousand Nine Hundred Ninety-Nine
+\par }\pard \ltrpar\ql \li0\ri0\nowidctlpar\wrapdefault\nooverflow\faauto\rin0\lin0\itap0 {\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid8726537           \tab }{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8726537 C:\\>}{\rtlch\fcs1 \af0 \ltrch\fcs0 
+\insrsid8726537 \page }{\rtlch\fcs1 \ab\af0\afs28 \ltrch\fcs0 \b\fs28\insrsid3501110\charrsid3501110 Daniel }{\rtlch\fcs1 \ab\af0\afs28 \ltrch\fcs0 \b\fs28\insrsid3501110 Selmon}{\rtlch\fcs1 \ab\af0\afs28 \ltrch\fcs0 \b\fs28\insrsid8023416  }{\rtlch\fcs1 
+\ab\af0\afs28 \ltrch\fcs0 \b\fs28\insrsid8726537 - }{\rtlch\fcs1 \ab\af0\afs28 \ltrch\fcs0 \b\fs28\insrsid3501110 daniel}{\rtlch\fcs1 \ab\af0\afs28 \ltrch\fcs0 \b\fs28\insrsid8726537 .asm
+\par 
+\par }{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid8726537 
+\par }{\rtlch\fcs1 \ab\af0\afs24 \ltrch\fcs0 \b\fs24\insrsid8726537 Project: }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid8726537 Convert Date
+\par 
+\par 
+\par Write a program that will convert a date formatted as \lquote yyyyddd\rquote  passed in as an input para}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid11545701 meter to a Standard Date format}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid8726537 .}{
+\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid5132308  The day of the week should also be output.}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid11545701 
+\par }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid7880154 
+\par }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid5132308 The program should work for all 4 digit years beginning with}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid11545701 :
+\par 
+\par }\pard \ltrpar\ql \fi720\li0\ri0\nowidctlpar\wrapdefault\nooverflow\faauto\rin0\lin0\itap0\pararsid11545701 {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid11545701 1582288 [10/15/1582}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid5132308  }{
+\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid11545701 - }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid5132308 Friday, 15 October 1582}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid11545701 ]
+\par 
+\par }\pard \ltrpar\ql \li0\ri0\nowidctlpar\wrapdefault\nooverflow\faauto\rin0\lin0\itap0\pararsid11545701 {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid5132308  which is the first day of the Gregorian Calendar.}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 
+\fs24\insrsid8726537 
+\par }\pard \ltrpar\ql \li0\ri0\nowidctlpar\wrapdefault\nooverflow\faauto\rin0\lin0\itap0 {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid5132308 
+\par }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid8726537 Example:
+\par 
+\par }\pard \ltrpar\ql \li720\ri0\nowidctlpar\wrapdefault\nooverflow\faauto\rin0\lin720\itap0 {\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8726537 C:\\}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8023416 >}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 
+\f2\fs22\insrsid3501110 daniel}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8726537  2004001
+\par }\pard \ltrpar\ql \fi720\li0\ri0\nowidctlpar\wrapdefault\nooverflow\faauto\rin0\lin0\itap0 {\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8726537 01/01/2004}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid5132308  \endash 
+ Thursday, 01 January 2004}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8726537 
+\par C:\\>}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid3501110 daniel }{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8726537 1900365
+\par 12/31/1900}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid5132308  \endash  Monday, }{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid16325982 31}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid5132308  December 1900}{\rtlch\fcs1 \af2\afs22 
+\ltrch\fcs0 \f2\fs22\insrsid8726537 
+\par C:\\>}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid3501110 daniel}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8023416  }{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8726537 1900366
+\par 01/01/1901}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid5132308  \endash  Tuesday, 01 January 1901}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8726537 
+\par C:\\>}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid3501110 daniel}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8023416  }{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8726537 2000366
+\par 12/31/2000}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid5132308  \endash  Sunday, 31 December 2000}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8726537 
+\par }\pard \ltrpar\ql \fi720\li0\ri0\nowidctlpar\wrapdefault\nooverflow\faauto\rin0\lin0\itap0\pararsid5132308 {\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid5132308 C:\\>}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid3501110 daniel}{\rtlch\fcs1 
+\af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid5132308  2003032
+\par 02/01/2003 \endash  Saturday, 01 February 2003
+\par C:\\>}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid3501110 daniel}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid5132308  200}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid9114260 9}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 
+\f2\fs22\insrsid5132308 350
+\par 12/1}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid9114260 6}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid5132308 /200}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid9114260 9}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid5132308  
+\endash  }{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid14488598 Wednesday}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid5132308 , 1}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid9114260 6}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 
+\f2\fs22\insrsid5132308  December 2008
+\par }\pard \ltrpar\ql \fi720\li0\ri0\nowidctlpar\wrapdefault\nooverflow\faauto\rin0\lin0\itap0 {\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8726537 C:\\>
+\par }\pard \ltrpar\ql \li0\ri0\nowidctlpar\wrapdefault\nooverflow\faauto\rin0\lin0\itap0 {\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8726537 \page }{\rtlch\fcs1 \ab\af0\afs28 \ltrch\fcs0 \b\fs28\insrsid9114260 Roland }{\rtlch\fcs1 \ab\af0\afs28 
+\ltrch\fcs0 \b\fs28\insrsid9114260\charrsid5113622 Yakobchuk }{\rtlch\fcs1 \ab\af0\afs28 \ltrch\fcs0 \b\fs28\insrsid9114260 - roland.asm}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid9114260 
+\par }{\rtlch\fcs1 \ab\af0\afs28 \ltrch\fcs0 \b\fs28\insrsid8726537 
+\par }{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid8726537 
+\par }{\rtlch\fcs1 \ab\af0\afs24 \ltrch\fcs0 \b\fs24\insrsid8726537 Project: }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid8726537 Blackjack Simulation
+\par }{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid8726537 
+\par 
+\par }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid8726537 Write a program that will simulate the game of Blackjack.
+\par 
+\par Example:
+\par 
+\par \tab }{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8726537 C:\\>}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid9114260 roland}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8726537 
+\par \tab You have 100 dollars.
+\par \tab Your bet? 5
+\par \tab Dealer gets 10.
+\par \tab Dealer has 10.
+\par \tab You get 15.
+\par \tab You have 15.
+\par \tab Hit or Stand? h
+\par \tab You get 5.
+\par \tab You have 20.
+\par \tab Hit or Stand? S
+\par \tab Dealer gets 6.
+\par \tab Dealer has 16.
+\par \tab Dealer gets 2.
+\par \tab Dealer has 18.
+\par \tab You Win!
+\par \tab You have 105 dollars.
+\par \tab Your bet? Q
+\par \tab Thanks for playing!
+\par \tab C:\\>
+\par }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid8726537 \page }{\rtlch\fcs1 \ab\af0\afs28 \ltrch\fcs0 \b\fs28\insrsid9114260\charrsid5113622 Walter Coyoy Rodas}{\rtlch\fcs1 \ab\af0\afs28 \ltrch\fcs0 \b\fs28\insrsid9114260  }{\rtlch\fcs1 \ab\af0\afs28 
+\ltrch\fcs0 \b\fs28\insrsid9114260\charrsid8023416  }{\rtlch\fcs1 \ab\af0\afs28 \ltrch\fcs0 \b\fs28\insrsid9114260 - walter.asm}{\rtlch\fcs1 \ab\af0\afs28 \ltrch\fcs0 \b\fs28\insrsid8726537 
+\par 
+\par }{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid8726537 
+\par }\pard \ltrpar\ql \li0\ri0\nowidctlpar\wrapdefault\nooverflow\faauto\outlinelevel0\rin0\lin0\itap0\pararsid9114260 {\rtlch\fcs1 \ab\af0\afs24 \ltrch\fcs0 \b\fs24\insrsid9114260 Project: }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid9114260 Big-
+Decimal Calculator
+\par }\pard \ltrpar\ql \li0\ri0\nowidctlpar\wrapdefault\nooverflow\faauto\rin0\lin0\itap0\pararsid9114260 {\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid9114260 
+\par 
+\par }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid9114260 Write a program that will perform addition, subtraction, multiplication and division on two Big-Decimal numbers that are input on the command line.
+\par 
+\par Example:
+\par 
+\par }\pard \ltrpar\ql \li0\ri0\nowidctlpar\wrapdefault\nooverflow\faauto\outlinelevel0\rin0\lin0\itap0\pararsid9114260 {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid9114260 \tab }{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid9114260 C:\\>walter 1
+23456789.987654321 / 3.14159
+\par 
+\par }\pard \ltrpar\ql \li0\ri0\nowidctlpar\wrapdefault\nooverflow\faauto\rin0\lin0\itap0\pararsid9114260 {\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid9114260 \tab }{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid9114260\charrsid15407907 39}{
+\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid9114260 ,}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid9114260\charrsid15407907 297}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid9114260 ,}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 
+\f2\fs22\insrsid9114260\charrsid15407907 549.9628068338007187443301}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid9114260 
+\par 
+\par \tab C:\\>walter 1 + 1
+\par 
+\par \tab 2.0
+\par 
+\par \tab C:\\>walter -123.321 - -123.321
+\par 
+\par \tab 0.0
+\par 
+\par \tab C:\\>walter 123.4 * 2.1
+\par 
+\par }\pard \ltrpar\ql \fi720\li0\ri0\nowidctlpar\wrapdefault\nooverflow\faauto\rin0\lin0\itap0\pararsid9114260 {\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid9114260\charrsid12067580 259.14}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid9114260 
+
+\par 
+\par C:\\>walter 0 / 0
+\par 
+\par Division by Zero is illegal!
+\par 
+\par C:\\>
+\par }\pard \ltrpar\ql \li0\ri0\nowidctlpar\wrapdefault\nooverflow\faauto\rin0\lin0\itap0 {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid8726537 \page }{\rtlch\fcs1 \ab\af0\afs28 \ltrch\fcs0 \b\fs28\insrsid15410284 Byron R. Avila}{\rtlch\fcs1 \ab\af0\afs28 
+\ltrch\fcs0 \b\fs28\insrsid8726537  - }{\rtlch\fcs1 \ab\af0\afs28 \ltrch\fcs0 \b\fs28\insrsid15410284 byron}{\rtlch\fcs1 \ab\af0\afs28 \ltrch\fcs0 \b\fs28\insrsid8726537 .asm
+\par 
+\par }{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid8726537 
+\par }{\rtlch\fcs1 \ab\af0\afs24 \ltrch\fcs0 \b\fs24\insrsid8726537 Project: }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid8726537 Count the }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid12003110 C}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 
+\fs24\insrsid8726537 haracters and }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid147877 Find }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid8726537 the Longest Word
+\par }{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid8726537 
+\par }{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8726537 
+\par }\pard \ltrpar\ql \li0\ri0\nowidctlpar\wrapdefault\nooverflow\faauto\rin0\lin0\itap0\pararsid8726537 {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid8726537\charrsid8726537 
+Write a program that will take a file name as an input parameter. The program should count the number of occurrences of each character found in the file. Display the counts }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid8726537 of}{\rtlch\fcs1 
+\af0\afs24 \ltrch\fcs0 \fs24\insrsid8726537\charrsid8726537  the alphabetic characters from A-Z. (upper and lower case characters should be counted together). All other characters in the file should be lumped into one bucket and displayed as "Other".}{
+\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid8726537 
+\par 
+\par The program will also find the longest word contained in the file. (If there are multiple words of the same length show each only once.)
+\par 
+\par Non-alphabetic characters terminate words.
+\par }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid8726537\charrsid8726537 
+\par Example: (assumes a file called }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid8726537 test}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid8726537\charrsid8726537 .txt exists in the current directory)
+\par 
+\par }{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8726537 C:\\>}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid15410284 byron}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8726537  test.txt}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 
+\fs24\insrsid8726537\charrsid8726537  }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid8726537 
+\par }{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8726537 The longest word in the file \lquote test.txt\rquote  is:
+\par \tab floccinaucinihilipilification
+\par }{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8726537\charrsid8726537 Character counts:
+\par }\pard \ltrpar\ql \fi720\li0\ri0\nowidctlpar\wrapdefault\nooverflow\faauto\rin0\lin0\itap0\pararsid8726537 {\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8726537\charrsid8726537 A(10) B(2)  C(13) D(4)  E(20)
+\par }\pard \ltrpar\ql \li720\ri0\nowidctlpar\wrapdefault\nooverflow\faauto\rin0\lin720\itap0\pararsid8726537 {\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8726537\charrsid8726537 F(4)  G(1)  H(2)  I(}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 
+\f2\fs22\insrsid8726537 19}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8726537\charrsid8726537 ) J(0)
+\par K(2)  L(6)  M(8)  N(}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8726537 5}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8726537\charrsid8726537 )  O(12)
+\par P(1)  Q(0)  R(7)  S(8)  T(8)
+\par U(1)  V(3)  W(2)  X(13) Y(4)
+\par Z(0)  Other(}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid6035364 65535}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8726537\charrsid8726537 )
+\par }\pard \ltrpar\ql \li0\ri0\nowidctlpar\wrapdefault\nooverflow\faauto\rin0\lin0\itap0\pararsid8726537 {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid8726537\charrsid8726537 C:\\>}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid8726537 \page }{
+\rtlch\fcs1 \ab\af0\afs28 \ltrch\fcs0 \b\fs28\insrsid5113622 David Kay}{\rtlch\fcs1 \ab\af0\afs28 \ltrch\fcs0 \b\fs28\insrsid15020131\charrsid15020131  }{\rtlch\fcs1 \ab\af0\afs28 \ltrch\fcs0 \b\fs28\insrsid8023416 \endash }{\rtlch\fcs1 \ab\af0\afs28 
+\ltrch\fcs0 \b\fs28\insrsid8726537  }{\rtlch\fcs1 \ab\af0\afs28 \ltrch\fcs0 \b\fs28\insrsid5113622 davidk}{\rtlch\fcs1 \ab\af0\afs28 \ltrch\fcs0 \b\fs28\insrsid8023416 .}{\rtlch\fcs1 \ab\af0\afs28 \ltrch\fcs0 \b\fs28\insrsid8726537 asm
+\par }\pard \ltrpar\ql \li0\ri0\nowidctlpar\wrapdefault\nooverflow\faauto\rin0\lin0\itap0 {\rtlch\fcs1 \ab\af0\afs28 \ltrch\fcs0 \b\fs28\insrsid8726537 
+\par }{\rtlch\fcs1 \ab\af0 \ltrch\fcs0 \b\insrsid8726537 
+\par }\pard \ltrpar\ql \li0\ri0\nowidctlpar\wrapdefault\nooverflow\faauto\outlinelevel0\rin0\lin0\itap0\pararsid8863232 {\rtlch\fcs1 \ab\af0\afs24 \ltrch\fcs0 \b\fs24\insrsid8863232 Project:}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid8863232 
+ Bouncing Balls
+\par }\pard \ltrpar\ql \li0\ri0\nowidctlpar\wrapdefault\nooverflow\faauto\rin0\lin0\itap0\pararsid8863232 {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid8863232 
+\par 
+\par Write a program that will read a file containing lines of input parameters  (}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8863232 x y }{\rtlch\fcs1 \af3\afs22 \ltrch\fcs0 \f3\fs22\insrsid8863232 {\field{\*\fldinst SYMBOL 68 \\f "Symbol"
+ \\s 11}{\fldrslt\f3\fs22}}}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8863232 x }{\rtlch\fcs1 \af3\afs22 \ltrch\fcs0 \f3\fs22\insrsid8863232 {\field{\*\fldinst SYMBOL 68 \\f "Symbol" \\s 11}{\fldrslt\f3\fs22}}}{\rtlch\fcs1 \af2\afs22 
+\ltrch\fcs0 \f2\fs22\insrsid8863232 y}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid8863232 ) and draw 11x11 bitmaps on the screen (320x200) each centered at (}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8863232 x,y}{\rtlch\fcs1 \af0\afs24 
+\ltrch\fcs0 \fs24\insrsid8863232 ). The bitmaps should be erased and redrawn on the screen at (}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8863232 x+}{\rtlch\fcs1 \af3\afs22 \ltrch\fcs0 \f3\fs22\insrsid8863232 {\field{\*\fldinst SYMBOL 68 \\f "Sy
+mbol" \\s 11}{\fldrslt\f3\fs22}}}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8863232 x,y+}{\rtlch\fcs1 \af3\afs22 \ltrch\fcs0 \f3\fs22\insrsid8863232 {\field{\*\fldinst SYMBOL 68 \\f "Symbol" \\s 11}{\fldrslt\f3\fs22}}}{\rtlch\fcs1 \af2\afs22 
+\ltrch\fcs0 \f2\fs22\insrsid8863232 y}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid8863232 
+) and the process repeated until the bitmap collides with one of the sides, top or bottom of the screen or another bitmap, at which point the deltas should be adjusted t
+o cause the bitmap to "bounce". The bitmap should change color each time it changes direction. Some reasonable strategy for program termination should be employed.
+\par 
+\par Example:
+\par 
+\par }\pard \ltrpar\ql \li0\ri0\nowidctlpar\wrapdefault\nooverflow\faauto\outlinelevel0\rin0\lin0\itap0\pararsid8863232 {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid8863232 \tab }{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8863232 C:\\>}{
+\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid5113622 davidk}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8863232  balls.txt
+\par }\pard \ltrpar\ql \li0\ri0\nowidctlpar\wrapdefault\nooverflow\faauto\rin0\lin0\itap0\pararsid8863232 {\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8863232 \tab C:\\>
+\par }\pard \ltrpar\ql \li0\ri0\nowidctlpar\wrapdefault\nooverflow\faauto\rin0\lin0\itap0 {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid8726537 \page }{\rtlch\fcs1 \ab\af0\afs28 \ltrch\fcs0 \b\fs28\insrsid5113622\charrsid5113622 Angel Delgado }{\rtlch\fcs1 
+\ab\af0\afs28 \ltrch\fcs0 \b\fs28\insrsid8726537 - }{\rtlch\fcs1 \ab\af0\afs28 \ltrch\fcs0 \b\fs28\insrsid5113622 angel}{\rtlch\fcs1 \ab\af0\afs28 \ltrch\fcs0 \b\fs28\insrsid8726537 .asm
+\par 
+\par }{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid8726537 
+\par }{\rtlch\fcs1 \ab\af0\afs24 \ltrch\fcs0 \b\fs24\insrsid8726537 Project:}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid8726537  Roman Numeral Calculator
+\par 
+\par 
+\par Write a program that will convert the sum of two Roman Numerals.  (input numbers and sum can range from 1 to 3999)
+\par 
+\par }{\rtlch\fcs1 \af2\afs24 \ltrch\fcs0 \f2\fs24\insrsid8726537 I = 1, V = 5, X = 10, L = 50, C = 100, D = 500, M = 1000
+\par 
+\par }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid8726537 
+\par Example:
+\par 
+\par \tab }{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8726537 C:\\>}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid5113622 angel}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8726537  I + I
+\par \tab II
+\par \tab C:\\>}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid5113622 angel}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8726537  XI + XIV
+\par \tab XXV
+\par \tab C:\\>}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid5113622 angel}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8726537  MCLVII + MCLVIII
+\par }\pard \ltrpar\ql \li0\ri0\nowidctlpar\wrapdefault\nooverflow\faauto\rin0\lin0\itap0\pararsid3959994 {\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8726537 \tab }{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid3959994 MMCCCXV 
+\par }{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8726537 C:\\>
+\par }\pard \ltrpar\ql \li720\ri0\nowidctlpar\wrapdefault\nooverflow\faauto\rin0\lin720\itap0 {\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8726537 
+\par 
+\par 
+\par 
+\par 
+\par 
+\par 
+\par 
+\par 
+\par 
+\par 
+\par 
+\par 
+\par 
+\par 
+\par 
+\par 
+\par 
+\par 
+\par }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid8726537 
+\par }\pard \ltrpar\ql \li0\ri0\nowidctlpar\wrapdefault\nooverflow\faauto\rin0\lin0\itap0 {\rtlch\fcs1 \ab\af0\afs28 \ltrch\fcs0 \b\fs28\insrsid5113622 David}{\rtlch\fcs1 \ab\af0\afs28 \ltrch\fcs0 \b\fs28\insrsid15410284  }{\rtlch\fcs1 \ab\af0\afs28 
+\ltrch\fcs0 \b\fs28\insrsid5113622\charrsid5113622 Argilan }{\rtlch\fcs1 \ab\af0\afs28 \ltrch\fcs0 \b\fs28\insrsid8726537 - }{\rtlch\fcs1 \ab\af0\afs28 \ltrch\fcs0 \b\fs28\insrsid5113622 davida}{\rtlch\fcs1 \ab\af0\afs28 \ltrch\fcs0 
+\b\fs28\insrsid8726537 .asm
+\par 
+\par }{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid8726537 
+\par }{\rtlch\fcs1 \ab\af0\afs24 \ltrch\fcs0 \b\fs24\insrsid8726537 Project:}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid8726537  Anagrams
+\par 
+\par 
+\par Write a program that will display all the anagrams contained in pocket.dic for a word passed in as an input parameter.
+\par 
+\par Example:
+\par 
+\par }{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid6297777 \tab C:\\>}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid5113622 davida}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8726537  ptos
+\par \tab post
+\par \tab pots
+\par \tab spot
+\par \tab stop
+\par \tab tops
+\par }\pard \ltrpar\ql \li720\ri0\nowidctlpar\wrapdefault\nooverflow\faauto\rin0\lin720\itap0 {\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8726537 C:\\>
+\par }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid8726537 
+\par 
+\par }\pard \ltrpar\ql \li0\ri0\nowidctlpar\wrapdefault\nooverflow\faauto\rin0\lin0\itap0 {\rtlch\fcs1 \ab\af0\afs28 \ltrch\fcs0 \b\fs28\insrsid8726537 
+\par 
+\par 
+\par 
+\par 
+\par 
+\par 
+\par 
+\par 
+\par 
+\par 
+\par 
+\par 
+\par 
+\par 
+\par 
+\par }{\rtlch\fcs1 \ab\af0\afs28 \ltrch\fcs0 \b\fs28\insrsid5113622\charrsid5113622 Bilal }{\rtlch\fcs1 \ab\af0\afs28 \ltrch\fcs0 \b\fs28\insrsid5113622 Butt}{\rtlch\fcs1 \ab\af0\afs28 \ltrch\fcs0 \b\fs28\insrsid8023416\charrsid8023416  }{\rtlch\fcs1 
+\ab\af0\afs28 \ltrch\fcs0 \b\fs28\insrsid8726537 - }{\rtlch\fcs1 \ab\af0\afs28 \ltrch\fcs0 \b\fs28\insrsid5113622 bilal}{\rtlch\fcs1 \ab\af0\afs28 \ltrch\fcs0 \b\fs28\insrsid8726537 .asm
+\par 
+\par }{\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid8726537 
+\par }{\rtlch\fcs1 \ab\af0\afs24 \ltrch\fcs0 \b\fs24\insrsid8726537 Project:}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid8726537  }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid3628285 Prime Number Checker}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 
+\fs24\insrsid8726537 
+\par 
+\par 
+\par Write a program that will }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid3628285 determine whether a number from }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid1771676 1}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid3628285  \endash  }{
+\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid3352396\charrsid3352396 4}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid3352396 ,}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid3352396\charrsid3352396 294}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 
+\fs24\insrsid3352396 ,}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid3352396\charrsid3352396 967}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid3352396 ,}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid3352396\charrsid3352396 295}{\rtlch\fcs1 
+\af0\afs24 \ltrch\fcs0 \fs24\insrsid3628285  passed in as an input parameter is a prime number.}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid1771676  }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid3352396 
+\par }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid1771676 (1 is not prime, 2 is the only even prime number)}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid3352396 .}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \fs24\insrsid8726537 
+\par 
+\par Example:
+\par 
+\par }\pard \ltrpar\ql \li0\ri0\nowidctlpar\wrapdefault\nooverflow\faauto\rin0\lin0\itap0\pararsid3628285 {\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid3628285 \tab C:\\>}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid5113622 bilal}{\rtlch\fcs1 
+\af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid3628285  13
+\par \tab 13 is }{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid3097109 Prime.}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid3628285 
+\par \tab C:\\>}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid5113622 bilal}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid3628285  14
+\par \tab 14 is NOT P}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid3097109 rime.}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid3628285 
+\par \tab C:\\>}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid5113622 bilal}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid3628285  32749
+\par \tab 32749 is }{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid3097109 Prime.}{\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid3628285 
+\par }\pard \ltrpar\ql \li720\ri0\nowidctlpar\wrapdefault\nooverflow\faauto\rin0\lin720\itap0 {\rtlch\fcs1 \af2\afs22 \ltrch\fcs0 \f2\fs22\insrsid8726537 C:\\>
+\par }\pard \ltrpar\ql \li0\ri0\nowidctlpar\wrapdefault\nooverflow\faauto\rin0\lin0\itap0\pararsid5113622 {\rtlch\fcs1 \af0 \ltrch\fcs0 \insrsid8726537 
+\par }}

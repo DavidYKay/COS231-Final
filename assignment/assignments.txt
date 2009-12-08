@@ -51,15 +51,26 @@ Number to Words
 
 Bouncing Balls
     File contains lines of input parameters
-    x, y, deltX, deltY
     bitmaps are drawn, then erased and redrawn, until one bitmap hits the side of the screen, at which point the deltas should be adjusted so that it appears to bounce off the wall
     ALSO: bitmap should change color when it hits the wall
     balls don't interact with each other (yet)
-
-Additional Interrupts
-    Documented on the web
-    Ralph Brown (list of interrupts)
+ACTUAL SPEC:
+	Read file: lines of input parameters (x, y, deltX, deltY)
+	draw 11x11 bitmaps in a 320x200 screen
+		each bitmap is centered around corresponding x,y coordinate
+	on collision:
+		bitmaps will be erased and redrawn on the screen at (x + deltX, y+deltY)
+		bitmaps should change direction, like a "bounce"
+		bitmaps should change color
+	some strategy for program termination should be employed
+	
 Predefined interrupts given:
-    
-
-
+	Get Current Video Mode	10h		0Fh
+	Set Video Mode			10h		00h
+	Scroll Up Window		10h		06h
+	Direct Console Input	21h		06h
+	Get System Time			21h		2Ch
+	Open Existing File		21h		3Dh
+	Read From File			21h		3Fh
+	Close File				21h		3Eh
+	Terminate With Return	21h		4Ch
