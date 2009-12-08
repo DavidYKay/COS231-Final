@@ -1,5 +1,6 @@
 COLLISION DETECTION
 
+3d collision detection:
 http://flipcode.com/archives/Basic_Collision_Detection.shtml
 
 Have we crossed the plane?
@@ -26,4 +27,8 @@ t = a point along the line
           DotProduct( plane->normal, ray)
         
   CPoint3D intersect = start + (ray * t);
+
+
+Great tutorial on 2D collision
+http://www.metanetsoftware.com/technique/tutorialA.html
 
