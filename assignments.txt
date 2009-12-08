@@ -1,0 +1,65 @@
+Assignments
+-------------------------
+All the projects are good!
+    -some sound easy. You didn't get that one
+    -some sound incredibly hard. Not that one either.
+    -"man I hope I don't get that one" - is the one you get
+NONE have been done well
+Don't take an original and copy it
+
+Big Decimal Calculator
+    add/sub/mult/div
+    two BIGDECIMAL numbers
+    example: "david 123456789.987654321 / 2.1234567"
+    "1234.5678 / 0" - divide by zero error
+
+Convert Date
+    convert yyyyddd, which is passed in as an input parameter to a standard date format
+    output all 4-digit years from 10/15/1582 (1582288), the beginning of the gregorian calendar
+    print out date, day of week
+    HANDLE ROLLOVER - 366 should head to next year
+
+Count the Characters, Find the Longest Word
+    take a filename input
+    count # of each character found
+    display the count of the alphabetic characters, case-insensitive
+    non-alpha counted as "other"
+    display the longest word
+
+BlackJack Simulation
+    "You have 100 dollars... your bet?"
+    Hit/stand
+    q for quit - leave
+    Randomness - how to deal with this?
+
+Prime Number Checker
+    take an input, determine if it is prime
+    assume you're getting a number, not a garbage character
+
+Roman Numeral Calculator
+    1-3999 range (standard roman numerals)
+    I + I = II
+
+Project: Anagrams
+    take a pocket.dic
+    find all anagrams of a word input as parameter
+
+Number to Words
+    convert a number to english
+    from 0 to 99999999999999999 (? check this)
+    nine hundred ninety-nine trillion...
+
+Bouncing Balls
+    File contains lines of input parameters
+    x, y, deltX, deltY
+    bitmaps are drawn, then erased and redrawn, until one bitmap hits the side of the screen, at which point the deltas should be adjusted so that it appears to bounce off the wall
+    ALSO: bitmap should change color when it hits the wall
+    balls don't interact with each other (yet)
+
+Additional Interrupts
+    Documented on the web
+    Ralph Brown (list of interrupts)
+Predefined interrupts given:
+    
+
+
