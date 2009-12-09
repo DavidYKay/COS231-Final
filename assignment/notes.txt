@@ -33,3 +33,19 @@ Great tutorial on 2D collision
 http://www.metanetsoftware.com/technique/tutorialA.html
 
 
+
+------------------
+Calculating resultant velocity:
+    Elastic collision
+------------------
+(DXi, DYi) => (DXf, DYf)
+if horizontal wall,
+    DXf = -DXi
+    DYf = DYi
+if vertical wall,
+    DXf = DXi
+    DYf = -DYi
+
+if two balls,
+
+    
