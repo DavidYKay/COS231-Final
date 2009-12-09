@@ -71,6 +71,44 @@ if vertical wall,
 
 if two balls,
 
+------------------
+Drawing to the Screen
+------------------
+320 * 200 = 64000 dec bytes to represent the screen
+(319, 0) = 319dec or 13F hex
+(0, 1) = 320dec or 140 hex
+offset = (row * 320) + column
+
+
+"double buffer"
+    use a part of memory where we prep a frame before drawing it
+
+Ports: 3C8h is used to set color (output color index), 
+    3C7h is used for reading palette values (outpur color index)
+    3C9h is used to output color component data in RGB.
+
+
+------------------
+BMP format
+------------------
+http://www.fileformat.info/format/bmp/egff.htm
+
+typedef struct _WinBMPFileHeader
+{
+	WORD   FileType;     /* File type, always 4D42h (ASCII "BM") */
+	DWORD  FileSize;     /* Size of the file in bytes (only if file is compressed, else 0) */
+	WORD   Reserved1;    /* Always 0 */
+	WORD   Reserved2;    /* Always 0 */
+	DWORD  BitmapOffset; /* Starting position of image data in bytes */
+} WINBMPFILEHEADER;
+
+The following are the BMP RLE markers:
+
+00 00           End of scan line
+00 01           End of bitmap data
+00 02 XX YY     Run offset marker
+
+
 ************************************************************
 PREDEFINED INTERRUPTS GIVEN:
 ************************************************************
