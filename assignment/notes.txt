@@ -1,4 +1,28 @@
+************************************************************
 COLLISION DETECTION
+************************************************************
+Simple solution:
+	since we're using spheres, we can measure everything center-to-center and use radius
+	Consider "sliding" the wall upwards by the ball's radius and measure center-to-center
+		-This very useful for determining the collision positions
+
+dot product
+	You can project a vector onto another by doing the "dot product", and what you get the is component of the first vector along the direction of the second vector.  We get the wall normal vector by findng a vector perpindicular to the wall line segment itself.  You can find the perpindicular of a vector like so:
+
+	vector1:  <vx, vy>
+	normal to vector1: <-vy, vx>
+
+unit normal vector1: <-vy,vx> / sqrt(vy^2 + vx^2)
+unit normal vector1: <-vy / sqrt(vy^2 + vx^2), vx / sqrt(vy^2 + vx^2)>
+
+To find the projection vector of the initial vector to the wall normal, we use this formula:
+
+projection vector = (-I · n) * n
+
+Where:
+    I = initial vector
+    n = the unit wall normal vector
+
 
 3d collision detection:
 http://flipcode.com/archives/Basic_Collision_Detection.shtml
@@ -33,3 +57,88 @@ Great tutorial on 2D collision
 http://www.metanetsoftware.com/technique/tutorialA.html
 
 
+************************************************************
+PREDEFINED INTERRUPTS GIVEN:
+************************************************************
+	Get Current Video Mode	10h		0Fh
+		Return:
+		AH = number of character columns
+		AL = display mode (see #00010 at AH=00h)
+		BH = active page (see AH=05h)
+************************************************************
+	Set Video Mode			10h		00h
+	
+************************************************************
+	Scroll Up Window		10h		06h
+		AH = 06h
+		AL = number of lines by which to scroll up (00h = clear entire window)
+		BH = attribute used to write blank lines at bottom of window
+		CH,CL = row,column of window's upper left corner
+		DH,DL = row,column of window's lower right corne
+		RETURN: Nothing
+************************************************************
+	Direct Console Input	21h		06h
+		AH = 06h
+		DL = character (except FFh)
+
+		Return:
+		AL = character output (despite official docs which state nothing is returned) (at least DOS 2.1-7.0) 
+
+************************************************************
+	Get System Time			21h		2Ch
+		RETURN:
+		CH = hour CL = minute DH = second DL = 1/100 seconds
+
+		NOTE: On most systems, the resolution of the system clock is about 5/100sec, so returned times generally do not increment by 1. On some systems, DL may always return 00h 
+
+************************************************************
+	Open Existing File		21h		3Dh
+		AH = 3Dh
+		AL = access and sharing modes (see #01402)
+		DS:DX -> ASCIZ filename
+		CL = attribute mask of files to look for (server call only)
+
+		Return:
+		CF clear if successful AX = file handle CF set on error AX = error code (01h,02h,03h,04h,05h,0Ch,56h) (see #01680 at AH=59h)
+
+		Notes: File pointer is set to start of file. If SHARE or a network is loaded, the file open may fail if the file is already open, depending on the combination of sharing modes (see #01403,#01404). File handles which are inherited from a parent also inherit sharing and access restrictions. Files may be opened even if given the hidden or system attributes. Under the FlashTek X-32 DOS extender, the pointer is in DS:EDX. DR DOS checks the system password or explicitly supplied password at the end of the filename (following a semicolon) against the reserved field in the directory entry before allowing access. Sharing modes are only effective on local drives if SHARE is loaded 
+
+		Bit(s)  Description     (Table 01402)
+		2-0    access mode.
+		000 read only.
+		001 write only.
+		010 read/write.
+		011 (DOS 5+ internal) passed to redirector on EXEC to allow
+		case-sensitive filenames
+		3      reserved (0)
+		6-4    sharing mode (DOS 3.0+) (see #01403).
+		000 compatibility mode.
+		001 "DENYALL" prohibit both read and write access by others.
+		010 "DENYWRITE" prohibit write access by others.
+		011 "DENYREAD" prohibit read access by others.
+		100 "DENYNONE" allow full access by others.
+		111 network FCB (only available during server call)
+		7      inheritance.
+		If set, file is private to current process and will not be inherited by child processes
+
+************************************************************
+	Read From File			21h		3Fh
+		AH = 3Fh
+		BX = file handle
+		CX = number of bytes to read
+		DS:DX -> buffer for data
+
+		Return:
+		CF clear if successful AX = number of bytes actually read (0 if at EOF before call) CF set on error AX = error code (05h,06h) (see #01680 at AH=59h/BX=0000h) 
+
+************************************************************
+	Close File				21h		3Eh
+		Return:
+		CF clear if successful
+		AX destroyed
+		CF set on error
+		AX = error code (06h) (see #01680 at AH=59h/BX=0000h)
+
+************************************************************
+	Terminate With Return	21h		4Ch
+************************************************************
