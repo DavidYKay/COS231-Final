@@ -1,3 +1,3 @@
 masm davidk.asm
-link davidk,,,,,
+link/l davidk,,,,,
 davidk
