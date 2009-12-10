@@ -115,8 +115,8 @@ del_sub:
 	sub		al, cl				;delta = newtime - oldtime
 	cmp		al, 0
 	jl		del_zero			;we overflowed
-	add		ch, ah				;add to delta time
-	mov		cl, al				;store oldTime
+	add		ch, al				;add to running delta total
+	mov		cl, dl				;store oldTime
 	;check - is deltatime greater than our threshold?
 	cmp		ch, 5				;FRAME_THRESHOLD (30ms)
 	jge		del_fin
