@@ -5,7 +5,9 @@
 *~
 *.swp
 *.exe
+*.EXE
 *.map
+*.MAP
 *.obj
 *.db
 
