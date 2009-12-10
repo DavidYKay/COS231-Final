@@ -231,6 +231,16 @@ find_topleft:
 		sub		di, 1605		;slide it back to the start of the line, 5 lines up (5 + 1605)
 		ret
 
+get_time:
+		push	cx
+;Get System Time			21h		2Ch
+;	RETURN:
+;	CH = hour CL = minute DH = second DL = 1/100 seconds
+        mov     ah, 2Ch     ;
+        mov     al, 00h     ;
+        int     21h
+		pop		cx
+		ret
 ;******************************
 ;MATH FUNCTIONS
 ;******************************
