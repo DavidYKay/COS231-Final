@@ -126,17 +126,22 @@ draw_box:	;draws the borders around the edge of the screen
 		push	dx				;store this for safekeeping
 		;sub		di, 1765				;slide it back to the start of the line, 5 lines up (160 + 1605)
         mov     cx, 121			;11 x 11
-aloop:      
-		call	circ_newline	;bump us down by one line
+		jmp		bloop
 bloop:      ;this loop is decrementing CX for us for free!
         mov     es:[di], 02h    ;move an 02hex into wherever offset of di points
         inc		di
 		mov		ax, cx			
+		dec		ax				;decrement by one to adjust timing
 		mov		dl, 11			;prep for div
-		div	dl				;check if we've finished one line
+		div		dl				;check if we've finished one line
 		cmp		ah, 0
 		je		aloop			;time for new line
         loop    bloop           ;loop on this current line
+		jmp		done_box
+aloop:      
+		call	circ_newline	;bump us down by one line
+		loop	bloop
+done_box:
 		pop		dx
 		ret						;we're done
 draw_circle:	;draws a bitmap, centered at the point passed in ax
@@ -166,8 +171,8 @@ draw_circle:	;draws a bitmap, centered at the point passed in ax
 circ_newline:
 		;remove 11 to move back to first position
 		;add 320 to move to next line
-		;add		di, 309
-		add		di, 320
+		add		di, 309
+		;add		di, 320
 		ret
 circle1:
         ;mov     cx, 11			;line length
