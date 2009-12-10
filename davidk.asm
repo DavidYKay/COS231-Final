@@ -260,13 +260,13 @@ done_root:
 absolute_value:		;takes a word in ax and returns the absolute value in ax
 		push	dx				;store this for safekeeping
 		mov		dx, ax
-		sar		dx, dx
-		sar		dx, dx
-		sar		dx, dx
-		sar		dx, dx
-		sar		dx, dx
-		sar		dx, dx
-		sar		dx, dx
+		sar		dx
+		sar		dx
+		sar		dx
+		sar		dx
+		sar		dx
+		sar		dx
+		sar		dx
 		cmp		dx, 1			;test the far left bit. 
 		jle		done_abs		;if it was positive
 		call	twos_complement ;if negative, make it positive
