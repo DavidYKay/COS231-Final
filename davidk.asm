@@ -96,8 +96,8 @@ main:
 ;Animation Functions
 ;******************************
 animate_ball:
-	mov     cx, 320			;pixels to animate
-	;mov     cx, 32000			;screen width
+	;mov     cx, 320			;pixels to animate
+	mov     cx, 32000			;screen width
 animbloop:
 	inc		di
 	;call	reset_screen
@@ -108,6 +108,7 @@ animbloop:
 delay_frame:		;subroutine to delay until the next frame
 	push	dx ;dx - backup of ax, holding newtime
 	push	bx ;bh - holds deltaTotal ;bl - holds oldTime
+del_loop:
 	xor		bx, bx				;used for counting delta time(ch) and oldtime (cl)
 	call	get_time
 	mov		dx, ax				;in case we need it again
@@ -123,7 +124,7 @@ del_sub:
 	cmp		bh, 10				;FRAME_THRESHOLD (30ms)
 	;cmp		bh, 0FFFFh				;FRAME_THRESHOLD (30ms)
 	jge		del_fin
-	jmp		delay_frame
+	jmp		del_loop
 del_fin:
 	pop		bx
 	pop		dx
