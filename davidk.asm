@@ -55,10 +55,14 @@ main:
 		;call	draw_line_vert
 		;mov		di, 63680		;bottom left corner
 		;call	draw_line_horiz
-		mov		di, 32160		;center of screen
+		;mov		di, 32160		;center of screen
 		;mov		di, 32000		;center of screen
 		;call	draw_box
-		call	animate_ball
+		;call	animate_ball
+		call	get_time
+		mov		di, ax
+		call	draw_box
+		
 		jmp		done
 
 ;EXAMPLE GAME LOOP
@@ -233,12 +237,16 @@ find_topleft:
 
 get_time:
 		push	cx
+		push	dx
 ;Get System Time			21h		2Ch
 ;	RETURN:
 ;	CH = hour CL = minute DH = second DL = 1/100 seconds
+;   Function actually returns values in AH/AL at the moment
         mov     ah, 2Ch     ;
         mov     al, 00h     ;
         int     21h
+		mov		ax, dx		;move to accumulator for output
+		pop		dx
 		pop		cx
 		ret
 ;******************************
