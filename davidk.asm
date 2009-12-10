@@ -258,22 +258,22 @@ pythagorean:	;returns distance in the AX register, takes a and b in AL and AH
    ;END FUNCTION  MySqrt
 ;END PROGRAM  SquareRoot
 
-;absolute_value:		;takes a word in ax and returns the absolute value in ax
-;		push	dx				;store this for safekeeping
-;		mov		dx, ax
-;		sar		dx
-;		sar		dx
-;		sar		dx
-;		sar		dx
-;		sar		dx
-;		sar		dx
-;		sar		dx
-;		cmp		dx, 1			;test the far left bit. 
-;		jle		done_abs		;if it was positive
-;		call	twos_complement ;if negative, make it positive
-;done_abs:
-;		pop		dx
-;		ret
+absolute_value:		;takes a word in ax and returns the absolute value in ax
+		push	dx				;store this for safekeeping
+		mov		dx, ax
+		sar		dx, 1
+		sar		dx, 1
+		sar		dx, 1
+		sar		dx, 1
+		sar		dx, 1
+		sar		dx, 1
+		sar		dx, 1
+		cmp		dx, 1			;test the far left bit. 
+		jle		done_abs		;if it was positive
+		call	twos_complement ;if negative, make it positive
+done_abs:
+		pop		dx
+		ret
 twos_complement:
 		not		ax
 		inc		ax				;2's complement the number in ax
