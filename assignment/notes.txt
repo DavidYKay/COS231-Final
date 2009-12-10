@@ -16,15 +16,15 @@ Ball Management
 -----
 Ball Representation
 -----
-	Word  - xpos
-	Word  - ypos
-	Byte? - deltax
-	Byte? - deltay
+	(Byte - xpos)
+	(Byte - ypos)
+	Word  - pos
+	Byte  - deltax
+	Byte  - deltay
 	Byte  - color
 	(collision flag)
 
-
-
+deltaX - stored as an int value
 
 ************************************************************
 COLLISION DETECTION

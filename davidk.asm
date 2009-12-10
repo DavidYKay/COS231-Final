@@ -11,17 +11,9 @@ STACK   SEGMENT PARA STACK 'STACK'
 STACK   ENDS
 _DATA   SEGMENT PARA PUBLIC 'DATA'
 screen  DD      0a0000000h
-	
-;circle 
-;00001110000
-;00110001100
-;01000000010
-;10000000001
-;10000000001
-;10000000001
-;01000000010
-;00110001100
-;00001110000
+
+deltx   DW      0a0000h
+delty   DW      0a0000h
 
 ;screen  DD      0a0007D00h ; halfway down screen
 ;screen  DD      0a0007D6Ah ; line in middle
@@ -64,10 +56,10 @@ start:
 		;call	draw_line_vert
 		;mov		di, 63680		;bottom left corner
 		;call	draw_line_horiz
-		;call	animate_ball
 		mov		di, 32160		;center of screen
 		;mov		di, 32000		;center of screen
-		call	draw_box
+		;call	draw_box
+		call	animate_ball
 		jmp		done
 
 ;EXAMPLE GAME LOOP
@@ -120,11 +112,11 @@ draw_borders:	;draws the borders around the edge of the screen
 dloop:      ;this loop is decrementing CX for us for free!
         mov     es:[di], 02h    ;move an 02hex into wherever offset of di points
         inc		di
-        loop    dloop           ;loops while decrementing CX for us
+        loop    dloop           
 		ret
 draw_box:	;draws the borders around the edge of the screen
 		push	dx				;store this for safekeeping
-		sub		di, 1605				;slide it back to the start of the line, 5 lines up (5 + 1605)
+		sub		di, 1605		;slide it back to the start of the line, 5 lines up (5 + 1605)
         mov     cx, 121			;11 x 11
 		jmp		bloop
 bloop:      ;this loop is decrementing CX for us for free!
@@ -132,7 +124,7 @@ bloop:      ;this loop is decrementing CX for us for free!
         inc		di
 		mov		ax, cx			
 		dec		ax				;decrement by one to adjust timing
-		mov		dl, 11			;prep for div
+		mov		dl, 11		
 		div		dl				;check if we've finished one line
 		cmp		ah, 0
 		je		aloop			;time for new line
@@ -213,8 +205,77 @@ circle4:
 ;UTILITY FUNCTIONS
 ;******************************
 
-find_topleft: 
-		sub		di, 1605	;find top left, based on center point
+
+;******************************
+;MATH FUNCTIONS
+;******************************
+pythagorean:	;returns distance in the AX register, takes a and b in AL and AH
+		;push	dx
+		;mov		dl, al
+		;mov		dh, ah			;make backups
+
+
+		;imul					;find a^2
+
+		;imul					;find b^2
+
+
+		;		;square root
+		;pop		dx
+		ret
+
+squareroot:		;takes a word argument in ax and returns the square root in ax
+
+; ---------------------------------------------------------------
+; REAL FUNCTION  MySqrt()
+;    This function uses Newton's method to compute an approximate
+; of a positive number.  If the input value is zero, then zero is
+; returned immediately.  For convenience, the absolute value of
+; the input is used rather than kill the program when the input
+; is negative.
+; ---------------------------------------------------------------
+      
+	  ;REAL, INTENT(IN) :: Input
+      ;REAL             :: X, NewX
+      ;REAL, PARAMETER  :: Tolerance = 0.00001
+		cmp		ax, 0					; if the input is zero
+		je		done_root               ;    returns zero      
+										
+      ELSE                              ; otherwise,
+         ;X = ABS(Input)                 ;    use absolute value
+         DO                             ;    for each iteration
+            ;NewX  = 0.5*(X + Input/X)   ;       compute a new approximation
+			
+            IF (ABS(X - NewX) < Tolerance)  ; if very close, exit
+			jmp		done_root
+            ;X = NewX                    ;       otherwise, keep the new one
+         END DO
+         MySqrt = NewX
+      END IF
+done_root:
+		ret
+   ;END FUNCTION  MySqrt
+;END PROGRAM  SquareRoot
+
+absolute_value:		;takes a word in ax and returns the absolute value in ax
+		push	dx				;store this for safekeeping
+		mov		dx, ax
+		sar		dx, dx
+		sar		dx, dx
+		sar		dx, dx
+		sar		dx, dx
+		sar		dx, dx
+		sar		dx, dx
+		sar		dx, dx
+		cmp		dx, 1			;test the far left bit. 
+		jle		done_abs		;if it was positive
+		call	twos_complement ;if negative, make it positive
+done_abs:
+		pop		dx
+		ret
+twos_complement:
+		not		ax
+		inc		ax				;2's complement the number in ax
 		ret
 ;******************************
 done:
