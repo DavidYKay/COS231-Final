@@ -96,15 +96,15 @@ main:
 ;Animation Functions
 ;******************************
 animate_ball:
-	;mov     cx, 320			;pixels to animate
-	mov     cx, 32000			;screen width
+	mov     cx, 320			;pixels to animate
+	;mov     cx, 32000			;screen width
 animbloop:
 	inc		di
 	;call	reset_screen
 	call	draw_box
 	call	delay_frame
 	loop    animbloop           ;loops while decrementing CX for us
-	jmp		del_fin
+	ret
 delay_frame:		;subroutine to delay until the next frame
 	push	dx ;dx - backup of ax, holding newtime
 	push	bx ;bh - holds deltaTotal ;bl - holds oldTime
