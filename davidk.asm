@@ -65,8 +65,8 @@ start:
 		;mov		di, 63680		;bottom left corner
 		;call	draw_line_horiz
 		;call	animate_ball
-		;mov		di, 32160		;center of screen
-		mov		di, 32000		;center of screen
+		mov		di, 32160		;center of screen
+		;mov		di, 32000		;center of screen
 		call	draw_box
 		jmp		done
 
@@ -124,7 +124,7 @@ dloop:      ;this loop is decrementing CX for us for free!
 		ret
 draw_box:	;draws the borders around the edge of the screen
 		push	dx				;store this for safekeeping
-		;sub		di, 1765				;slide it back to the start of the line, 5 lines up (160 + 1605)
+		sub		di, 1605				;slide it back to the start of the line, 5 lines up (5 + 1605)
         mov     cx, 121			;11 x 11
 		jmp		bloop
 bloop:      ;this loop is decrementing CX for us for free!
