@@ -13,6 +13,8 @@ _DATA   SEGMENT PARA PUBLIC 'DATA'
 screen  DD      0a0000000h
 deltx   DW      0000h
 delty   DW      0000h
+;oldtime DB		?
+;deltTime DB		?
 ;screen  DD      0a0007D00h ; halfway down screen
 ;screen  DD      0a0007D6Ah ; line in middle
 ;buffer	 DW					; dedicate a WORD for our buffer?
@@ -58,10 +60,8 @@ main:
 		;mov		di, 32160		;center of screen
 		;mov		di, 32000		;center of screen
 		;call	draw_box
-		;call	animate_ball
-		call	get_time
-		mov		di, ax
-		call	draw_box
+		;call	get_time
+		call	animate_ball
 		
 		jmp		done
 
@@ -103,9 +103,28 @@ animbloop:
 	loop    animbloop           ;loops while decrementing CX for us
 	call	delay_frame
 	ret
-delay_frame:
-	nop
+delay_frame:		;subroutine to delay until the next frame
+	push	dx
+	push	cx					
+	xor		cx, cx				;used for counting delta time(ch) and oldtime (cl)
+	call	get_time
+	mov		dx, ax				;in case we need it again
+del_sub:			
+	sub		al, cl				;delta = newtime - oldtime
+	cmp		al, 0
+	jl		del_zero			;we overflowed
+	add		ch, ah				;add to delta time
+	mov		cl, al				;store oldTime
+	jmp		delay_frame
+
+del_fin:
+	pop		cx
+	pop		dx
 	ret
+del_zero:
+	mov		ax, dx				;If negative, add 100 to newtime and repeat
+	add		al, 100
+	jmp del_sub
 ;******************************
 ;Drawing Functions
 ;******************************
@@ -301,15 +320,8 @@ pythagorean:	;returns distance in the AX register, takes a and b in AL and AH
 absolute_value:		;takes a word in ax and returns the absolute value in ax
 		push	dx				;store this for safekeeping
 		mov		dx, ax
-		sar		dx, 1
-		sar		dx, 1
-		sar		dx, 1
-		sar		dx, 1
-		sar		dx, 1
-		sar		dx, 1
-		sar		dx, 1
-		cmp		dx, 1			;test the far left bit. 
-		jle		done_abs		;if it was positive
+		cmp		dx, 0			;test the far left bit. 
+		jge		done_abs		;if it was positive
 		call	twos_complement ;if negative, make it positive
 done_abs:
 		pop		dx
