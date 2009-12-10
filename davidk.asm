@@ -100,27 +100,28 @@ animate_ball:
 	mov     cx, 32000			;screen width
 animbloop:
 	inc		di
-	call	reset_screen
+	;call	reset_screen
 	call	draw_box
 	call	delay_frame
 	loop    animbloop           ;loops while decrementing CX for us
-	ret
-
+	jmp		del_fin
 delay_frame:		;subroutine to delay until the next frame
-	push	dx
-	push	bx					
+	push	dx ;dx - backup of ax, holding newtime
+	push	bx ;bh - holds deltaTotal ;bl - holds oldTime
 	xor		bx, bx				;used for counting delta time(ch) and oldtime (cl)
 	call	get_time
 	mov		dx, ax				;in case we need it again
-	mov		bx, ax				;in case we need it again
+	;mov	bx, ax				;in case we need it again
 del_sub:			
 	sub		al, bl				;delta = newtime - oldtime
 	cmp		al, 0
 	jl		del_zero			;we overflowed
-	add		bh, al				;add to running delta total
-	mov		bl, dl				;store oldTime
+	add		bh, al				;add new delta to running delta total
+	mov		bl, dl				;store newTime in oldTime
 	;check - is deltatime greater than our threshold?
-	cmp		bh, 5				;FRAME_THRESHOLD (30ms)
+	;cmp		bh, 50				;FRAME_THRESHOLD (30ms)
+	cmp		bh, 10				;FRAME_THRESHOLD (30ms)
+	;cmp		bh, 0FFFFh				;FRAME_THRESHOLD (30ms)
 	jge		del_fin
 	jmp		delay_frame
 del_fin:
