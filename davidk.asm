@@ -46,6 +46,7 @@ start:
         mov     al, 3fh
         out     dx, al
         les		di, screen      ;les - (reg16, mem32). loads mem32 into reg16 and the ES register
+main:
 		;call	draw_line_horiz
 		;call	draw_line_vert
 		;mov		di, 319			;top right corner
@@ -56,8 +57,8 @@ start:
 		;call	draw_line_horiz
 		mov		di, 32160		;center of screen
 		;mov		di, 32000		;center of screen
-		call	draw_box
-		;call	animate_ball
+		;call	draw_box
+		call	animate_ball
 		jmp		done
 
 ;EXAMPLE GAME LOOP
@@ -87,8 +88,30 @@ start:
 ;}
 
 ;******************************
+;Animation Functions
+;******************************
+animate_ball:
+	mov     cx, 320			;screen width
+animbloop:
+	inc		di
+	call	reset_screen
+	call	draw_box
+	loop    animbloop           ;loops while decrementing CX for us
+	call	delay_frame
+	ret
+delay_frame:
+	nop
+	ret
+;******************************
 ;Drawing Functions
 ;******************************
+reset_screen:
+		push	ax
+        mov     ah, 06h     ;"scroll up window"
+        mov     al, 00h     ;erases the background (can wipe screen)
+        int     10h
+		pop		ax
+		ret
 draw_line_horiz:		;draws a line, left to right, the width of the screen
         mov     cx, 320			;screen width
         ;les		di, screen      ;les - (reg16, mem32). loads mem32 into reg16 and the ES register
@@ -114,6 +137,7 @@ dloop:      ;this loop is decrementing CX for us for free!
 		ret
 draw_box:	;draws the borders around the edge of the screen
 		push	dx				;store this for safekeeping
+		push	di				;store this for safekeeping
 		sub		di, 1605		;slide it back to the start of the line, 5 lines up (5 + 1605)
         mov     cx, 121			;11 x 11
 		jmp		bloop
@@ -133,6 +157,7 @@ aloop:
 		loop	bloop
 done_box:
 		pop		dx
+		pop		di
 		ret						;we're done
 draw_circle:	;draws a bitmap, centered at the point passed in ax
 ;later, replace this with bitmap draw
@@ -214,13 +239,10 @@ pythagorean:	;returns distance in the AX register, takes a and b in AL and AH
 		;mov		dl, al
 		;mov		dh, ah			;make backups
 
-
 		;imul					;find a^2
 
 		;imul					;find b^2
-
-
-		;		;square root
+								;square root
 		;pop		dx
 		ret
 
