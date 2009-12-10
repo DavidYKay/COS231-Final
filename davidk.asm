@@ -11,10 +11,8 @@ STACK   SEGMENT PARA STACK 'STACK'
 STACK   ENDS
 _DATA   SEGMENT PARA PUBLIC 'DATA'
 screen  DD      0a0000000h
-
-deltx   DW      0a0000h
-delty   DW      0a0000h
-
+deltx   DW      0000h
+delty   DW      0000h
 ;screen  DD      0a0007D00h ; halfway down screen
 ;screen  DD      0a0007D6Ah ; line in middle
 ;buffer	 DW					; dedicate a WORD for our buffer?
@@ -58,8 +56,8 @@ start:
 		;call	draw_line_horiz
 		mov		di, 32160		;center of screen
 		;mov		di, 32000		;center of screen
-		;call	draw_box
-		call	animate_ball
+		call	draw_box
+		;call	animate_ball
 		jmp		done
 
 ;EXAMPLE GAME LOOP
@@ -204,7 +202,9 @@ circle4:
 ;******************************
 ;UTILITY FUNCTIONS
 ;******************************
-
+find_topleft:
+		sub		di, 1605		;slide it back to the start of the line, 5 lines up (5 + 1605)
+		ret
 
 ;******************************
 ;MATH FUNCTIONS
@@ -224,7 +224,7 @@ pythagorean:	;returns distance in the AX register, takes a and b in AL and AH
 		;pop		dx
 		ret
 
-squareroot:		;takes a word argument in ax and returns the square root in ax
+;squareroot:		;takes a word argument in ax and returns the square root in ax
 
 ; ---------------------------------------------------------------
 ; REAL FUNCTION  MySqrt()
@@ -238,41 +238,42 @@ squareroot:		;takes a word argument in ax and returns the square root in ax
 	  ;REAL, INTENT(IN) :: Input
       ;REAL             :: X, NewX
       ;REAL, PARAMETER  :: Tolerance = 0.00001
-		cmp		ax, 0					; if the input is zero
-		je		done_root               ;    returns zero      
-										
-      ELSE                              ; otherwise,
-         ;X = ABS(Input)                 ;    use absolute value
-         DO                             ;    for each iteration
-            ;NewX  = 0.5*(X + Input/X)   ;       compute a new approximation
-			
-            IF (ABS(X - NewX) < Tolerance)  ; if very close, exit
-			jmp		done_root
-            ;X = NewX                    ;       otherwise, keep the new one
-         END DO
-         MySqrt = NewX
-      END IF
-done_root:
-		ret
+	;	cmp		ax, 0					; if the input is zero
+	;	je		done_root               ;    returns zero      
+	;									
+    ;  ELSE                              ; otherwise,
+    ;     ;X = ABS(Input)                 ;    use absolute value
+    ;     DO                             ;    for each iteration
+    ;        ;NewX  = 0.5*(X + Input/X)   ;       compute a new approximation
+	;		
+	;		
+    ;        IF (ABS(X - NewX) < Tolerance)  ; if very close, exit
+	;		jmp		done_root
+    ;        ;X = NewX                    ;       otherwise, keep the new one
+    ;     END DO
+    ;     MySqrt = NewX
+    ;  END IF
+;done_root:
+;		ret
    ;END FUNCTION  MySqrt
 ;END PROGRAM  SquareRoot
 
-absolute_value:		;takes a word in ax and returns the absolute value in ax
-		push	dx				;store this for safekeeping
-		mov		dx, ax
-		sar		dx
-		sar		dx
-		sar		dx
-		sar		dx
-		sar		dx
-		sar		dx
-		sar		dx
-		cmp		dx, 1			;test the far left bit. 
-		jle		done_abs		;if it was positive
-		call	twos_complement ;if negative, make it positive
-done_abs:
-		pop		dx
-		ret
+;absolute_value:		;takes a word in ax and returns the absolute value in ax
+;		push	dx				;store this for safekeeping
+;		mov		dx, ax
+;		sar		dx
+;		sar		dx
+;		sar		dx
+;		sar		dx
+;		sar		dx
+;		sar		dx
+;		sar		dx
+;		cmp		dx, 1			;test the far left bit. 
+;		jle		done_abs		;if it was positive
+;		call	twos_complement ;if negative, make it positive
+;done_abs:
+;		pop		dx
+;		ret
 twos_complement:
 		not		ax
 		inc		ax				;2's complement the number in ax

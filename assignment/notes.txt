@@ -89,6 +89,7 @@ http://www.metanetsoftware.com/technique/tutorialA.html
 Calculating resultant velocity:
     Elastic collision
 ------------------
+SIMPLE, BOOTLEG PHYSICS:
 (DXi, DYi) => (DXf, DYf)
 if horizontal wall,
     DXf = -DXi
@@ -97,7 +98,28 @@ if vertical wall,
     DXf = DXi
     DYf = -DYi
 
-if two balls,
+
+LEGIT PHYSICS:
+"Newton's Rule (i.e. the conservation of momentum) applies to the components of velocity resolved along the common normal surfaces of the colliding bodies at the point of contact. In the case of the two spheres the velocity components involved are the components resolved along the line of centers during the contact. Consequently, the components of velocity perpendicular to the line of centers will be unchanged during the impact." 
+
+-- find the final velocities in the normal reference frame
+-- the x velocities will obey the rules for a 1-D collision
+set v1fxr = ((m1-m2)*v1xr+(m2+m2)*v2xr)/(m1+m2)
+set v2fxr = ((m1+m1)*v1xr+(m2-m1)*v2xr)/(m1+m2)
+-- the y velocities will not be changed
+set v1fyr = v1yr
+set v2fyr = v2yr
+
+We now have the 'after collision' velocities, but we have to transform the components back to the standard x-y reference frame. In this particular case, the velocity of the red puck was entirely in the standard y-direction (so our x-velocity in the standard reference frame is zero).
+
+The relevant code (once again) is very dependent on angles!
+
+-- convert back to the standard x,y coordinates
+set v1fx = cos(phi)*v1fxr+cos(phi+pi()/2)*v1fyr
+set v1fy = sin(phi)*v1fxr+sin(phi+pi()/2)*v1fyr
+set v2fx = cos(phi)*v2fxr+cos(phi+pi()/2)*v2fyr
+set v2fy = sin(phi)*v2fxr+sin(phi+pi()/2)*v2fyr
+
 
 ------------------
 Drawing to the Screen
