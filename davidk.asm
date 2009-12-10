@@ -108,8 +108,8 @@ animbloop:
 delay_frame:		;subroutine to delay until the next frame
 	push	dx ;dx - backup of ax, holding newtime
 	push	bx ;bh - holds deltaTotal ;bl - holds oldTime
-del_loop:
 	xor		bx, bx				;used for counting delta time(ch) and oldtime (cl)
+del_loop:
 	call	get_time
 	mov		dx, ax				;in case we need it again
 	;mov	bx, ax				;in case we need it again
@@ -120,8 +120,8 @@ del_sub:
 	add		bh, al				;add new delta to running delta total
 	mov		bl, dl				;store newTime in oldTime
 	;check - is deltatime greater than our threshold?
-	;cmp		bh, 50				;FRAME_THRESHOLD (30ms)
-	cmp		bh, 10				;FRAME_THRESHOLD (30ms)
+	cmp		bh, 50				;FRAME_THRESHOLD (30ms)
+	;cmp		bh, 10				;FRAME_THRESHOLD (30ms)
 	;cmp		bh, 0FFFFh				;FRAME_THRESHOLD (30ms)
 	jge		del_fin
 	jmp		del_loop
@@ -130,6 +130,7 @@ del_fin:
 	pop		dx
 	ret
 del_zero:
+	;mov		al, dl				;If negative, add 100 to newtime and repeat
 	mov		ax, dx				;If negative, add 100 to newtime and repeat
 	add		al, 100
 	jmp del_sub
