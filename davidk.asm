@@ -50,7 +50,7 @@ start:
         out     dx, al
         les		di, screen      ;les - (reg16, mem32). loads mem32 into reg16 and the ES register
 main:
-		;call	draw_line_horiz
+		;call	draw_line_horiz 
 		;call	draw_line_vert
 		;mov		di, 319			;top right corner
 		;call	draw_line_vert
@@ -58,8 +58,8 @@ main:
 		;call	draw_line_vert
 		;mov		di, 63680		;bottom left corner
 		;call	draw_line_horiz
-		mov		di, 32160		;center of screen
-		;mov		di, 32000		;center of screen
+		;mov		di, 32160		;center of screen
+		mov		di, 32000		;center of screen
 		;call	draw_box
 		;call	get_time
 		call	animate_ball
@@ -105,24 +105,26 @@ animbloop:
 	call	delay_frame
 	loop    animbloop           ;loops while decrementing CX for us
 	ret
+
 delay_frame:		;subroutine to delay until the next frame
 	push	dx
-	push	cx					
-	xor		cx, cx				;used for counting delta time(ch) and oldtime (cl)
+	push	bx					
+	xor		bx, bx				;used for counting delta time(ch) and oldtime (cl)
 	call	get_time
 	mov		dx, ax				;in case we need it again
+	mov		bx, ax				;in case we need it again
 del_sub:			
-	sub		al, cl				;delta = newtime - oldtime
+	sub		al, bl				;delta = newtime - oldtime
 	cmp		al, 0
 	jl		del_zero			;we overflowed
-	add		ch, al				;add to running delta total
-	mov		cl, dl				;store oldTime
+	add		bh, al				;add to running delta total
+	mov		bl, dl				;store oldTime
 	;check - is deltatime greater than our threshold?
-	cmp		ch, 5				;FRAME_THRESHOLD (30ms)
+	cmp		bh, 5				;FRAME_THRESHOLD (30ms)
 	jge		del_fin
 	jmp		delay_frame
 del_fin:
-	pop		cx
+	pop		bx
 	pop		dx
 	ret
 del_zero:
@@ -163,6 +165,7 @@ dloop:      ;this loop is decrementing CX for us for free!
         loop    dloop           
 		ret
 draw_box:	;draws the borders around the edge of the screen
+		push	cx				;store this for safekeeping
 		push	dx				;store this for safekeeping
 		push	di				;store this for safekeeping
 		sub		di, 1605		;slide it back to the start of the line, 5 lines up (5 + 1605)
@@ -183,8 +186,9 @@ aloop:
 		call	circ_newline	;bump us down by one line
 		loop	bloop
 done_box:
-		pop		dx
 		pop		di
+		pop		dx
+		pop		cx
 		ret						;we're done
 draw_circle:	;draws a bitmap, centered at the point passed in ax
 ;later, replace this with bitmap draw
