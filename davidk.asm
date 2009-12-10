@@ -1,4 +1,5 @@
-        .DOSSEG
+include davidk.inc
+		.DOSSEG
 ;MEMORY RESERVATION
 ;DB Reserves space in one Byte (1 byte) units.  
 ;DW Reserves space in one Word (2 byte) units.  
@@ -57,7 +58,7 @@ main:
 		;call	draw_line_vert
 		;mov		di, 63680		;bottom left corner
 		;call	draw_line_horiz
-		;mov		di, 32160		;center of screen
+		mov		di, 32160		;center of screen
 		;mov		di, 32000		;center of screen
 		;call	draw_box
 		;call	get_time
@@ -95,13 +96,14 @@ main:
 ;Animation Functions
 ;******************************
 animate_ball:
-	mov     cx, 320			;screen width
+	;mov     cx, 320			;pixels to animate
+	mov     cx, 32000			;screen width
 animbloop:
 	inc		di
 	call	reset_screen
 	call	draw_box
-	loop    animbloop           ;loops while decrementing CX for us
 	call	delay_frame
+	loop    animbloop           ;loops while decrementing CX for us
 	ret
 delay_frame:		;subroutine to delay until the next frame
 	push	dx
@@ -115,8 +117,10 @@ del_sub:
 	jl		del_zero			;we overflowed
 	add		ch, ah				;add to delta time
 	mov		cl, al				;store oldTime
+	;check - is deltatime greater than our threshold?
+	cmp		ch, 5				;FRAME_THRESHOLD (30ms)
+	jge		del_fin
 	jmp		delay_frame
-
 del_fin:
 	pop		cx
 	pop		dx
