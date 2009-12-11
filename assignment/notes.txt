@@ -1,86 +1,3 @@
-************************************************************
-Procedure / Main Loop
-************************************************************
-Initialize
-Begin loop
-	Check Collisions
-	Move Objects
-	Draw Objects
-	Are We Done?
-		NO:  loop
-		YES: exit
-
-************************************************************
-Ball Management
-************************************************************
------
-Ball Representation
------
-	(Byte - xpos)
-	(Byte - ypos)
-	Word  - pos
-	Byte  - deltax
-	Byte  - deltay
-	Byte  - color
-	(collision flag)
-
-deltaX - stored as an int value
-
-************************************************************
-COLLISION DETECTION
-************************************************************
-Simple solution:
-	since we're using spheres, we can measure everything center-to-center and use radius
-	Consider "sliding" the wall upwards by the ball's radius and measure center-to-center
-		-This very useful for determining the collision positions
-
-dot product
-	You can project a vector onto another by doing the "dot product", and what you get the is component of the first vector along the direction of the second vector.  We get the wall normal vector by findng a vector perpindicular to the wall line segment itself.  You can find the perpindicular of a vector like so:
-
-	vector1:  <vx, vy>
-	normal to vector1: <-vy, vx>
-
-unit normal vector1: <-vy,vx> / sqrt(vy^2 + vx^2)
-unit normal vector1: <-vy / sqrt(vy^2 + vx^2), vx / sqrt(vy^2 + vx^2)>
-
-To find the projection vector of the initial vector to the wall normal, we use this formula:
-
-projection vector = (-I · n) * n
-
-Where:
-    I = initial vector
-    n = the unit wall normal vector
-
-
-3d collision detection:
-http://flipcode.com/archives/Basic_Collision_Detection.shtml
-
-Have we crossed the plane?
-
-int ClassifyPoint( CPlane3D *plane, CPoint3D *destPt )
-  {
-        scalar p = DotProduct( plane->normal, destPt ) + plane->distance;
-
-        if( p > 0.0f ) return PLANE_FRONT;
-        else
-        if( p < 0.0f ) return PLANE_BACK;
-
-        return PLANE_COINCIDE;
-  }
- 
-What is the intersection point?
-
-  lx = start.x + (ray.x * t)
-  ly = start.y + (ray.y * t)
-  lz = start.z + (raz.z * t)
-
-t = a point along the line
-  t = - ( DotProduct( plane->normal, start) + plane->distance )   /
-          DotProduct( plane->normal, ray)
-        
-  CPoint3D intersect = start + (ray * t);
-
-
 Great tutorial on 2D collision
 http://www.metanetsoftware.com/technique/tutorialA.html
 
@@ -97,7 +14,6 @@ if horizontal wall,
 if vertical wall,
     DXf = DXi
     DYf = -DYi
-
 
 LEGIT PHYSICS:
 "Newton's Rule (i.e. the conservation of momentum) applies to the components of velocity resolved along the common normal surfaces of the colliding bodies at the point of contact. In the case of the two spheres the velocity components involved are the components resolved along the line of centers during the contact. Consequently, the components of velocity perpendicular to the line of centers will be unchanged during the impact." 
@@ -135,6 +51,39 @@ offset = (row * 320) + column
 Ports: 3C8h is used to set color (output color index), 
     3C7h is used for reading palette values (output color index)
     3C9h is used to output color component data in RGB.
+	------------------
+		MODE X
+	------------------
+	The offset M of pixel N
+	 in display memory is M = N/4, and the plane P of pixel N is P = N mod 4.  For
+	 display memory writes, the plane is selected by setting bit P of the Map Mask
+	 register (Sequence Controller register 2) to 1 and all other bits to 0; for
+	 display memory reads, the plane is selected by setting the Read Map register
+	 (Graphics Controller register 4) to P.
+
+Listing Five (page 156)
+ overcomes both these problems by tailoring the fill technique to the
+ organization of display memory.  Each plane is filled in its entirety in one
+ burst before the next plane is processed, so only five OUTs are required in
+ all, and REP STOS can indeed be used.
+
+	------------------
+		MODE X
+	------------------
+	The offset M of pixel N
+	 in display memory is M = N/4, and the plane P of pixel N is P = N mod 4.  For
+	 display memory writes, the plane is selected by setting bit P of the Map Mask
+	 register (Sequence Controller register 2) to 1 and all other bits to 0; for
+	 display memory reads, the plane is selected by setting the Read Map register
+	 (Graphics Controller register 4) to P.
+
+	Listing Five (page 156)
+	 overcomes both these problems by tailoring the fill technique to the
+	 organization of display memory.  Each plane is filled in its entirety in one
+	 burst before the next plane is processed, so only five OUTs are required in
+	 all, and REP STOS can indeed be used.
+
+
 ------------------
 BMP format
 ------------------
