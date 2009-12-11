@@ -118,7 +118,8 @@ del_sub:
 	add		bh, al				;add new delta to running delta total
 	mov		bl, dl				;store newTime in oldTime
 	;check - is deltatime greater than our threshold?
-	cmp		bh, 50				;FRAME_THRESHOLD (30ms)
+	;cmp		bh, 50				;FRAME_THRESHOLD (30ms)
+	cmp		bh, FRAME_THRESHOLD				;FRAME_THRESHOLD (30ms)
 	;cmp		bh, 10				;FRAME_THRESHOLD (30ms)
 	;cmp		bh, 0FFFFh				;FRAME_THRESHOLD (30ms)
 	jge		del_fin
