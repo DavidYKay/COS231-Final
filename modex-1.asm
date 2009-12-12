@@ -20,9 +20,6 @@ STACK   SEGMENT PARA STACK 'STACK'
 STACK   ENDS
 _DATA   SEGMENT PARA PUBLIC 'DATA'
 
-        ;.model  small
-        ;.data
-
 ; Index/data pairs for CRT Controller registers that differ between
 ; mode 13h and mode X.
 CRTParms label  word
@@ -51,7 +48,7 @@ start:
 		mov     ds, ax
 ;        public  _Set320x240Mode
 ;_Set320x240Mode proc    near
-Set320x240Mode:
+;Set320x240Mode:
         push    bp      ;preserve caller's stack frame
         push    si      ;preserve C register vars
         push    di      ; (don't count on BIOS preserving anything)
@@ -85,6 +82,7 @@ Set320x240Mode:
         mov     si,offset CRTParms ;point to CRT parameter table
         mov     cx,CRT_PARM_LENGTH ;# of table entries
 SetCRTParmsLoop:
+		;LODSW loads a byte from [DS:SI] or [DS:ESI] into AL. It then increments or decrements (depending on the direction flag: increments if the flag is clear, decrements if it is set) SI or ESI.
         lodsw           ;get the next CRT Index/Data pair
         out     dx,ax   ;set the next CRT Index/Data pair
         loop    SetCRTParmsLoop

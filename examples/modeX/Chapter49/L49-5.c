@@ -110,17 +110,17 @@ AnimatedObject AnimatedObjects[] = {
 void main(void);
 void DrawBackground(unsigned int);
 void MoveObject(AnimatedObject *);
-extern void Set320x240Mode(void);
-extern void FillRectangleX(int, int, int, int, unsigned int, int);
-extern void FillPatternX(int, int, int, int, unsigned int, char*);
+extern void Set320x240Mode(void); //L49-1.asm
+extern void FillRectangleX(int, int, int, int, unsigned int, int); //L49-6.asm
+extern void FillPatternX(int, int, int, int, unsigned int, char*); //L49-2.asm
 extern void CopySystemToScreenMaskedX(int, int, int, int, int, int,
-   char *, unsigned int, int, int, char *);
+   char *, unsigned int, int, int, char *); //L49-4.asm
 extern void CopyScreenToScreenX(int, int, int, int, int, int,
-   unsigned int, unsigned int, int, int);
+   unsigned int, unsigned int, int, int); //L49-3.asm or L48-3.asm
 extern unsigned int CreateAlignedMaskedImage(MaskedImage *,
-   unsigned int, char *, int, int, char *);
+   unsigned int, char *, int, int, char *); //L49-3.c
 extern void CopyScreenToScreenMaskedX(int, int, int, int, int, int,
-   MaskedImage *, unsigned int, int);
+   MaskedImage *, unsigned int, int); //Only in this file?
 extern void ShowPage(unsigned int);
 
 void main()
