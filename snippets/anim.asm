@@ -17,7 +17,7 @@ _DATA   ENDS
 EGROUP  GROUP   _BUFF1
 _BUFF1	SEGMENT PARA PUBLIC 'BUFF1'
 ;buffer1	DB		64000 DUP (?) ; dedicate 64000 bytes for our buffer
-buffer1	DB		64000 DUP (01) ; dedicate 64000 bytes for our buffer
+buffer1	DB		500 DUP (01) ; dedicate 64000 bytes for our buffer
 _BUFF1  ENDS
 ;_BUFF2	SEGMENT PARA PUBLIC 'BUFF2'
 ;buffer2	DB		64000 DUP (?) ; dedicate 64000 bytes for our buffer
@@ -36,20 +36,20 @@ start:
 		;mov		ax, 200
 		;call	draw_pixels
 
-		;call	write_to_screen
+		call	write_to_screen
 
 		;call	delay_second
 		;call	delay_test
 		
-		les		di, screen 
-		add		di, 32500
-		call	draw_box
+		;les		di, screen 
+		;add		di, 32500
+		;call	draw_box
 		;call	delay_second
 
 		;call	clear_buffer
 		;call	draw_pixels
 
-		call	clear_screen
+		;call	clear_screen
 
 		jmp		done
 ;******************************
@@ -134,15 +134,16 @@ write_to_screen:			;move all zeroes into the background
 		;mov		ds, ax						;set DS to buffer1 address
 		;xor		si, si						;si=0
 		les		di, screen 
-		;mov		cx, SCREEN_SIZE
-		mov		cx, 6000
+		;mov		di, 32160
+		mov		cx, SCREEN_SIZE
+		;mov		cx, 300
 wloop:
-		;mov		ax, word ptr buffer1[si]
-        ;mov     es:[di], ax					;copy byte from buffer to screen
-        mov     es:[di], 02h					;copy byte from buffer to screen
+		mov		ax, word ptr buffer1[si]
+        mov     es:[di], ax					;copy byte from buffer to screen
+        ;mov     es:[di], 02h					;copy byte from buffer to screen
 		inc		di
 		;inc		si
-		loop cloop
+		loop wloop
 		ret
 
 draw_box:	
