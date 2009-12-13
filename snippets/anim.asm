@@ -58,10 +58,10 @@ start:
 		add		di, 6400
 		call	draw_box
 		call	write_to_screen
-		;call	clear_buffer
-		call	clear_screen
+		call	clear_buffer
+		;call	clear_screen
 
-		;call	animate_box
+		call	animate_box
 		
 		pop		es
 
