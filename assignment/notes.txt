@@ -1,6 +1,11 @@
 Great tutorial on 2D collision
 http://www.metanetsoftware.com/technique/tutorialA.html
 
+------------------
+Arrays
+------------------
+Use ES:DI and DS:SI
+Good example in snippets/array.asm
 
 ------------------
 Calculating resultant velocity:
@@ -68,21 +73,125 @@ Listing Five (page 156)
  all, and REP STOS can indeed be used.
 
 	------------------
-		MODE X
+	UNCHAINED MODE
 	------------------
-	The offset M of pixel N
-	 in display memory is M = N/4, and the plane P of pixel N is P = N mod 4.  For
-	 display memory writes, the plane is selected by setting bit P of the Map Mask
-	 register (Sequence Controller register 2) to 1 and all other bits to 0; for
-	 display memory reads, the plane is selected by setting the Read Map register
-	 (Graphics Controller register 4) to P.
+	The VGA card has 256K of memory. Many SVGA cards have much more, but even on those cards, VGA modes can only access the first 256K-except for mode 0x13, which can only access 64K. The reason is that mode 0x13 is a chain-4 mode, which basically means only every forth byte of video memory is used. The reason for this is because the linear structure of the video memory allowed fast and easy video memory access. Turning off chain-4 mode allows the program to access of all 256K of video memory, but involves more complicated programming.
 
-	Listing Five (page 156)
-	 overcomes both these problems by tailoring the fill technique to the
-	 organization of display memory.  Each plane is filled in its entirety in one
-	 burst before the next plane is processed, so only five OUTs are required in
-	 all, and REP STOS can indeed be used.
+	In unchained mode, memory exists in four 64K planes. Each plane corresponds to a specific column of video memory: plane 0 contains pixels 0, 4, 8, etc.; plane 1 contains pixels 1, 5, 9, etc.; plane 2 contains columns 2, 6, 10, etc.; and plane 3 contains columns 3, 7, 11, etc. (Figure 22). So to plot a pixel at position (5,7), plane 1 is selected, and the offset is (320*7+5)/4 = 561. 
 
+	ENTERING UNCHAINED MODE
+		Since unchained mode is not a standard VGA mode, it cannot be set using a BIOS function call. Instead, certain VGA registers have to be tweaked. It involves two VGA controllers: the sequence controller (port 0x3C4) and the CRT controller (port 0x3D4).
+
+		/* VGA sequence controller */
+		#define SC_INDEX      0x03c4
+		#define SC_DATA       0x03c5
+		
+		/* VGA CRT controller */
+		#define CRTC_INDEX    0x03d4
+		#define CRTC_DATA     0x03d5
+		
+		#define MEMORY_MODE   0x04
+		#define UNDERLINE_LOC 0x14
+		#define MODE_CONTROL  0x17
+
+		...
+
+		/* turn off chain-4 mode */
+		outp(SC_INDEX, MEMORY_MODE);
+		outp(SC_DATA, 0x06);
+
+		/* TODO: Insert code to clear the screen here.
+		   (the BIOS only sets every fourth byte
+		   to zero -- the rest needs to be set to
+		   zero, too) */
+
+		/* turn off long mode */
+		outp(CRTC_INDEX, UNDERLINE_LOC);
+		outp(CRTC_DATA, 0x00);
+		/* turn on byte mode */
+		outp(CRTC_INDEX, MODE_CONTROL);
+		outp(CRTC_DATA, 0xe3);
+
+	PLANE SELECT
+		The Map Mask register is located at index 2 of the Sequence Controller. To select the Map Mask register, write 2 to the Sequence Controller address at port 0x3C4. Then the Map Mask can be found at the Sequence Controller's data port at port 0x3C5.
+
+		plane = (x&3);
+		/* select the map mask register */
+		outp(0x3c4, 0x02);
+		/* write 2^plane */
+		outp(0x3c5, 1 << plane);
+
+		If a value other than a power of two was used to select a plane, MULTIPLE PLANES would be SELECTED. For example, if 13 (binary 1101) were used, planes 0, 2, and 3 would be selected. That means every plane selected is written with the color value. One use for this is fast screen-clearing. If every plane is selected, only 16,000 bytes need to be written, instead of 64,000 like in mode 0x13.
+
+		/* set map mask to all 4 planes */
+		outpw(0x3c4, 0xff02);
+		memset(VGA,0, 16000);
+
+	PAGE FLIPPING
+	
+		First, set up two word-sized variables to keep track of the visible and non-visible pages. These are offsets to video memory.
+
+		unsigned int visible_page=0;
+		unsigned int non_visible_page=320*200/4;
+
+		Then do all the drawing to the non-visible page. For instance, if a pixel was to be plotted:
+
+		/* select plane */
+		outp(SC_INDEX, MAP_MASK);
+		outp(SC_DATA,  1 << (x&3) );
+
+		VGA[non_visible_page+(y<<6)+(y<<4)+(x>>2)]=color;
+
+		When all the drawing is finished, it is time to switch the pages. The new offset is set through two registers on the CRT controller. The first, 0x0C, sets the upper 8-bits of the offset, and the second, 0x0D, sets the lower 8-bits.
+		
+		/* CRT controller registers */
+		#define HIGH_ADDRESS 0x0C
+		#define LOW_ADDRESS  0x0D
+		
+		...
+		
+		temp = visible_page;
+		visible_page = non_visible_page;
+		non_visible_page = temp;
+		
+		high_addr=HIGH_ADDRESS | (visible_page & 0xff00);
+		low_addr =LOW_ADDRESS  | (visible_page << 8);
+		
+		while ((inp(INPUT_STATUS_1) & VRETRACE));
+		outpw(CRTC_INDEX, high_addr);
+		outpw(CRTC_INDEX, low_addr);
+		while (!(inp(INPUT_STATUS_1) & VRETRACE));
+
+
+
+	MEMORY LAYOUT - Figure 48.3 
+		Occupies ~65536 addresses, aka FFFF or 1 byte
+
+MEMORY LOCATIONS
+	The video memory of the VGA is mapped to the PC's memory via a window in the range between segments 0xA0000 and 0xBFFFF in the PC's real mode address space (A000:0000 and B000:FFFF in segment:offset notation). Typically these starting segments are:
+
+		* 0xA0000 for EGA/VGA graphics modes (64 KB)
+		* 0xB0000 for monochrome text mode (32 KB)
+		* 0xB8000 for color text mode and CGA-compatible graphics modes (32 KB)
+
+------------------
+Animation Pseudocode
+------------------
+while (running) {
+	/* clear background */
+	memset(double_buffer,0,SCREEN_SIZE);
+	/* animate objects */
+
+	/* point to the next image in the animation */
+	//What exactly does this do???
+	bitmap_offset+=BITMAP_WIDTH;
+	if ((bitmap_offset%bmp.width)==0)
+		bitmap_offset+=bmp.width*(BITMAP_HEIGHT-1);
+
+	/* show the buffer */
+	//Note that having string copy would be really handy here
+	memcpy(VGA,double_buffer,SCREEN_SIZE); //byte *VGA=(byte *)0xA0000000L;        /* this points to video memory. */
+}
 
 ------------------
 BMP format
