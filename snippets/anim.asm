@@ -32,25 +32,32 @@ start:
 
 		call	save_oldmode
 		call	set_mode13h
-		;call	animate_ball
-		;mov		ax, 200
-		;call	draw_pixels
-
-
-		;call	delay_second
-		;call	delay_test
-		
-		;les		di, screen 
 
 		push	es
 		mov		ax, _BUFF1
 		mov		es, ax						;set ES to buffer1 segment
 		mov		di, offset buffer1			; start at element 1
-		;xor		di, di						;di=0
 		mov		di, 32500
 		call	draw_box
+		add		di, 6400
+		call	draw_box
+		add		di, 6400
+		call	draw_box
+
+		;call	animate_ball
+		
 		call	write_to_screen
 		pop		es
+
+		;call	animate_ball
+		;mov		ax, 200
+		;call	draw_pixels
+
+		;call	delay_second
+		;call	delay_test
+		
+		;les	di, screen 
+
 		;call	delay_second
 
 		;call	clear_buffer
@@ -95,15 +102,17 @@ animate_ball:
 	mov     cx, 320			;pixels to animate
 	;mov     cx, 32000			;screen width
 	;les		di, buffer1
-	mov		ax, OFFSET buffer1
-	mov		es, ax
-	xor		di, di
+	;mov		ax, OFFSET buffer1
+	;mov		es, ax
+	;xor		di, di
 animbloop:
 	inc		di
 	call	draw_box
+	;call	draw_pixels
 	;call	delay_frame
 	call	write_to_screen
-	loop    animbloop           ;loops while decrementing CX for us
+	;call	clear_buffer
+	;loop    animbloop           ;loops while decrementing CX for us
 	ret
 
 ;******************************
@@ -123,10 +132,11 @@ pix_loop:
 		ret
 clear_screen:
 		les		di, screen
+		jmp		clear_main
 clear_buffer:			;move all zeroes into the background
-		;les		di, buffer1
-		;mov		ax, OFFSET buffer1
-		;mov		es, ax
+		mov		ax, OFFSET buffer1
+clear_main:
+		mov		es, ax
 		xor		di, di
 		mov		cx, SCREEN_SIZE
 cloop:
@@ -156,20 +166,17 @@ wloop:
         mov     ds:[si], ax					;copy byte from buffer to screen
 		inc		di
 		inc		si
-		loop wloop
+		loop	wloop
 		mov		ds, bx
 		pop		es
 		ret
 draw_box:	
 		push	cx				;store this for safekeeping
-		push	dx				;store this for safekeeping
 		push	di				;store this for safekeeping
-		sub		di, 1605		;slide it back to the start of the line, 5 lines up (5 + 1605)
+		sub		di, 1605		;slide it back to the start of the line, 5 lines up (5 + 1600)
         mov     cx, 121			;11 x 11
-
-		jmp		bloop
 bloop:      ;this loop is decrementing CX for us for free!
-        mov     es:[di], 02h    ;move an 02hex into wherever offset of di points
+        mov     es:[di], 04h    ;move an 02hex into wherever offset of di points
         inc		di
 		mov		ax, cx			
 		dec		ax				;decrement by one to adjust timing
@@ -184,15 +191,11 @@ aloop:
 		loop	bloop
 done_box:
 		pop		di
-		pop		dx
 		pop		cx
 		ret						;we're done
 
-circ_newline:
-		;remove 11 to move back to first position
-		;add 320 to move to next line
-		add		di, 309
-		;add		di, 320
+circ_newline:					;add 320 to move to next line
+		add		di, 309 		;remove 11 to move back to first position
 		ret
 ;******************************
 ;Utility Functions
