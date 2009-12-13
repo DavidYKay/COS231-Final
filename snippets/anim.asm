@@ -6,8 +6,8 @@ include ..\davidk.inc
 ;DD Reserves space in one Double (4 byte) units.  
 ;DQ Reserves space in one Quad (8 byte) units.  
 ;DT Reserves space in one Ten (10 byte) units.  
-DGROUP  GROUP   _DATA, STACK
-BGROUP  GROUP   _BUFF1, _BUFF2
+DGROUP  GROUP   _DATA, STACK, _BUFF1
+;BGROUP  GROUP   _BUFF1, _BUFF2
 STACK   SEGMENT PARA STACK 'STACK'
         DB      256 DUP (?) ;DUP for duplicate, ie 'fill the space with the following'
 STACK   ENDS
@@ -30,8 +30,12 @@ start:
         mov     ds, ax
 		call	save_oldmode
 		call	set_mode13h
-		call	clear_background
+		call	animate_ball
+		call	clear_buffer
 		jmp		done
+;******************************
+;VGA Mode Functions
+;******************************
 save_oldmode:
         mov     ah, 0fh     ;get video mode 
         int     10h
@@ -58,16 +62,136 @@ set_mode13h:
         mov     al, 3fh
         out     dx, al
 		ret
-clear_background:			;move all zeroes into the background
-		les		di, screen
-		;mov		ax, screen
+;******************************
+;Animation Functions
+;******************************
+animate_ball:
+	;mov     cx, 320			;pixels to animate
+	mov     cx, 32000			;screen width
+	;les		di, buffer1
+	mov		ax, OFFSET buffer1
+	mov		es, ax
+	xor		di, di
+animbloop:
+	inc		di
+	call	draw_box
+	call	delay_frame
+	call	write_to_screen
+	loop    animbloop           ;loops while decrementing CX for us
+	ret
+delay_frame:		;subroutine to delay until the next frame
+	push	dx ;dx - backup of ax, holding newtime
+	push	bx ;bh - holds deltaTotal ;bl - holds oldTime
+	xor		bx, bx				;used for counting delta time(ch) and oldtime (cl)
+del_loop:
+	call	get_time
+	mov		dx, ax				;in case we need it again
+	;mov	bx, ax				;in case we need it again
+del_sub:			
+	sub		al, bl				;delta = newtime - oldtime
+	cmp		al, 0
+	jl		del_zero			;we overflowed
+	add		bh, al				;add new delta to running delta total
+	mov		bl, dl				;store newTime in oldTime
+	;check - is deltatime greater than our threshold?
+	;cmp		bh, 50				;FRAME_THRESHOLD (30ms)
+	cmp		bh, FRAME_THRESHOLD				;FRAME_THRESHOLD (30ms)
+	;cmp		bh, 10				;FRAME_THRESHOLD (30ms)
+	;cmp		bh, 0FFFFh				;FRAME_THRESHOLD (30ms)
+	jge		del_fin
+	jmp		del_loop
+del_fin:
+	pop		bx
+	pop		dx
+	ret
+del_zero:
+	;mov		al, dl				;If negative, add 100 to newtime and repeat
+	mov		ax, dx				;If negative, add 100 to newtime and repeat
+	add		al, 100
+	jmp del_sub
+
+clear_buffer:			;move all zeroes into the background
+		;les		di, buffer1
+		;mov		ax, OFFSET buffer1
 		;mov		es, ax
-		mov		di, 0
+		xor		di, di
 		mov		cx, SCREEN_SIZE
 cloop:
-        mov     es:[di], 0    ;move an 02hex into wherever offset of di points
+        ;mov     es:[di], 0    ;move an 02hex into wherever offset of di points
+        mov byte ptr buffer1[di], 0    ;move an 02hex into wherever offset of di points
 		inc		di
 		loop cloop
+		ret
+write_to_screen:			;move all zeroes into the background
+		;Use ES:DI and DS:SI to copy from one and write to the other
+		;lds		si, buffer1
+		;mov		ax, OFFSET buffer1
+		;mov		ds, ax						;set DS to buffer1 address
+		xor		si, si						;si=0
+		les		di, screen 
+		mov		cx, SCREEN_SIZE
+wloop:
+		mov		ax, word ptr buffer1[si]
+        mov     es:[di], ax					;copy byte from buffer to screen
+        ;mov byte ptr es:[di], buffer1[si]    ;copy byte from buffer to screen
+        ;mov     word ptr es:[di], ds:[si]    ;copy byte from buffer to screen
+		inc		di
+		inc		si
+		loop cloop
+		ret
+
+;******************************
+;VGA Mode Functions
+;******************************
+draw_box:	;draws the borders around the edge of the screen
+		push	cx				;store this for safekeeping
+		push	dx				;store this for safekeeping
+		push	di				;store this for safekeeping
+		sub		di, 1605		;slide it back to the start of the line, 5 lines up (5 + 1605)
+        mov     cx, 121			;11 x 11
+		jmp		bloop
+bloop:      ;this loop is decrementing CX for us for free!
+        mov     es:[di], 02h    ;move an 02hex into wherever offset of di points
+        inc		di
+		mov		ax, cx			
+		dec		ax				;decrement by one to adjust timing
+		mov		dl, 11		
+		div		dl				;check if we've finished one line
+		cmp		ah, 0
+		je		aloop			;time for new line
+        loop    bloop           ;loop on this current line
+		jmp		done_box
+aloop:      
+		call	circ_newline	;bump us down by one line
+		loop	bloop
+done_box:
+		pop		di
+		pop		dx
+		pop		cx
+		ret						;we're done
+
+circ_newline:
+		;remove 11 to move back to first position
+		;add 320 to move to next line
+		add		di, 309
+		;add		di, 320
+		ret
+;******************************
+;Utility Functions
+;******************************
+get_time:
+		push	cx
+		push	dx
+;Get System Time			21h		2Ch
+;	RETURN:
+;	CH = hour CL = minute DH = second DL = 1/100 seconds
+;   Function actually returns values in AH/AL at the moment
+        mov     ah, 2Ch     ;
+        mov     al, 00h     ;
+        int     21h
+		mov		ax, dx		;move to accumulator for output
+		pop		dx
+		pop		cx
 		ret
 done:
         mov     ah, 08h         ;after loop
