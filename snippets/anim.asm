@@ -30,8 +30,8 @@ start:
         mov     ds, ax
 		call	save_oldmode
 		call	set_mode13h
-		call	animate_ball
-		call	clear_buffer
+		;call	animate_ball
+		call	draw_pixel
 		jmp		done
 ;******************************
 ;VGA Mode Functions
@@ -66,8 +66,8 @@ set_mode13h:
 ;Animation Functions
 ;******************************
 animate_ball:
-	;mov     cx, 320			;pixels to animate
-	mov     cx, 32000			;screen width
+	mov     cx, 320			;pixels to animate
+	;mov     cx, 32000			;screen width
 	;les		di, buffer1
 	mov		ax, OFFSET buffer1
 	mov		es, ax
@@ -75,7 +75,7 @@ animate_ball:
 animbloop:
 	inc		di
 	call	draw_box
-	call	delay_frame
+	;call	delay_frame
 	call	write_to_screen
 	loop    animbloop           ;loops while decrementing CX for us
 	ret
@@ -110,6 +110,17 @@ del_zero:
 	add		al, 100
 	jmp del_sub
 
+;******************************
+;Drawing functions
+;******************************
+draw_pixel:
+		les		di, screen
+		mov		es:[di + 100],1 ;draw to buffer
+		mov		es:[di + 200],1 ;draw to buffer
+		mov		es:[di + 300],1 ;draw to buffer
+		call	write_to_screen
+		ret
+
 clear_buffer:			;move all zeroes into the background
 		;les		di, buffer1
 		;mov		ax, OFFSET buffer1
@@ -140,10 +151,7 @@ wloop:
 		loop cloop
 		ret
 
-;******************************
-;VGA Mode Functions
-;******************************
-draw_box:	;draws the borders around the edge of the screen
+draw_box:	
 		push	cx				;store this for safekeeping
 		push	dx				;store this for safekeeping
 		push	di				;store this for safekeeping
