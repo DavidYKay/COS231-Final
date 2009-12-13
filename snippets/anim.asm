@@ -149,11 +149,11 @@ write_to_screen:			;move all zeroes into the background
 		mov		cx, SCREEN_SIZE				;loop thru each pixel
 wloop:
 		;mov		al, byte ptr buffer1[di]	;fetch
-		mov		al, byte ptr es:[di]	;fetch
+		mov		ax, word ptr es:[di]	;fetch
         ;mov     es:[di], al					;copy byte from buffer to screen
         ;mov     es:[di], 02h					;copy byte from buffer to screen
         ;mov     ds:[si], 02h					;copy byte from buffer to screen
-        mov     ds:[si], al					;copy byte from buffer to screen
+        mov     ds:[si], ax					;copy byte from buffer to screen
 		inc		di
 		inc		si
 		loop wloop
