@@ -34,15 +34,20 @@ start:
 		call	set_mode13h
 		;call	animate_ball
 		;mov		ax, 200
-		;call	draw_pixel
+		;call	draw_pixels
+
+		;call	write_to_screen
 
 		;call	delay_second
 		;call	delay_test
+		
+		les		di, screen 
+		add		di, 32500
+		call	draw_box
 		;call	delay_second
 
 		;call	clear_buffer
-		call	write_to_screen
-		;call	draw_pixel
+		;call	draw_pixels
 
 		;call	clear_screen
 
@@ -97,7 +102,7 @@ animbloop:
 ;******************************
 ;Drawing functions
 ;******************************
-draw_pixel:
+draw_pixels:
 		push	cx
 		cbw		
 		mov		cx, ax
@@ -125,10 +130,9 @@ cloop:
 		ret
 write_to_screen:			;move all zeroes into the background
 		;Use ES:DI and DS:SI to copy from one and write to the other
-		;lds		si, buffer1
-		mov		ax, OFFSET buffer1
-		mov		ds, ax						;set DS to buffer1 address
-		xor		si, si						;si=0
+		;mov		ax, OFFSET buffer1
+		;mov		ds, ax						;set DS to buffer1 address
+		;xor		si, si						;si=0
 		les		di, screen 
 		;mov		cx, SCREEN_SIZE
 		mov		cx, 6000
@@ -137,7 +141,7 @@ wloop:
         ;mov     es:[di], ax					;copy byte from buffer to screen
         mov     es:[di], 02h					;copy byte from buffer to screen
 		inc		di
-		inc		si
+		;inc		si
 		loop cloop
 		ret
 
@@ -191,9 +195,9 @@ get_time:
 		pop		dx
 		pop		cx
 		ret
-delay_test:		;subroutine to delay until the next frame
+delay_test:		;test the delay method by delaying then drawing some stuff on the screen
 	call	get_time
-	call	draw_pixel
+	call	draw_pixels
 	call	circ_newline
 	ret
 delay_second:		;subroutine to delay until the next frame

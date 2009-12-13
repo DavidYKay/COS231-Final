@@ -111,7 +111,7 @@ animate_ball:
 	mov     cx, 32000			;screen width
 animbloop:
 	inc		di
-	;call	reset_screen
+	call	reset_screen
 	call	draw_box
 	call	delay_frame
 	loop    animbloop           ;loops while decrementing CX for us
