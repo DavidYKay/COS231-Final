@@ -138,11 +138,11 @@ write_to_screen:			;move all zeroes into the background
 		mov		cx, SCREEN_SIZE
 		;mov		cx, 300
 wloop:
-		mov		ax, word ptr buffer1[si]
-        mov     es:[di], ax					;copy byte from buffer to screen
+		mov		al, byte ptr buffer1[si]
+        mov     es:[di], al					;copy byte from buffer to screen
         ;mov     es:[di], 02h					;copy byte from buffer to screen
 		inc		di
-		;inc		si
+		inc		si
 		loop wloop
 		ret
 
