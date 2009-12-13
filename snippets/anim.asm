@@ -39,14 +39,28 @@ start:
 		mov		di, offset buffer1			; start at element 1
 		mov		di, 32500
 		call	draw_box
-		add		di, 6400
-		call	draw_box
-		add		di, 6400
-		call	draw_box
-
-		;call	animate_ball
-		
 		call	write_to_screen
+		add		di, 6400
+		call	draw_box
+		call	write_to_screen
+		add		di, 6400
+		call	draw_box
+		call	write_to_screen
+		add		di, 6400
+		call	draw_box
+		call	write_to_screen
+		add		di, 6400
+		call	draw_box
+		call	write_to_screen
+		add		di, 6400
+		call	draw_box
+		call	write_to_screen
+		add		di, 6400
+		call	draw_box
+		call	write_to_screen
+
+		;call	animate_box
+		
 		pop		es
 
 		;call	animate_ball
@@ -98,21 +112,19 @@ set_mode13h:
 ;******************************
 ;Animation Functions
 ;******************************
-animate_ball:
-	mov     cx, 320			;pixels to animate
-	;mov     cx, 32000			;screen width
+animate_box:
+	mov     cx, 1500			;screen width
 	;les		di, buffer1
 	;mov		ax, OFFSET buffer1
 	;mov		es, ax
 	;xor		di, di
-animbloop:
-	inc		di
+animboxloop:
 	call	draw_box
-	;call	draw_pixels
 	;call	delay_frame
 	call	write_to_screen
-	;call	clear_buffer
-	;loop    animbloop           ;loops while decrementing CX for us
+	call	clear_buffer
+	inc		di
+	loop    animboxloop           ;loops while decrementing CX for us
 	ret
 
 ;******************************
@@ -131,11 +143,16 @@ pix_loop:
 		pop		cx
 		ret
 clear_screen:
+		push	es
 		les		di, screen
 		jmp		clear_main
 clear_buffer:			;move all zeroes into the background
-		mov		ax, OFFSET buffer1
+		push	es
+		mov		ax, _BUFF1
+		;mov		ax, OFFSET buffer1
+		;mov		ax, es
 clear_main:
+		push	di
 		mov		es, ax
 		xor		di, di
 		mov		cx, SCREEN_SIZE
@@ -144,15 +161,18 @@ cloop:
         mov byte ptr buffer1[di], 0    ;move an 02hex into wherever offset of di points
 		inc		di
 		loop cloop
+		pop		es
+		pop		di
 		ret
 write_to_screen:			;move all zeroes into the background
-		push	es
+		push	di
+		push	bx
 		mov		bx, ds
 		;Use ES:DI and DS:SI to copy from one and write to the other
-		mov		ax, _BUFF1
-		mov		es, ax						;set ES to buffer1 segment
+		;mov		ax, _BUFF1
+		;mov		es, ax						;set ES to buffer1 segment
 		mov		di, offset buffer1			; start at element 1
-		xor		di, di						;di=0
+		;xor		di, di						;di=0
 		
 		;les		di, screen 
 		lds		si, screen					;point ds:[si] to vga
@@ -168,11 +188,15 @@ wloop:
 		inc		si
 		loop	wloop
 		mov		ds, bx
-		pop		es
+		pop		bx
+		pop		di
 		ret
 draw_box:	
+		;parameters: DI - center of box
+		;ES - start of draw buffer
 		push	cx				;store this for safekeeping
 		push	di				;store this for safekeeping
+		push	dx				;store this for safekeeping
 		sub		di, 1605		;slide it back to the start of the line, 5 lines up (5 + 1600)
         mov     cx, 121			;11 x 11
 bloop:      ;this loop is decrementing CX for us for free!
@@ -190,6 +214,7 @@ aloop:
 		call	circ_newline	;bump us down by one line
 		loop	bloop
 done_box:
+		pop		dx
 		pop		di
 		pop		cx
 		ret						;we're done
