@@ -6,8 +6,7 @@ include ..\davidk.inc
 ;DD Reserves space in one Double (4 byte) units.  
 ;DQ Reserves space in one Quad (8 byte) units.  
 ;DT Reserves space in one Ten (10 byte) units.  
-DGROUP  GROUP   _DATA, STACK, _BUFF1
-;BGROUP  GROUP   _BUFF1, _BUFF2
+DGROUP  GROUP   _DATA, STACK
 STACK   SEGMENT PARA STACK 'STACK'
         DB      256 DUP (?) ;DUP for duplicate, ie 'fill the space with the following'
 STACK   ENDS
@@ -15,29 +14,34 @@ _DATA   SEGMENT PARA PUBLIC 'DATA'
 screen  DD      0a0000000h
 oldmode DB      ?  
 _DATA   ENDS
+EGROUP  GROUP   _BUFF1
 _BUFF1	SEGMENT PARA PUBLIC 'BUFF1'
-buffer1	DB		64000 DUP (?) ; dedicate 64000 bytes for our buffer
+;buffer1	DB		64000 DUP (?) ; dedicate 64000 bytes for our buffer
+buffer1	DB		64000 DUP (01) ; dedicate 64000 bytes for our buffer
 _BUFF1  ENDS
-_BUFF2	SEGMENT PARA PUBLIC 'BUFF2'
-buffer2	DB		64000 DUP (?) ; dedicate 64000 bytes for our buffer
-_BUFF2  ENDS
+;_BUFF2	SEGMENT PARA PUBLIC 'BUFF2'
+;buffer2	DB		64000 DUP (?) ; dedicate 64000 bytes for our buffer
+;_BUFF2  ENDS
 _TEXT   SEGMENT PARA PUBLIC 'CODE'
-        ASSUME  cs:_TEXT, ds:DGROUP, ss:DGROUP
+        ASSUME  cs:_TEXT, ds:DGROUP, ss:DGROUP, es:EGROUP
 start:
         mov     ax, DGROUP
         mov     ds, ax
+        mov     ax, EGROUP
+        mov     es, ax
 
 		call	save_oldmode
 		call	set_mode13h
 		;call	animate_ball
+		;mov		ax, 200
 		;call	draw_pixel
 
-		call	delay_second
-		call	delay_test
-		call	delay_second
+		;call	delay_second
+		;call	delay_test
+		;call	delay_second
 
 		;call	clear_buffer
-		;call	write_to_screen
+		call	write_to_screen
 		;call	draw_pixel
 
 		;call	clear_screen
@@ -102,7 +106,7 @@ pix_loop:
 		mov		es:[di],1 ;draw to buffer
 		add		di, 100
 		loop	pix_loop
-		call	write_to_screen
+		;call	write_to_screen
 		pop		cx
 		ret
 clear_screen:
@@ -122,16 +126,16 @@ cloop:
 write_to_screen:			;move all zeroes into the background
 		;Use ES:DI and DS:SI to copy from one and write to the other
 		;lds		si, buffer1
-		;mov		ax, OFFSET buffer1
-		;mov		ds, ax						;set DS to buffer1 address
+		mov		ax, OFFSET buffer1
+		mov		ds, ax						;set DS to buffer1 address
 		xor		si, si						;si=0
 		les		di, screen 
-		mov		cx, SCREEN_SIZE
+		;mov		cx, SCREEN_SIZE
+		mov		cx, 6000
 wloop:
-		mov		ax, word ptr buffer1[si]
-        mov     es:[di], ax					;copy byte from buffer to screen
-        ;mov byte ptr es:[di], buffer1[si]    ;copy byte from buffer to screen
-        ;mov     word ptr es:[di], ds:[si]    ;copy byte from buffer to screen
+		;mov		ax, word ptr buffer1[si]
+        ;mov     es:[di], ax					;copy byte from buffer to screen
+        mov     es:[di], 02h					;copy byte from buffer to screen
 		inc		di
 		inc		si
 		loop cloop
