@@ -49,7 +49,7 @@ start:
 		;call	clear_buffer
 		;call	draw_pixels
 
-		;call	clear_screen
+		call	clear_screen
 
 		jmp		done
 ;******************************
