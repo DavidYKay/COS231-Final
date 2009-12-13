@@ -58,7 +58,8 @@ start:
 		add		di, 6400
 		call	draw_box
 		call	write_to_screen
-		call	clear_buffer
+		;call	clear_buffer
+		call	clear_screen
 
 		;call	animate_box
 		
@@ -150,16 +151,16 @@ clear_screen:
 clear_buffer:			;move all zeroes into the background
 		push	es
 		mov		ax, _BUFF1
+		mov		es, ax
 		;mov		ax, OFFSET buffer1
 		;mov		ax, es
 clear_main:
 		push	di
-		mov		es, ax
 		xor		di, di
 		mov		cx, SCREEN_SIZE
 cloop:
         ;mov     es:[di], 0    ;move an 02hex into wherever offset of di points
-        mov byte ptr buffer1[di], 0    ;move an 02hex into wherever offset of di points
+        mov byte ptr es:[di], 0    ;move an 02hex into wherever offset of di points
 		inc		di
 		loop cloop
 		pop		es
