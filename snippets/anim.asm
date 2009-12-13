@@ -36,14 +36,21 @@ start:
 		;mov		ax, 200
 		;call	draw_pixels
 
-		call	write_to_screen
 
 		;call	delay_second
 		;call	delay_test
 		
 		;les		di, screen 
-		;add		di, 32500
-		;call	draw_box
+
+		push	es
+		mov		ax, _BUFF1
+		mov		es, ax						;set ES to buffer1 segment
+		mov		di, offset buffer1			; start at element 1
+		;xor		di, di						;di=0
+		mov		di, 32500
+		call	draw_box
+		call	write_to_screen
+		pop		es
 		;call	delay_second
 
 		;call	clear_buffer
@@ -153,13 +160,13 @@ wloop:
 		mov		ds, bx
 		pop		es
 		ret
-
 draw_box:	
 		push	cx				;store this for safekeeping
 		push	dx				;store this for safekeeping
 		push	di				;store this for safekeeping
 		sub		di, 1605		;slide it back to the start of the line, 5 lines up (5 + 1605)
         mov     cx, 121			;11 x 11
+
 		jmp		bloop
 bloop:      ;this loop is decrementing CX for us for free!
         mov     es:[di], 02h    ;move an 02hex into wherever offset of di points
