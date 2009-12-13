@@ -1,1 +1,2 @@
 FRAME_THRESHOLD equ 3
+SCREEN_SIZE     equ 64000	; 320 x 200 pixels
