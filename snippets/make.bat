@@ -1,3 +1,3 @@
-masm/l memory.asm
-link memory,,,,,
-memory
+masm/l anim.asm
+link anim,,,,,
+anim
