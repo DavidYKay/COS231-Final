@@ -1,5 +1,6 @@
 # Can ignore specific files
 .DS_Store
+pocket.dic
 
 # Use wildcards as well
 *~
@@ -10,6 +11,10 @@
 *.MAP
 *.obj
 *.db
+*.lst
+*.html
+*.zip
+*.bmp
 
 # Can also ignore all directories and files in a directory.
 tmp/**/* 
