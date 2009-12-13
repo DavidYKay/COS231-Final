@@ -1,11 +1,22 @@
 include ..\davidk.inc
 		.DOSSEG
+
+;Ball struct, representing a bouncing ball
+BALL			struct
+	colliding       db 0
+	Xpos	        db 160
+	Ypos	        db 100
+	deltaX          db 0
+	deltaY			db 0
+	color	        db 0
+BALL			ends
+
 ;MEMORY RESERVATION
-;DB Reserves space in one Byte (1 byte) units.  
-;DW Reserves space in one Word (2 byte) units.  
+;DB Reserves space in one Byte	 (1 byte) units.  
+;DW Reserves space in one Word 	 (2 byte) units.  
 ;DD Reserves space in one Double (4 byte) units.  
-;DQ Reserves space in one Quad (8 byte) units.  
-;DT Reserves space in one Ten (10 byte) units.  
+;DQ Reserves space in one Quad   (8 byte) units.  
+;DT Reserves space in one Ten   (10 byte) units.  
 DGROUP  GROUP   _DATA, STACK
 STACK   SEGMENT PARA STACK 'STACK'
         DB      256 DUP (?) ;DUP for duplicate, ie 'fill the space with the following'
@@ -19,16 +30,17 @@ _BUFF1	SEGMENT PARA PUBLIC 'BUFF1'
 ;buffer1	DB		64000 DUP (?) ; dedicate 64000 bytes for our buffer
 buffer1	DB		64000 DUP (03) ; dedicate 64000 bytes for our buffer
 _BUFF1  ENDS
-;_BUFF2	SEGMENT PARA PUBLIC 'BUFF2'
-;buffer2	DB		64000 DUP (?) ; dedicate 64000 bytes for our buffer
-;_BUFF2  ENDS
+_BALLS	SEGMENT PARA PUBLIC 'BALLS'
+balls	DB		256 DUP (?) ; dedicate 64000 bytes for our buffer
+_BALLS  ENDS
+
 _TEXT   SEGMENT PARA PUBLIC 'CODE'
         ASSUME  cs:_TEXT, ds:DGROUP, ss:DGROUP, es:EGROUP
 start:
         mov     ax, DGROUP
         mov     ds, ax
-        mov     ax, EGROUP
-        mov     es, ax
+        ;mov     ax, EGROUP
+        ;mov     es, ax
 
 		call	save_oldmode
 		call	set_mode13h
@@ -62,25 +74,7 @@ start:
 		;call	clear_screen
 
 		call	animate_box
-		
 		pop		es
-
-		;call	animate_ball
-		;mov		ax, 200
-		;call	draw_pixels
-
-		;call	delay_second
-		;call	delay_test
-		
-		;les	di, screen 
-
-		;call	delay_second
-
-		;call	clear_buffer
-		;call	draw_pixels
-
-		;call	clear_screen
-
 		jmp		done
 ;******************************
 ;VGA Mode Functions
