@@ -30,11 +30,14 @@ _TEXT   SEGMENT PARA PUBLIC 'CODE'
 start:
         mov     ax, DGROUP
         mov     ds, ax
+		call	save_oldmode
+		call	mode_13h
+		jmp		main
+save_oldmode:
         mov     ah, 0fh     ;get video mode 
         int     10h
         mov		oldmode, al ;save it as the 'old mode'
-		call	mode_13h
-		jmp		main
+		ret
 mode_13h:
         mov     ah, 00h     ;videomode interrupt
         mov     al, 13h     ;set new mode to 00h
@@ -273,7 +276,6 @@ circle4:
 find_topleft:
 		sub		di, 1605		;slide it back to the start of the line, 5 lines up (5 + 1605)
 		ret
-
 get_time:
 		push	cx
 		push	dx
