@@ -7,6 +7,7 @@ include davidk.inc
 ;DQ Reserves space in one Quad (8 byte) units.  
 ;DT Reserves space in one Ten (10 byte) units.  
 DGROUP  GROUP   _DATA, STACK
+BGROUP  GROUP   _BUFF1, _BUFF2
 STACK   SEGMENT PARA STACK 'STACK'
         DB      256 DUP (?) ;DUP for duplicate, ie 'fill the space with the following'
 STACK   ENDS
@@ -16,9 +17,14 @@ deltx   DW      0000h
 delty   DW      0000h
 ;screen  DD      0a0007D00h ; halfway down screen
 ;screen  DD      0a0007D6Ah ; line in middle
-;buffer	 DW					; dedicate a WORD for our buffer?
-oldmode DB      ?
+oldmode DB      ?  
 _DATA   ENDS
+_BUFF1	SEGMENT PARA PUBLIC 'BUFF1'
+buffer1	DB		64000 DUP (?) ; dedicate 64000 bytes for our buffer
+_BUFF1  ENDS
+_BUFF2	SEGMENT PARA PUBLIC 'BUFF2'
+buffer2	DB		64000 DUP (?) ; dedicate 64000 bytes for our buffer
+_BUFF2  ENDS
 _TEXT   SEGMENT PARA PUBLIC 'CODE'
         ASSUME  cs:_TEXT, ds:DGROUP, ss:DGROUP
 start:
@@ -27,6 +33,9 @@ start:
         mov     ah, 0fh     ;get video mode 
         int     10h
         mov		oldmode, al ;save it as the 'old mode'
+		call	mode_13h
+		jmp		main
+mode_13h:
         mov     ah, 00h     ;videomode interrupt
         mov     al, 13h     ;set new mode to 00h
         int     10h
@@ -47,6 +56,7 @@ start:
         mov     al, 3fh
         out     dx, al
         les		di, screen      ;les - (reg16, mem32). loads mem32 into reg16 and the ES register
+		ret
 main:
 		;call	draw_line_horiz 
 		;call	draw_line_vert
