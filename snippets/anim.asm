@@ -58,7 +58,7 @@ start:
 		add		di, 6400
 		call	draw_box
 		call	write_to_screen
-		call	clear_buffer
+		;call	clear_buffer
 		;call	clear_screen
 
 		call	animate_box
@@ -115,7 +115,7 @@ set_mode13h:
 ;Animation Functions
 ;******************************
 animate_box:
-	mov     cx, 150			;screen width
+	mov     cx, 32000			;screen width
 	;les		di, buffer1
 	;mov		ax, OFFSET buffer1
 	;mov		es, ax
@@ -125,6 +125,7 @@ animboxloop:
 	;call	delay_frame
 	call	write_to_screen
 	call	clear_buffer
+	;call	clear_screen
 	inc		di
 	loop    animboxloop           ;loops while decrementing CX for us
 	ret
@@ -161,7 +162,7 @@ clear_main:
 		mov		cx, SCREEN_SIZE
 cloop:
         ;mov     es:[di], 0    ;move an 02hex into wherever offset of di points
-        mov byte ptr es:[di], 0    ;move an 02hex into wherever offset of di points
+        mov byte ptr es:[di], 3    ;move an 02hex into wherever offset of di points
 		inc		di
 		loop cloop
 		pop		cx
@@ -170,31 +171,31 @@ cloop:
 		ret
 write_to_screen:			;move all zeroes into the background
 		push	di
-		push	bx
 		push	cx
+		push	bx
 		mov		bx, ds
 		;Use ES:DI and DS:SI to copy from one and write to the other
 		;mov		ax, _BUFF1
 		;mov		es, ax						;set ES to buffer1 segment
-		mov		di, offset buffer1			; start at element 1
-		;xor		di, di						;di=0
+		;mov		di, OFFSET buffer1			; start at element 1
+		xor		di, di						;di=0
 		
 		;les		di, screen 
 		lds		si, screen					;point ds:[si] to vga
 		mov		cx, SCREEN_SIZE				;loop thru each pixel
 wloop:
 		;mov		al, byte ptr buffer1[di]	;fetch
-		mov		ax, word ptr es:[di]	;fetch
+		mov		al, byte ptr es:[di]	;fetch
         ;mov     es:[di], al					;copy byte from buffer to screen
         ;mov     es:[di], 02h					;copy byte from buffer to screen
         ;mov     ds:[si], 02h					;copy byte from buffer to screen
-        mov     ds:[si], ax					;copy byte from buffer to screen
+        mov     ds:[si], al					;copy byte from buffer to screen
 		inc		di
 		inc		si
 		loop	wloop
 		mov		ds, bx
-		pop		cx
 		pop		bx
+		pop		cx
 		pop		di
 		ret
 draw_box:	
