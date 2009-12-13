@@ -17,7 +17,7 @@ _DATA   ENDS
 EGROUP  GROUP   _BUFF1
 _BUFF1	SEGMENT PARA PUBLIC 'BUFF1'
 ;buffer1	DB		64000 DUP (?) ; dedicate 64000 bytes for our buffer
-buffer1	DB		500 DUP (01) ; dedicate 64000 bytes for our buffer
+buffer1	DB		64000 DUP (03) ; dedicate 64000 bytes for our buffer
 _BUFF1  ENDS
 ;_BUFF2	SEGMENT PARA PUBLIC 'BUFF2'
 ;buffer2	DB		64000 DUP (?) ; dedicate 64000 bytes for our buffer
@@ -129,21 +129,29 @@ cloop:
 		loop cloop
 		ret
 write_to_screen:			;move all zeroes into the background
+		push	es
+		mov		bx, ds
 		;Use ES:DI and DS:SI to copy from one and write to the other
-		;mov		ax, OFFSET buffer1
-		;mov		ds, ax						;set DS to buffer1 address
-		;xor		si, si						;si=0
-		les		di, screen 
-		;mov		di, 32160
-		mov		cx, SCREEN_SIZE
-		;mov		cx, 300
+		mov		ax, _BUFF1
+		mov		es, ax						;set ES to buffer1 segment
+		mov		di, offset buffer1			; start at element 1
+		xor		di, di						;di=0
+		
+		;les		di, screen 
+		lds		si, screen					;point ds:[si] to vga
+		mov		cx, SCREEN_SIZE				;loop thru each pixel
 wloop:
-		mov		al, byte ptr buffer1[si]
-        mov     es:[di], al					;copy byte from buffer to screen
+		;mov		al, byte ptr buffer1[di]	;fetch
+		mov		al, byte ptr es:[di]	;fetch
+        ;mov     es:[di], al					;copy byte from buffer to screen
         ;mov     es:[di], 02h					;copy byte from buffer to screen
+        ;mov     ds:[si], 02h					;copy byte from buffer to screen
+        mov     ds:[si], al					;copy byte from buffer to screen
 		inc		di
 		inc		si
 		loop wloop
+		mov		ds, bx
+		pop		es
 		ret
 
 draw_box:	
