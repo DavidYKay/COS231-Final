@@ -13,8 +13,6 @@ STACK   SEGMENT PARA STACK 'STACK'
 STACK   ENDS
 _DATA   SEGMENT PARA PUBLIC 'DATA'
 screen  DD      0a0000000h
-;deltx   DW      0000h
-;delty   DW      0000h
 oldmode DB      ?  
 _DATA   ENDS
 _BUFF1	SEGMENT PARA PUBLIC 'BUFF1'
@@ -28,10 +26,21 @@ _TEXT   SEGMENT PARA PUBLIC 'CODE'
 start:
         mov     ax, DGROUP
         mov     ds, ax
+
 		call	save_oldmode
 		call	set_mode13h
 		;call	animate_ball
-		call	draw_pixel
+		;call	draw_pixel
+
+		;call	delay_second
+		call	delay_test
+
+		;call	clear_buffer
+		;call	write_to_screen
+		;call	draw_pixel
+
+		;call	clear_screen
+
 		jmp		done
 ;******************************
 ;VGA Mode Functions
@@ -79,48 +88,24 @@ animbloop:
 	call	write_to_screen
 	loop    animbloop           ;loops while decrementing CX for us
 	ret
-delay_frame:		;subroutine to delay until the next frame
-	push	dx ;dx - backup of ax, holding newtime
-	push	bx ;bh - holds deltaTotal ;bl - holds oldTime
-	xor		bx, bx				;used for counting delta time(ch) and oldtime (cl)
-del_loop:
-	call	get_time
-	mov		dx, ax				;in case we need it again
-	;mov	bx, ax				;in case we need it again
-del_sub:			
-	sub		al, bl				;delta = newtime - oldtime
-	cmp		al, 0
-	jl		del_zero			;we overflowed
-	add		bh, al				;add new delta to running delta total
-	mov		bl, dl				;store newTime in oldTime
-	;check - is deltatime greater than our threshold?
-	;cmp		bh, 50				;FRAME_THRESHOLD (30ms)
-	cmp		bh, FRAME_THRESHOLD				;FRAME_THRESHOLD (30ms)
-	;cmp		bh, 10				;FRAME_THRESHOLD (30ms)
-	;cmp		bh, 0FFFFh				;FRAME_THRESHOLD (30ms)
-	jge		del_fin
-	jmp		del_loop
-del_fin:
-	pop		bx
-	pop		dx
-	ret
-del_zero:
-	;mov		al, dl				;If negative, add 100 to newtime and repeat
-	mov		ax, dx				;If negative, add 100 to newtime and repeat
-	add		al, 100
-	jmp del_sub
 
 ;******************************
 ;Drawing functions
 ;******************************
 draw_pixel:
+		push	cx
+		cbw		
+		mov		cx, ax
 		les		di, screen
-		mov		es:[di + 100],1 ;draw to buffer
-		mov		es:[di + 200],1 ;draw to buffer
-		mov		es:[di + 300],1 ;draw to buffer
+pix_loop:
+		mov		es:[di],1 ;draw to buffer
+		add		di, 100
+		loop	pix_loop
 		call	write_to_screen
+		pop		cx
 		ret
-
+clear_screen:
+		les		di, screen
 clear_buffer:			;move all zeroes into the background
 		;les		di, buffer1
 		;mov		ax, OFFSET buffer1
@@ -195,12 +180,43 @@ get_time:
 ;	CH = hour CL = minute DH = second DL = 1/100 seconds
 ;   Function actually returns values in AH/AL at the moment
         mov     ah, 2Ch     ;
-        mov     al, 00h     ;
+        ;mov     al, 00h     ;
         int     21h
 		mov		ax, dx		;move to accumulator for output
 		pop		dx
 		pop		cx
 		ret
+delay_test:		;subroutine to delay until the next frame
+	call	get_time
+	call	draw_pixel
+	call	circ_newline
+	ret
+delay_second:		;subroutine to delay until the next frame
+	push	dx ;dx - backup of ax, holding newtime
+	push	bx ;bh - holds deltaTotal ;bl - holds oldTime
+	xor		bx, bx				;used for counting delta time(ch) and oldtime (cl)
+del_loop:
+	call	get_time
+	mov		dx, ax				;in case we need it again
+del_sub:			
+	sub		ah, bl				;delta = newtime - oldtime
+	cmp		ah, 0
+	jl		del_zero			;we overflowed
+	add		bh, ah				;add new delta to running delta total
+	mov		bl, dh				;store newTime in oldTime
+	;check - is deltatime greater than our threshold?
+	cmp		bh, 10				;FRAME_THRESHOLD (30ms)
+	;cmp		bh, FRAME_THRESHOLD				;FRAME_THRESHOLD (30ms)
+	jge		del_fin
+	jmp		del_loop
+del_fin:
+	pop		bx
+	pop		dx
+	ret
+del_zero:
+	mov		ax, dx				;If negative, add 100 to newtime and repeat
+	add		al, 60
+	jmp del_sub
 done:
         mov     ah, 08h         ;after loop
         int     21h             ;interrupt DOS, 'wait for keypress'
