@@ -32,8 +32,9 @@ start:
 		;call	animate_ball
 		;call	draw_pixel
 
-		;call	delay_second
+		call	delay_second
 		call	delay_test
+		call	delay_second
 
 		;call	clear_buffer
 		;call	write_to_screen
@@ -193,20 +194,18 @@ delay_test:		;subroutine to delay until the next frame
 	ret
 delay_second:		;subroutine to delay until the next frame
 	push	dx ;dx - backup of ax, holding newtime
-	push	bx ;bh - holds deltaTotal ;bl - holds oldTime
+	push	bx ;bl - holds deltaTotal ;bh - holds oldTime
 	xor		bx, bx				;used for counting delta time(ch) and oldtime (cl)
 del_loop:
 	call	get_time
 	mov		dx, ax				;in case we need it again
 del_sub:			
-	sub		ah, bl				;delta = newtime - oldtime
+	sub		ah, bh				;delta = newtime - oldtime
 	cmp		ah, 0
 	jl		del_zero			;we overflowed
-	add		bh, ah				;add new delta to running delta total
-	mov		bl, dh				;store newTime in oldTime
-	;check - is deltatime greater than our threshold?
-	cmp		bh, 10				;FRAME_THRESHOLD (30ms)
-	;cmp		bh, FRAME_THRESHOLD				;FRAME_THRESHOLD (30ms)
+	add		bl, ah				;add new delta to running delta total
+	mov		bh, dh				;store newTime in oldTime
+	cmp		bl, 3				;has it been 3 seconds?
 	jge		del_fin
 	jmp		del_loop
 del_fin:
