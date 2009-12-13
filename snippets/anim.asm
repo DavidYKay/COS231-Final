@@ -115,7 +115,7 @@ set_mode13h:
 ;Animation Functions
 ;******************************
 animate_box:
-	mov     cx, 1500			;screen width
+	mov     cx, 150			;screen width
 	;les		di, buffer1
 	;mov		ax, OFFSET buffer1
 	;mov		es, ax
@@ -156,6 +156,7 @@ clear_buffer:			;move all zeroes into the background
 		;mov		ax, es
 clear_main:
 		push	di
+		push	cx
 		xor		di, di
 		mov		cx, SCREEN_SIZE
 cloop:
@@ -163,12 +164,14 @@ cloop:
         mov byte ptr es:[di], 0    ;move an 02hex into wherever offset of di points
 		inc		di
 		loop cloop
+		pop		cx
 		pop		es
 		pop		di
 		ret
 write_to_screen:			;move all zeroes into the background
 		push	di
 		push	bx
+		push	cx
 		mov		bx, ds
 		;Use ES:DI and DS:SI to copy from one and write to the other
 		;mov		ax, _BUFF1
@@ -190,6 +193,7 @@ wloop:
 		inc		si
 		loop	wloop
 		mov		ds, bx
+		pop		cx
 		pop		bx
 		pop		di
 		ret
