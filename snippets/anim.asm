@@ -2,7 +2,7 @@ include ..\davidk.inc
 		.DOSSEG
 
 ;Ball struct, representing a bouncing ball
-BALL			struct
+BALL			struct	;6 bytes in size
 	colliding       db 0
 	Xpos	        db 160
 	Ypos	        db 100
@@ -24,14 +24,16 @@ STACK   ENDS
 _DATA   SEGMENT PARA PUBLIC 'DATA'
 screen  DD      0a0000000h
 oldmode DB      ?  
+buffOffset DW      ?  
+dataOffset DW      ?  
 _DATA   ENDS
-EGROUP  GROUP   _BUFF1
+EGROUP  GROUP   _BUFF1, _BALLS
 _BUFF1	SEGMENT PARA PUBLIC 'BUFF1'
 ;buffer1	DB		64000 DUP (?) ; dedicate 64000 bytes for our buffer
 buffer1	DB		64000 DUP (03) ; dedicate 64000 bytes for our buffer
 _BUFF1  ENDS
 _BALLS	SEGMENT PARA PUBLIC 'BALLS'
-balls	DB		256 DUP (?) ; dedicate 64000 bytes for our buffer
+balls	DB		256 DUP (?) ; 
 _BALLS  ENDS
 
 _TEXT   SEGMENT PARA PUBLIC 'CODE'
@@ -39,42 +41,44 @@ _TEXT   SEGMENT PARA PUBLIC 'CODE'
 start:
         mov     ax, DGROUP
         mov     ds, ax
-        ;mov     ax, EGROUP
-        ;mov     es, ax
+		mov		dataOffset, ax
+        mov     ax, EGROUP
+        mov     es, ax
+		mov		buffOffset, ax
 
 		call	save_oldmode
 		call	set_mode13h
 
-		push	es
 		mov		ax, _BUFF1
 		mov		es, ax						;set ES to buffer1 segment
 		mov		di, offset buffer1			; start at element 1
-		mov		di, 32500
-		call	draw_box
-		call	write_to_screen
-		add		di, 6400
-		call	draw_box
-		call	write_to_screen
-		add		di, 6400
-		call	draw_box
-		call	write_to_screen
-		add		di, 6400
-		call	draw_box
-		call	write_to_screen
-		add		di, 6400
-		call	draw_box
-		call	write_to_screen
-		add		di, 6400
-		call	draw_box
-		call	write_to_screen
-		add		di, 6400
-		call	draw_box
-		call	write_to_screen
+		;mov		di, 32500
+		mov		di, 1700
+		;call	draw_box
+		;call	write_to_screen
+		;add		di, 6400
+		;call	draw_box
+		;call	write_to_screen
+		;add		di, 6400
+		;call	draw_box
+		;call	write_to_screen
+		;add		di, 6400
+		;call	draw_box
+		;call	write_to_screen
+		;add		di, 6400
+		;call	draw_box
+		;call	write_to_screen
+		;add		di, 6400
+		;call	draw_box
+		;call	write_to_screen
+		;add		di, 6400
+		;call	draw_box
+		;call	write_to_screen
+
+		call	init_ball
 		;call	clear_buffer
 		;call	clear_screen
-
-		call	animate_box
-		pop		es
+		;call	animate_box
 		jmp		done
 ;******************************
 ;VGA Mode Functions
@@ -109,23 +113,37 @@ set_mode13h:
 ;Animation Functions
 ;******************************
 animate_box:
-	mov     cx, 32000			;screen width
-	;les		di, buffer1
-	;mov		ax, OFFSET buffer1
-	;mov		es, ax
-	;xor		di, di
+		mov     cx, 54000			;screen width
+		;les		di, buffer1
+		;mov		ax, OFFSET buffer1
+		;mov		es, ax
+		;xor		di, di
 animboxloop:
-	call	draw_box
-	;call	delay_frame
-	call	write_to_screen
-	call	clear_buffer
-	;call	clear_screen
-	inc		di
-	loop    animboxloop           ;loops while decrementing CX for us
-	ret
+		call	draw_box
+		;call	delay_frame
+		call	write_to_screen
+		call	clear_buffer
+		;call	clear_screen
+		inc		di
+		loop    animboxloop           ;loops while decrementing CX for us
+		ret
 
+init_ball:		;subroutine to initialize one ball to bounce around
+		push	di
+		ASSUME	di:PTR BALL
+		mov		di, OFFSET balls
+		mov		[di].colliding, 0
+		mov 	[di].Xpos, 160
+		mov 	[di].Ypos, 100
+		mov 	[di].deltaX, 10
+		mov 	[di].deltaY, 0
+		mov 	[di].color, 1
+		ASSUME	di:nothing
+		pop		di
+		ret
+	
 ;******************************
-;Drawing functions
+;Drawing subroutines
 ;******************************
 draw_pixels:
 		push	cx
