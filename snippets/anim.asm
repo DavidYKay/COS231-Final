@@ -3,12 +3,12 @@ include ..\davidk.inc
 
 ;Ball struct, representing a bouncing ball
 BALL			struct	;6 bytes in size
-	colliding       db 0
-	Xpos	        db 160
-	Ypos	        db 100
-	deltaX          db 0
-	deltaY			db 0
-	color	        db 0
+	colliding       DB 0
+	Xpos	        DB 160
+	Ypos	        DB 100
+	deltaX          DB 0
+	deltaY			DB 0
+	color	        DB 0
 BALL			ends
 
 ;MEMORY RESERVATION
@@ -24,8 +24,8 @@ STACK   ENDS
 _DATA   SEGMENT PARA PUBLIC 'DATA'
 screen  DD      0a0000000h
 oldmode DB      ?  
-buffOffset DW      ?  
-dataOffset DW      ?  
+EGroupSegment DW      ?  
+DGroupSegment DW      ?  
 _DATA   ENDS
 EGROUP  GROUP   _BUFF1, _BALLS
 _BUFF1	SEGMENT PARA PUBLIC 'BUFF1'
@@ -41,10 +41,10 @@ _TEXT   SEGMENT PARA PUBLIC 'CODE'
 start:
         mov     ax, DGROUP
         mov     ds, ax
-		mov		dataOffset, ax
+		mov		DGroupSegment, ax
         mov     ax, EGROUP
         mov     es, ax
-		mov		buffOffset, ax
+		mov		EGroupSegment, ax
 
 		call	save_oldmode
 		call	set_mode13h
@@ -75,10 +75,12 @@ start:
 		;call	draw_box
 		;call	write_to_screen
 
-		;call	init_ball
 		;call	clear_buffer
 		;call	clear_screen
-		call	animate_box
+		;call	animate_box
+		
+		call	init_ball
+		call	animate_ball
 		jmp		done
 ;******************************
 ;VGA Mode Functions
@@ -142,6 +144,71 @@ init_ball:		;subroutine to initialize one ball to bounce around
 		pop		di
 		ret
 	
+animate_ball:
+		mov     cx, 1600			;screen width
+		;les		di, buffer1
+		;mov		ax, OFFSET buffer1
+		;mov		es, ax
+		;xor		di, di
+animballloop:
+		call	draw_box
+		;call	draw_ball
+		;call	delay_frame
+		call	write_to_screen
+		call	clear_buffer
+		;call	clear_screen
+		call	move_ball
+		;inc		di
+		loop    animballloop           ;loops while decrementing CX for us
+		ret
+
+move_ball: ;adjusts ball's position based on deltaX, deltaY
+		push	es
+		mov		EGroupSegment, ax
+		mov		es, ax
+		mov		al, balls.deltaX	;lookup delta x
+		add		balls.Xpos, al
+		mov		al, balls.deltaY 	;lookup delta y
+		add		balls.Ypos,	al		
+		pop		es
+		ret
+
+get_delta_pixel: ;returns the ball's pixel displacement based on coordinates
+				;INPUT: AH:X-coord AL:Y-coord
+				;RETURN: AX: pixel displacement
+		push	bx
+		push	dx
+		mov		bx, ax				;BH: X BL: Y
+
+		mov		dx, 320
+		cbw							;Y-coord to 16 bits
+		mul		dx					;multiply deltY by 320
+		mov		dx, ax				;store low-order result in dx
+
+		mov		al, bh				;convert delta-X to 16bit
+		cbw
+
+		add		dx, ax				;deltaPixel = X-coord + Y-coord * 320
+		pop		dx
+		pop		bx
+		ret
+
+;get_coordinate_change: ;returns the change in ball's pixel placement based on deltaX, deltaY
+;		push	es
+;		push	bx
+;		push	dx
+;		xor		bx, bx				;we'll hold our temp value in here
+;
+;		mov		EGroupSegment, ax
+;		mov		es, ax
+;		mov		al, balls.deltaX	;lookup delta x
+;		add		bx, al
+;		mov		al, balls.deltaY 	;lookup delta y
+;
+;		pop		dx
+;		pop		bx
+;		pop		es
+;		ret
 ;******************************
 ;Drawing subroutines
 ;******************************
