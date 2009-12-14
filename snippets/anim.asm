@@ -158,19 +158,32 @@ animballloop:
 		call	clear_buffer
 		;call	clear_screen
 		call	move_ball
+
 		;inc		di
 		loop    animballloop           ;loops while decrementing CX for us
 		ret
 
+get_xy_coord: 
+;parameters: AX: offset
+;return AH: x-coord AL:y-coord
+;presumes es points to EGroupSegment
+		push	bx
+		mov		ax, bx
+		mov		ah, balls[bx].deltaX	;lookup delta x
+		mov		al, balls[bx].deltaY	;lookup delta y
+		pop		bx
+		ret
+
 move_ball: ;adjusts ball's position based on deltaX, deltaY
-		push	es
-		mov		EGroupSegment, ax
-		mov		es, ax
+			;presumes es points to EGroupSegment
+		;push	es
+		;mov		EGroupSegment, ax
+		;mov		es, ax
 		mov		al, balls.deltaX	;lookup delta x
 		add		balls.Xpos, al
 		mov		al, balls.deltaY 	;lookup delta y
 		add		balls.Ypos,	al		
-		pop		es
+		;pop		es
 		ret
 
 get_delta_pixel: ;returns the ball's pixel displacement based on coordinates
