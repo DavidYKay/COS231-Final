@@ -62,7 +62,8 @@ start:
 		;call	clear_screen
 		;call	animate_box
 		
-		;call	init_ball
+		call	init_ball
+		call	get_ball_pixel
 		;call	animate_ball
 		jmp		done
 ;******************************
@@ -154,8 +155,10 @@ get_xy_coord:
 ;presumes es points to EGroupSegment
 		push	bx
 		mov		ax, bx
-		mov		ah, balls[bx].deltaX	;lookup delta x
-		mov		al, balls[bx].deltaY	;lookup delta y
+		ASSUME	ax:PTR BALL
+		mov		ah, es:[bx].deltaX	;lookup delta x
+		mov		al, es:[bx].deltaY	;lookup delta y
+		ASSUME	ax:nothing
 		pop		bx
 		ret
 move_ball: ;adjusts ball's position based on deltaX, deltaY
