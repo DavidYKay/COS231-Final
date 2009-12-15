@@ -202,7 +202,8 @@ get_delta_pixel: ;returns the ball's pixel displacement based on coordinates
 		mov		al, bh				;convert delta-X to 16bit
 		cbw
 
-		add		dx, ax				;deltaPixel = X-coord + Y-coord * 320
+		;add		dx, ax				;deltaPixel = X-coord + Y-coord * 320
+		add		ax, dx				;deltaPixel = X-coord + Y-coord * 320
 		pop		dx
 		pop		bx
 		ret
