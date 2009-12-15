@@ -61,12 +61,13 @@ start:
 
 		;call	clear_buffer
 		;call	clear_screen
+		
 		;call	animate_box
 		
 		call	init_ball
 		mov		ax, 00
 		call	get_ball_pixel
-		;call	animate_ball
+		call	animate_ball
 		jmp		done
 ;******************************
 ;VGA Mode Functions
@@ -141,11 +142,12 @@ animate_ball:
 animballloop:
 		call	move_ball				;move ball and handle collision
 		call	get_ball_pixel			;get current DI based on x,y
-		;mov		di, ax					;point to the right pixel
-		;call	draw_box
+		mov		di, ax					;point to the right pixel
+
+		call	draw_box
 		;;call	draw_ball
-		;call	write_to_screen
-		;call	clear_buffer
+		call	write_to_screen
+		call	clear_buffer
 		;;call	clear_screen
 
 		;;call	delay_frame
@@ -155,18 +157,21 @@ get_xy_coord:
 ;parameters: AX: ball's offset in array
 ;return:     AH: x-coord AL:y-coord
 ;presumes es points to EGroupSegment
-		push	bx
-		mov		ax, bx
-		ASSUME	ax:PTR BALL
-		mov		ah, es:[bx].deltaX	;lookup delta x
-		mov		al, es:[bx].deltaY	;lookup delta y
-		ASSUME	ax:nothing
-		pop		bx
+		push	di
+		mov		di, es:OFFSET balls
+		add		di, ax
+		ASSUME	di:PTR BALL
+		mov		ah, es:[di].deltaX	;lookup delta x
+		mov		al, es:[di].deltaY	;lookup delta y
+		ASSUME	di:nothing
+		pop		di
 		ret
 move_ball: ;adjusts ball's position based on deltaX, deltaY
+;parameters: AX: ball's offset in array
 		push	di
-		ASSUME	di:PTR BALL
 		mov		di, es:OFFSET balls
+		add		di, ax
+		ASSUME	di:PTR BALL
 		mov		al, es:[di].deltaX	;lookup delta x
 		add		es:[di].Xpos, al
 		mov		al, es:[di].deltaY 	;lookup delta y
@@ -175,6 +180,7 @@ move_ball: ;adjusts ball's position based on deltaX, deltaY
 		ASSUME	di:nothing
 		ret
 get_ball_pixel: ;returns the ball's pixel positioning based on coordinates
+;INPUT: AX: Ball displacement in array
 		call	get_xy_coord
 		call	get_delta_pixel
 		ret
