@@ -140,6 +140,7 @@ animate_ball:
 		;mov		ax, EGroupSegment
 		;mov		es, ax
 animballloop:
+		mov		ax, 0					;load offset of ball in ax
 		call	move_ball				;move ball and handle collision
 		call	get_ball_pixel			;get current DI based on x,y
 		mov		di, ax					;point to the right pixel
@@ -169,6 +170,7 @@ get_xy_coord:
 move_ball: ;adjusts ball's position based on deltaX, deltaY
 ;parameters: AX: ball's offset in array
 		push	di
+		push	ax
 		mov		di, es:OFFSET balls
 		add		di, ax
 		ASSUME	di:PTR BALL
@@ -176,6 +178,7 @@ move_ball: ;adjusts ball's position based on deltaX, deltaY
 		add		es:[di].Xpos, al
 		mov		al, es:[di].deltaY 	;lookup delta y
 		add		es:[di].Ypos,	al		
+		pop		ax
 		pop		di
 		ASSUME	di:nothing
 		ret
