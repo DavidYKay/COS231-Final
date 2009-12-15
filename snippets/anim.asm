@@ -164,10 +164,6 @@ get_xy_coord:
 		pop		bx
 		ret
 move_ball: ;adjusts ball's position based on deltaX, deltaY
-		;presumes es points to EGroupSegment
-		;push	es
-		;mov		EGroupSegment, ax
-		;mov		es, ax
 		push	di
 		ASSUME	di:PTR BALL
 		mov		di, es:OFFSET balls
@@ -177,7 +173,6 @@ move_ball: ;adjusts ball's position based on deltaX, deltaY
 		add		es:[di].Ypos,	al		
 		pop		di
 		ASSUME	di:nothing
-		;pop		es
 		ret
 get_ball_pixel: ;returns the ball's pixel positioning based on coordinates
 		call	get_xy_coord
