@@ -24,6 +24,7 @@ STACK   ENDS
 _DATA   SEGMENT PARA PUBLIC 'DATA'
 screen  DD      0a0000000h
 oldmode DB      ?  
+EOrigSegment  DW      ?  
 EGroupSegment DW      ?  
 DGroupSegment DW      ?  
 _DATA   ENDS
@@ -42,45 +43,27 @@ start:
         mov     ax, DGROUP
         mov     ds, ax
 		mov		DGroupSegment, ax
+		mov		ax, es
+		mov		EOrigSegment, ax			;backup the original segment
         mov     ax, EGROUP
         mov     es, ax
-		mov		EGroupSegment, ax
+		mov		EGroupSegment, ax			;store the EGROUp segment
 
-		call	save_oldmode
-		call	set_mode13h
+		call	save_oldmode				;save initial video mode
+		call	set_mode13h					;set to 256-color 320x200
 
 		mov		ax, _BUFF1
 		mov		es, ax						;set ES to buffer1 segment
 		mov		di, offset buffer1			; start at element 1
 		;mov		di, 32500
 		mov		di, 1700
-		;call	draw_box
-		;call	write_to_screen
-		;add		di, 6400
-		;call	draw_box
-		;call	write_to_screen
-		;add		di, 6400
-		;call	draw_box
-		;call	write_to_screen
-		;add		di, 6400
-		;call	draw_box
-		;call	write_to_screen
-		;add		di, 6400
-		;call	draw_box
-		;call	write_to_screen
-		;add		di, 6400
-		;call	draw_box
-		;call	write_to_screen
-		;add		di, 6400
-		;call	draw_box
-		;call	write_to_screen
 
 		;call	clear_buffer
 		;call	clear_screen
 		;call	animate_box
 		
-		call	init_ball
-		call	animate_ball
+		;call	init_ball
+		;call	animate_ball
 		jmp		done
 ;******************************
 ;VGA Mode Functions
@@ -123,13 +106,13 @@ animate_box:
 animboxloop:
 		call	draw_box
 		;call	delay_frame
+		;call	delay_second
 		call	write_to_screen
 		call	clear_buffer
 		;call	clear_screen
 		inc		di
 		loop    animboxloop           ;loops while decrementing CX for us
 		ret
-
 init_ball:		;subroutine to initialize one ball to bounce around
 		push	di
 		ASSUME	di:PTR BALL
@@ -143,26 +126,28 @@ init_ball:		;subroutine to initialize one ball to bounce around
 		ASSUME	di:nothing
 		pop		di
 		ret
-	
 animate_ball:
 		mov     cx, 1600			;screen width
 		;les		di, buffer1
 		;mov		ax, OFFSET buffer1
 		;mov		es, ax
 		;xor		di, di
-animballloop:
-		call	draw_box
-		;call	draw_ball
-		;call	delay_frame
-		call	write_to_screen
-		call	clear_buffer
-		;call	clear_screen
-		call	move_ball
 
-		;inc		di
+		;mov		ax, EGroupSegment
+		;mov		es, ax
+animballloop:
+		call	move_ball				;move ball and handle collision
+		call	get_ball_pixel			;get current DI based on x,y
+		;mov		di, ax					;point to the right pixel
+		;call	draw_box
+		;;call	draw_ball
+		;call	write_to_screen
+		;call	clear_buffer
+		;;call	clear_screen
+
+		;;call	delay_frame
 		loop    animballloop           ;loops while decrementing CX for us
 		ret
-
 get_xy_coord: 
 ;parameters: AX: offset
 ;return AH: x-coord AL:y-coord
@@ -173,19 +158,26 @@ get_xy_coord:
 		mov		al, balls[bx].deltaY	;lookup delta y
 		pop		bx
 		ret
-
 move_ball: ;adjusts ball's position based on deltaX, deltaY
-			;presumes es points to EGroupSegment
+		;presumes es points to EGroupSegment
 		;push	es
 		;mov		EGroupSegment, ax
 		;mov		es, ax
-		mov		al, balls.deltaX	;lookup delta x
-		add		balls.Xpos, al
-		mov		al, balls.deltaY 	;lookup delta y
-		add		balls.Ypos,	al		
+		push	di
+		ASSUME	di:PTR BALL
+		mov		di, OFFSET balls
+		mov		al, es:[di].deltaX	;lookup delta x
+		add		es:[di].Xpos, al
+		mov		al, es:[di].deltaY 	;lookup delta y
+		add		es:[di].Ypos,	al		
+		pop		di
+		ASSUME	di:nothing
 		;pop		es
 		ret
-
+get_ball_pixel: ;returns the ball's pixel positioning based on coordinates
+		call	get_xy_coord
+		call	get_delta_pixel
+		ret
 get_delta_pixel: ;returns the ball's pixel displacement based on coordinates
 				;INPUT: AH:X-coord AL:Y-coord
 				;RETURN: AX: pixel displacement
@@ -205,7 +197,6 @@ get_delta_pixel: ;returns the ball's pixel displacement based on coordinates
 		pop		dx
 		pop		bx
 		ret
-
 ;get_coordinate_change: ;returns the change in ball's pixel placement based on deltaX, deltaY
 ;		push	es
 ;		push	bx
@@ -231,7 +222,7 @@ draw_pixels:
 		mov		cx, ax
 		les		di, screen
 pix_loop:
-		mov		es:[di],1 ;draw to buffer
+		mov		es:[di], 1 ;draw to buffer
 		add		di, 100
 		loop	pix_loop
 		;call	write_to_screen
