@@ -33,8 +33,9 @@ _BUFF1	SEGMENT PARA PUBLIC 'BUFF1'
 ;buffer1	DB		64000 DUP (?) ; dedicate 64000 bytes for our buffer
 buffer1	DB		64000 DUP (03) ; dedicate 64000 bytes for our buffer
 _BUFF1  ENDS
+
 _BALLS	SEGMENT PARA PUBLIC 'BALLS'
-balls	DB		256 DUP (?) ; 
+balls	DB		256 DUP (07) ; 
 _BALLS  ENDS
 
 _TEXT   SEGMENT PARA PUBLIC 'CODE'
@@ -63,6 +64,7 @@ start:
 		;call	animate_box
 		
 		call	init_ball
+		mov		ax, 00
 		call	get_ball_pixel
 		;call	animate_ball
 		jmp		done
@@ -116,8 +118,8 @@ animboxloop:
 		ret
 init_ball:		;subroutine to initialize one ball to bounce around
 		push	di
+		mov		di, es:OFFSET balls
 		ASSUME	di:PTR BALL
-		mov		di, OFFSET balls
 		mov		es:[di].colliding, 0
 		mov 	es:[di].Xpos, 160
 		mov 	es:[di].Ypos, 100
@@ -150,8 +152,8 @@ animballloop:
 		loop    animballloop           ;loops while decrementing CX for us
 		ret
 get_xy_coord: 
-;parameters: AX: offset
-;return AH: x-coord AL:y-coord
+;parameters: AX: ball's offset in array
+;return:     AH: x-coord AL:y-coord
 ;presumes es points to EGroupSegment
 		push	bx
 		mov		ax, bx
@@ -168,7 +170,7 @@ move_ball: ;adjusts ball's position based on deltaX, deltaY
 		;mov		es, ax
 		push	di
 		ASSUME	di:PTR BALL
-		mov		di, OFFSET balls
+		mov		di, es:OFFSET balls
 		mov		al, es:[di].deltaX	;lookup delta x
 		add		es:[di].Xpos, al
 		mov		al, es:[di].deltaY 	;lookup delta y
