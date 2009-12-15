@@ -144,7 +144,7 @@ animballloop:
 		call	move_ball				;move ball and handle collision
 		call	get_ball_pixel			;get current DI based on x,y
 		mov		di, ax					;point to the right pixel
-
+		;inc		di
 		call	draw_box
 		;;call	draw_ball
 		call	write_to_screen
@@ -162,8 +162,8 @@ get_xy_coord:
 		mov		di, es:OFFSET balls
 		add		di, ax
 		ASSUME	di:PTR BALL
-		mov		ah, es:[di].deltaX	;lookup delta x
-		mov		al, es:[di].deltaY	;lookup delta y
+		mov		ah, es:[di].Xpos	;lookup current x
+		mov		al, es:[di].Ypos	;lookup current y
 		ASSUME	di:nothing
 		pop		di
 		ret
