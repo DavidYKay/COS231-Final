@@ -124,7 +124,7 @@ init_ball:		;subroutine to initialize one ball to bounce around
 		mov 	es:[di].Xpos, 160
 		mov 	es:[di].Ypos, 100
 		mov 	es:[di].deltaX, 10
-		mov 	es:[di].deltaY, 0
+		mov 	es:[di].deltaY, 10
 		mov 	es:[di].color, 1
 		ASSUME	di:nothing
 		pop		di
