@@ -3,11 +3,11 @@ include davidk.inc
 
 ;Ball struct, representing a bouncing ball
 BALL			struct	;6 bytes in size
-	colliding       DB 0
 	Xpos	        DW 160
 	Ypos	        DW 100 ;consider making this a byte?
 	deltaX          DB 0
 	deltaY			DB 0
+	colliding       DB 0
 	color	        DB 0
 BALL			ends
 
