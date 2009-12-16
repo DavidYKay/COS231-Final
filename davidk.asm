@@ -445,12 +445,23 @@ delay_test:		;test the delay method by delaying then drawing some stuff on the s
 	call	circ_newline
 	ret
 delay_frame:		;subroutine to delay until the next frame
+	push	dx ;dx - backup of ax, holding newtime
+	push	bx ;bl - total bh - lastTime	
+	xor		bx, bx	
+	call	get_time
+	mov		bh, ah				;store our first "lastTime"
 frame_loop:
 	call	get_time
-	cmp		ah, 30
-	;jle		frame_done
-	jg		frame_loop
+	mov		dx, ax
+	sub		ah, bh				;newtime - oldTime
+	add		bl, ah  			;add new delta to total
+	cmp		bl, 3   			;has total hit 3 seconds?
+	jge		frame_done
+	mov		bh, dh				;mark newTime as lastTime
+	jmp		frame_loop			;keep looping
 frame_done:
+	pop		bx
+	pop		dx				
 	ret
 	
 delay_second:		;subroutine to delay until the next second
