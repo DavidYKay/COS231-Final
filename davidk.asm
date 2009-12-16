@@ -126,9 +126,9 @@ init_ball:		;subroutine to initialize one ball to bounce around
 		ASSUME	di:PTR BALL
 		mov		es:[di].colliding, 0
 		mov 	es:[di].Xpos, 220
-		mov 	es:[di].Ypos, 10
-		mov 	es:[di].deltaX, 1
-		mov 	es:[di].deltaY, -1
+		mov 	es:[di].Ypos, 194
+		mov 	es:[di].deltaX, 0
+		mov 	es:[di].deltaY, 1
 		mov 	es:[di].color,  5
 		add		di, BALL_BYTES		;slide to next ball
 		mov		es:[di].colliding, 0
@@ -176,16 +176,16 @@ detect_collision:			;subroutine to detect a collision and correct the deltaX/del
 		mov		di, es:OFFSET balls
 		add		di, ax
 		ASSUME	di:PTR BALL
-		mov		bx, es:[di].Xpos	;lookup x pos
 		mov		ax, es:[di].Ypos 	;lookup y pos
+		mov		bx, es:[di].Xpos	;lookup x pos
 		cmp		ax, 5
-		jl		y_collision
+		jle		y_collision
 		cmp		ax, 195
-		jg		y_collision
+		jge		y_collision
 		cmp		bx, 5
-		jl		x_collision
+		jle		x_collision
 		cmp		bx, 315
-		jg		x_collision
+		jge		x_collision
 		jmp		done_collision		;no collisions found
 x_collision:				;if X is < 5 or > 315
 		neg		es:[di].deltaX
