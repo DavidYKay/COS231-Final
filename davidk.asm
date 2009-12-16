@@ -89,7 +89,17 @@ start:
 		;call	animate_ball
 
 		call	delay_test
-		call	delay_frame
+		call	delay_second
+		;call	clear_screen
+		;call	delay_test
+		;call	delay_frame
+		;call	clear_screen
+		;call	delay_test
+		;call	delay_frame
+		;call	clear_screen
+		;call	delay_test
+		;call	delay_frame
+		;call	clear_screen
 		jmp		done
 ;******************************
 ;VGA Mode Functions
@@ -271,7 +281,7 @@ increment_ball_color:
 ;******************************
 draw_pixels:
 		push	cx
-		cbw		
+		cbw							;only draw 1/100ths of second
 		mov		cx, ax
 		les		di, screen
 pix_loop:
@@ -466,18 +476,20 @@ frame_done:
 	
 delay_second:		;subroutine to delay until the next second
 	push	dx ;dx - backup of ax, holding newtime
-	push	bx ;bl - holds deltaTotal ;bh - holds oldTime
+	push	bx ;bl - holds Total ;bh - holds oldTime
 	xor		bx, bx				;used for counting delta time(ch) and oldtime (cl)
+	call	get_time
+	mov		bh, al
 del_loop:
 	call	get_time
 	mov		dx, ax				;in case we need it again
 del_sub:			
-	sub		ah, bh				;delta = newtime - oldtime
-	cmp		ah, 0
+	sub		al, bh				;delta = newtime - oldtime
+	cmp		al, 0
 	jl		del_zero			;we overflowed
-	add		bl, ah				;add new delta to running delta total
-	mov		bh, dh				;store newTime in oldTime
-	cmp		bl, 3				;has it been 3 seconds?
+	add		bl, al				;add new delta to running total
+	mov		bh, dl				;store newTime in oldTime
+	cmp		bl, 50				;has it been 3 seconds?
 	jge		del_fin
 	jmp		del_loop
 del_fin:
@@ -486,7 +498,7 @@ del_fin:
 	ret
 del_zero:
 	mov		ax, dx				;If negative, add 100 to newtime and repeat
-	add		al, 60
+	add		al, 100
 	jmp del_sub
 
 check_key:
