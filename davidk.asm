@@ -29,22 +29,9 @@ EOrigSegment  DW      ?
 EGroupSegment DW      ?  
 DGroupSegment DW      ?  
 
-;circLine1	DW		0000111000000000b
-;circLine2	DW		0011000110000000b
-;circLine3	DW		0100000001000000b
-;circLine4	DW		1000000000100000b
-
-;LINE 1;00001110000
-;LINE 2;00110001100
-;LINE 3;01000000010
-;LINE 3;01000000010
-;LINE 4;10000000001
-;LINE 4;10000000001
-;LINE 4;10000000001
-;LINE 3;01000000010
-;LINE 3;01000000010
-;LINE 2;00110001100
-;LINE 1;00001110000
+fn	DB	"balls.txt", 0     ; indicates we're zero-terminating our name, instead of '$'-terminating
+fhandle	DW	?
+emsg	DB	"I/O Error.", 13, 10, "$"
 
 _DATA   ENDS
 EGROUP  GROUP   _BUFF1, _BALLS
@@ -60,20 +47,17 @@ _BALLS  ENDS
 _TEXT   SEGMENT PARA PUBLIC 'CODE'
         ASSUME  cs:_TEXT, ds:DGROUP, ss:DGROUP, es:EGROUP
 start:
+        mov     ax, DGROUP					;set Dsegment to the DGROUP
+        mov     ds, ax
+		mov		DGroupSegment, ax
+		mov		ax, es
+
 		mov		EOrigSegment, ax			;backup the original segment
         mov     ax, EGROUP
         mov     es, ax
 		mov		EGroupSegment, ax			;store the EGROUp segment
 
-		;fetch the command line parameters
-		
-		;based on the parameters, open a file
-		;from the file, read the data into the buffer
-
-        mov     ax, DGROUP					;set Dsegment to the DGROUP
-        mov     ds, ax
-		mov		DGroupSegment, ax
-		mov		ax, es
+		call	parse_input
 		
 		call	save_oldmode				;save initial video mode
 		call	set_mode13h					;set to 256-color 320x200
@@ -89,7 +73,7 @@ start:
 		call	animate_ball				;this will loop until forever
 		jmp		done
 ;******************************
-;VGA Mode Functions
+;VGA Mode Subroutines
 ;******************************
 save_oldmode:
         mov     ah, 0fh     ;get video mode 
@@ -118,7 +102,7 @@ set_mode13h:
         out     dx, al
 		ret
 ;******************************
-;Animation Functions
+;Animation Subroutines
 ;******************************
 init_ball:		;subroutine to initialize one ball to bounce around
 		push	di
@@ -183,7 +167,7 @@ each_ball:
 		;jmp		each_ball				;loop forever
 		ret
 ;******************************
-;Physics Functions
+;Physics Subroutines
 ;******************************
 detect_collision:			;subroutine to detect a collision and correct the deltaX/deltaY
 		;PARAMETERS: AX: ball's offset in array
@@ -346,9 +330,18 @@ wloop:
 		pop		di
 		ret
 draw_circle: ;draws a circle using its offset? using its color?
+;LINE 1;00001110000
+;LINE 2;00110001100
+;LINE 3;01000000010
+;LINE 3;01000000010
+;LINE 4;10000000001
+;LINE 4;10000000001
+;LINE 4;10000000001
+;LINE 3;01000000010
+;LINE 3;01000000010
+;LINE 2;00110001100
+;LINE 1;00001110000
 		push	di				;store this for safekeeping
-		;sub		di, 3531		;draw from the top left (11 + 11*320)
-		;sub		di, 1605		;draw from the top left (11 + 11*320)
 		sub		di, 1606		;draw from the top left (11 + 11*320)
 		call	draw_circ1
 		call	circ_newline
@@ -434,24 +427,68 @@ circ_newline:					;add 320 to move to next line
 		add		di, 310 		;remove 10 to move back to first position
 		ret
 ;******************************
-;Utility Functions
+;I/O Subroutines
+;******************************
+parse_input:
+	call	open_file
+	call	read_file
+	jmp		done
+		;fetch the command line parameters
+		;based on the parameters, open a file
+		;"balls.txt"
+		;from the file, read the data into the buffer
+		;from the buffer, read the parameters and init the balls
+open_file:
+	mov		ax, 3d00h				;interrupt id 3Dh
+	mov		dx, OFFSET fn			;-filename, zero-terminated
+	int		21h						;Open File
+	jc		error					;error!
+	mov		fhandle, ax				;store our filehandle in memory
+	ret
+read_file:
+	mov		ax, 3f00h				;interrupt id 3fh
+	mov		bx, fhandle				;moves block of memory
+	mov		cx, 32					;read 32 bytes
+	mov		dx, OFFSET buffer1      ;OFFSET - moves runtime address of buf into dx
+	int		21h						;Read from file
+	jc		error
+	cmp		ax, 0					;number of bytes read
+	jz		eof
+	mov		si, ax
+	mov		byte ptr buffer1[si], '$'; indexed direct instruction. 
+	mov		ah, 09h					; verify it worked using -d ds:18 1 21
+	mov		dx, OFFSET buffer1
+	int		21h						;write to terminal
+	jmp		read_file
+eof:
+	mov		ax, 3e00h
+	mov		dx, OFFSET fn
+	int		21h						;close file
+	ret
+error:
+	mov		ah, 09h
+	mov		dx, OFFSET emsg
+	int		21h						;write to terminal
+	jmp		done
+;******************************
+;Timing/Delay Subroutines
 ;******************************
 get_time:
-		push	cx
-		push	dx
+	push	cx
+	push	dx
 ;Get System Time			21h		2Ch
 ;	RETURN:
 ;	CH = hour CL = minute DH = second DL = 1/100 seconds
 ;   Function actually returns DX values in AH/AL at the moment
-        mov     ah, 2Ch     ;
-        ;mov     al, 00h     ;
-        int     21h
-		;mov		ax, cx
-		mov		ax, dx		;move to accumulator for output
+	mov     ah, 2Ch     ;
+	;mov     al, 00h     ;
+	int     21h
+	;mov		ax, cx
+	mov		ax, dx		;move to accumulator for output
 
-		pop		dx
-		pop		cx
-		ret
+	pop		dx
+	pop		cx
+	ret
 delay_test:		;test the delay method by delaying then drawing some stuff on the screen
 	call	get_time
 	call	draw_pixels
@@ -476,7 +513,6 @@ frame_done:
 	pop		bx
 	pop		dx				
 	ret
-	
 delay_second:		;subroutine to delay until the next second
 	push	dx ;dx - backup of ax, holding newtime
 	push	bx ;bl - holds Total ;bh - holds oldTime
@@ -503,12 +539,16 @@ del_zero:
 	mov		ax, dx				;If negative, add 100 to newtime and repeat
 	add		al, 100
 	jmp del_sub
-
+;******************************
+;Misc Subroutines
+;******************************
 check_key:
 	mov     ah, 06h         ;
 	int     21h             ;interrupt DOS, 'direct console input'
 	jz		done
 	ret
+;******************************
+;******************************
 done:
 	mov     ah, 08h         ;after loop
 	int     21h             ;interrupt DOS, 'wait for keypress'
