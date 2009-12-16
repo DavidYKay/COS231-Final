@@ -32,6 +32,7 @@ DGroupSegment DW      ?
 fn	DB	"balls.txt", 0     ; indicates we're zero-terminating our name, instead of '$'-terminating
 fhandle	DW	?
 emsg	DB	"I/O Error.", 13, 10, "$"
+buffer2	DB		6400 DUP (03) ; dedicate 64000 bytes for our buffer
 
 _DATA   ENDS
 EGROUP  GROUP   _BUFF1, _BALLS
@@ -433,11 +434,11 @@ parse_input:
 	call	open_file
 	call	read_file
 	jmp		done
-		;fetch the command line parameters
-		;based on the parameters, open a file
-		;"balls.txt"
-		;from the file, read the data into the buffer
-		;from the buffer, read the parameters and init the balls
+	;fetch the command line parameters
+	;based on the parameters, open a file
+	;"balls.txt"
+	;from the file, read the data into the buffer
+	;from the buffer, read the parameters and init the balls
 open_file:
 	mov		ax, 3d00h				;interrupt id 3Dh
 	mov		dx, OFFSET fn			;-filename, zero-terminated
@@ -449,15 +450,15 @@ read_file:
 	mov		ax, 3f00h				;interrupt id 3fh
 	mov		bx, fhandle				;moves block of memory
 	mov		cx, 32					;read 32 bytes
-	mov		dx, OFFSET buffer1      ;OFFSET - moves runtime address of buf into dx
+	mov		dx, OFFSET buffer2      ;OFFSET - moves runtime address of buf into dx
 	int		21h						;Read from file
 	jc		error
 	cmp		ax, 0					;number of bytes read
 	jz		eof
 	mov		si, ax
-	mov		byte ptr buffer1[si], '$'; indexed direct instruction. 
+	mov		byte ptr buffer2[si], '$'; indexed direct instruction. 
 	mov		ah, 09h					; verify it worked using -d ds:18 1 21
-	mov		dx, OFFSET buffer1
+	mov		dx, OFFSET buffer2
 	int		21h						;write to terminal
 	jmp		read_file
 eof:
