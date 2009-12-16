@@ -171,12 +171,12 @@ mainloop:
 		mov		ax, 0					;load offset of ball in ax
 		jmp		each_ball
 next_ball:
-		mov		ax, dx					;restore offset from register
+		mov		ax, si					;restore offset from register
 		add		ax, BALL_BYTES			;increment to next ball
 each_ball:
 		call	detect_collision
 		call	move_ball				;move ball and handle collision
-		mov		dx, ax					;hold on to our offset
+		mov		si, ax					;hold on to our offset
 		call	get_ball_color			;put color in bl
 		call	get_ball_pixel			;put current pixel offset in AX
 		mov		di, ax					;point to the right pixel
