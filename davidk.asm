@@ -24,6 +24,7 @@ STACK   ENDS
 _DATA   SEGMENT PARA PUBLIC 'DATA'
 screen  DD      0a0000000h
 oldmode DB      ?  
+numballs DW     ?  ;number of balls in the array. A word since we'll be using it in CX
 EOrigSegment  DW      ?  
 EGroupSegment DW      ?  
 DGroupSegment DW      ?  
@@ -152,11 +153,12 @@ init_ball:		;subroutine to initialize one ball to bounce around
 		mov 	es:[di].color,  4
 		ASSUME	di:nothing
 		pop		di
+		mov		numballs, 2
 		ret
 animate_ball:
-		;mov     cx, 16000			;screen width
-		;mov     cx, 1600			;screen width
-		mov     cx, 640			;screen width
+		;mov		cx, 16000			;screen width
+		;mov     	cx, 1600			;screen width
+		;mov     	cx, 640			;screen width
 		;les		di, buffer1
 		;mov		ax, OFFSET buffer1
 		;mov		es, ax
@@ -164,20 +166,29 @@ animate_ball:
 
 		;mov		ax, EGroupSegment
 		;mov		es, ax
-animballloop:
+mainloop:
+		mov		cx, numballs			;init our ball counter
+		mov		ax, 0					;load offset of ball in ax
+		jmp		each_ball
+next_ball:
+		mov		ax, dx					;restore offset from register
+		add		ax, 8					;increment to next ball
+each_ball:
 		mov		ax, 0					;load offset of ball in ax
 		call	detect_collision
 		call	move_ball				;move ball and handle collision
+		mov		dx, ax					;hold on to our offset
 		call	get_ball_color			;put color in bl
 		call	get_ball_pixel			;put current pixel offset in AX
 		mov		di, ax					;point to the right pixel
 		call	draw_circle
+		;loop    next_ball			    ;else, loop to next round of animation
 		call	write_to_screen
 		call	clear_buffer
-		;;call	clear_screen
 		call	delay_second
-		;call	check_key
-		loop    animballloop           ;loops while decrementing CX for us
+		;call	check_key				;check for user input
+		;jmp	mainloop				;loop forever
+		jmp		each_ball				;loop forever
 		ret
 ;******************************
 ;Physics Functions
