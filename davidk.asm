@@ -149,7 +149,8 @@ base10loop:			;use BH as a counter of items on the stack
 		mov		bp, ax
 		dec		dh
 		cmp		dh, 0				;out of items?
-		jle		base10loop
+		jg		base10loop
+		;jle		base10loop
 		call	store_in_tempball	;store the finished product in tempball
 		;fall into next_char
 next_char:
