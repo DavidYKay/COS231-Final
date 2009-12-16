@@ -151,9 +151,16 @@ init_ball:		;subroutine to initialize one ball to bounce around
 		mov 	es:[di].deltaX, 1
 		mov 	es:[di].deltaY, 1
 		mov 	es:[di].color,  4
+		add		di, BALL_BYTES		;slide to next ball
+		mov		es:[di].colliding, 0
+		mov 	es:[di].Xpos, 250
+		mov 	es:[di].Ypos, 180
+		mov 	es:[di].deltaX, 1
+		mov 	es:[di].deltaY, 1
+		mov 	es:[di].color,  4
 		ASSUME	di:nothing
 		pop		di
-		mov		numballs, 2
+		mov		numballs, 3
 		ret
 animate_ball:
 		;mov		cx, 16000			;screen width
@@ -184,7 +191,7 @@ each_ball:
 		loop    next_ball			    ;else, loop to next round of animation
 		call	write_to_screen
 		call	clear_buffer
-		call	delay_second
+		;call	delay_second
 		;call	check_key				;check for user input
 		jmp	mainloop				;loop forever
 		;jmp		each_ball				;loop forever
@@ -328,8 +335,7 @@ cloop:
 write_to_screen:			;move all zeroes into the background
 		push	di
 		push	cx
-		push	bx
-		mov		bx, ds
+		push	ds
 		;Use ES:DI and DS:SI to copy from one and write to the other
 		;mov		ax, _BUFF1
 		;mov		es, ax						;set ES to buffer1 segment
@@ -349,8 +355,7 @@ wloop:
 		inc		di
 		inc		si
 		loop	wloop
-		mov		ds, bx
-		pop		bx
+		pop		ds
 		pop		cx
 		pop		di
 		ret
