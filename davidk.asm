@@ -202,11 +202,13 @@ detect_collision:			;subroutine to detect a collision and correct the deltaX/del
 		jmp		done_collision		;no collisions found
 x_collision:				;if X is < 5 or > 315
 		neg		es:[di].deltaX
-		inc		es:[di].color 	;change color
+		call	increment_ball_color;
+		;inc		es:[di].color 	;change color
 		jmp		done_collision
 y_collision:				;if Y is < 5 or > 195
 		neg		es:[di].deltaY
-		inc		es:[di].color 	;change color
+		call	increment_ball_color;
+		;inc		es:[di].color 	;change color
 done_collision:
 		ASSUME	di:nothing
 		pop		bx
@@ -268,6 +270,12 @@ get_ball_color:
 		mov		dl, es:[di].color	;lookup current color
 		ASSUME	di:nothing
 		pop		di
+		ret
+increment_ball_color:
+		mov		al, es:[di].color 	
+		add		al, 8				;change color by 8, which is not an even factor of 255
+		cmp		al, 0				;make sure we don't match the background color
+		mov		es:[di].color, al
 		ret
 ;******************************
 ;Drawing subroutines
