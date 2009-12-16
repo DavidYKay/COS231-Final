@@ -167,7 +167,14 @@ done_init:
 		ret
 
 store_in_tempball: ;stores a number in the proper position in tempball
+		cmp		si, 3
+		jle		store_word
+store_byte:
+		mov		byte ptr tempBall[si], bl
+		jmp		store_cont
+store_word:
 		mov		word ptr tempBall[si], bx
+store_cont:
 		inc		si
 		cmp		si, 7				;have we run over 7?
 		jg		reset_counter
