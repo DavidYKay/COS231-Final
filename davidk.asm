@@ -32,7 +32,8 @@ DGroupSegment DW      ?
 fn	DB	"balls.txt", 0     ; indicates we're zero-terminating our name, instead of '$'-terminating
 fhandle	DW	?
 emsg	DB	"I/O Error.", 13, 10, "$"
-buffer2	DB		6400 DUP (03) ; dedicate 64000 bytes for our buffer
+buffer2	DB		512 DUP (03) ; dedicate 64000 bytes for our buffer
+tempBall DB     8 DUP (?)    ; temporary ball
 
 _DATA   ENDS
 EGROUP  GROUP   _BUFF1, _BALLS
@@ -105,6 +106,100 @@ set_mode13h:
 ;******************************
 ;Animation Subroutines
 ;******************************
+init_balls_from_input:				;subroutine to initialize all balls from input
+		xor		di, di				;byte counter
+start_readinput:
+		mov		tempBall, 0			;zero out tempball
+		xor		dx, dx				;DL - 10^x counter DH - stack counter
+		xor		bx, bx				;BX - running total
+		xor		si, si				;Tempball ring counter, marks which bytes to write to 
+readloop:			;read parameters from buffer
+		mov		al, buffer2[di]
+		cmp		al, 20h				;Is character a space?
+		je		end_number
+		cmp     al, 0Dh				;is character a carriage return?
+		je		next_line
+		cmp     al, 0Ah 			;is character a newline?
+		je		next_line
+		cmp		al, "$"				;$ signifies end of input
+		je		done_init
+
+		mov		ah, al				;back up AL in AH
+		call	check_character		;IS character an ascii number?
+		cmp		al, 1
+		je		digit_found			;found!
+		jmp		next_char			;unrecognized character. keep going.
+digit_found:		;store the digit on the stack
+		mov		al, ah
+		sub		al, 30h				;remove 30hex to get an actual number
+		cbw
+		push	ax					;store the number on the stack
+		inc		dh					;dh counts how many items we have on the stack
+		jmp		next_char
+end_number:			;found a whole number. convert it from base 10 and store it 
+		xor		dl, dl				;use BL as a 10^x counter
+base10loop:			;use BH as a counter of items on the stack
+		pop		ax 
+		mul		dl					;multiply it by the appropriate base
+		add		bx, ax				;running total
+
+		inc		dl					;next power of ten
+		dec		dh
+		cmp		dh, 0				;out of items?
+		jne		base10loop
+		call	store_in_tempball	;store the finished product in tempball
+		;fall into next_char
+next_char:
+		inc		cx
+		jmp		readloop
+next_line:		;next line, so let's try to init a ball from what we have
+ball_found:
+		call	init_ball_from_temp
+		add		di, BALL_BYTES		;slide to next ball bucket
+		inc		cx
+		jmp		start_readinput
+done_init:		
+		ret
+
+store_in_tempball: ;stores a number in the proper position in tempball
+		mov		word ptr tempBall[si], bx
+		inc		si
+		cmp		si, 7				;have we run over 7?
+		jg		reset_counter
+		cmp		si,	1				;are we in no man's land?
+		je		extra_bump
+		cmp		si,	3				;are we in no man's land?
+		je		extra_bump
+tempball_done:
+		ret
+extra_bump:
+		inc		si
+		jmp		tempball_done
+reset_counter:
+		xor		si, si
+		jmp		tempball_done
+
+init_ball_from_temp:		;make sure that di points to the right offset
+		push	di
+		mov		di, es:OFFSET balls
+		ASSUME	di:PTR BALL
+		;ASSUME  tempBall:PTR BALL
+		mov 	ax,	word ptr tempBall[0]
+		mov 	es:[di].Xpos,		ax
+		mov 	ax,	word ptr tempBall[2]
+		mov 	es:[di].Ypos,   	ax
+		mov 	al,	byte ptr tempBall[4]
+		mov 	es:[di].deltaX, 	al
+		mov 	al,	byte ptr tempBall[5]
+		mov 	es:[di].deltaY, 	al
+		mov 	al,	byte ptr tempBall[6]
+		mov		es:[di].colliding,  al
+		mov 	al,	byte ptr tempBall[7]
+		mov 	es:[di].color,  	al
+		ASSUME	di:nothing
+		inc		numballs			;mark down how many we've found
+		pop		di
+		ret
 init_ball:		;subroutine to initialize one ball to bounce around
 		push	di
 		mov		di, es:OFFSET balls
@@ -431,14 +526,14 @@ circ_newline:					;add 320 to move to next line
 ;I/O Subroutines
 ;******************************
 parse_input:
-	call	open_file
-	call	read_file
-	jmp		done
+	
 	;fetch the command line parameters
-	;based on the parameters, open a file
+	call	open_file				;based on the parameters, open a file
+	call	read_file 				;from the file, read the data into the buffer
+	call	init_balls_from_input	;from the buffer, read the parameters and init the balls
+	ret
+	;jmp		done
 	;"balls.txt"
-	;from the file, read the data into the buffer
-	;from the buffer, read the parameters and init the balls
 open_file:
 	mov		ax, 3d00h				;interrupt id 3Dh
 	mov		dx, OFFSET fn			;-filename, zero-terminated
@@ -449,18 +544,21 @@ open_file:
 read_file:
 	mov		ax, 3f00h				;interrupt id 3fh
 	mov		bx, fhandle				;moves block of memory
-	mov		cx, 32					;read 32 bytes
+	mov		cx, 512					;read 128 bytes
 	mov		dx, OFFSET buffer2      ;OFFSET - moves runtime address of buf into dx
-	int		21h						;Read from file
+	int		21h						;Read from file, leaving contents in buffer2
 	jc		error
-	cmp		ax, 0					;number of bytes read
-	jz		eof
 	mov		si, ax
-	mov		byte ptr buffer2[si], '$'; indexed direct instruction. 
-	mov		ah, 09h					; verify it worked using -d ds:18 1 21
-	mov		dx, OFFSET buffer2
-	int		21h						;write to terminal
-	jmp		read_file
+	mov		byte ptr buffer2[si], '$'; place a '$' after the end of input, so we know it's the end
+	;cmp		ax, 0					;number of bytes read
+	jmp		eof
+
+	;mov		si, ax
+	;mov		byte ptr buffer2[si], '$'; indexed direct instruction. 
+	;mov		ah, 09h					; verify it worked using -d ds:18 1 21
+	;mov		dx, OFFSET buffer2
+	;int		21h						;write to terminal
+	;jmp		read_file
 eof:
 	mov		ax, 3e00h
 	mov		dx, OFFSET fn
@@ -547,6 +645,18 @@ check_key:
 	mov     ah, 06h         ;
 	int     21h             ;interrupt DOS, 'direct console input'
 	jz		done
+	ret
+check_character:	;checks the input byte (in AL) and replaces it with a code indicating its type
+	and		al, 0F0h					;ignore the right nibble
+	xor 	al, 030h					;xor with 30 hex to check left nibble
+	cmp 	al, 0						;should be all zeroes if it was ASCII number
+	je		ascii_byte
+misc_byte:					;if none of the above
+	mov		al, 0						;return 4
+	jmp char_done
+ascii_byte:		  				  		;if ASCII number
+	mov		al, 1 						;return 2
+char_done:
 	ret
 ;******************************
 ;******************************
