@@ -137,22 +137,20 @@ digit_found:		;store the digit on the stack
 		inc		dh					;dh counts how many items we have on the stack
 		jmp		next_char
 end_number:			;found a whole number. convert it from base 10 and store it 
-		push	si
 		mov		cx, 10				;base 10 multiplier
-		mov		si, 1				;use BL as a 10^x counter
+		mov		bp, 1				;use BL as a 10^x counter
 base10loop:			;use BH as a counter of items on the stack
 		pop		ax					;fetch our number to work on
-		mul		si					;multiply it by the appropriate base
+		mul		bp					;multiply it by the appropriate base
 		add		bx, ax				;running total
 
-		mov		ax, si				;next power of ten
+		mov		ax, bp				;next power of ten
 		mul		cx
-		mov		si, ax
+		mov		bp, ax
 		dec		dh
 		cmp		dh, 0				;out of items?
 		jle		base10loop
 		call	store_in_tempball	;store the finished product in tempball
-		pop		si
 		;fall into next_char
 next_char:
 		inc		di					;next byte
