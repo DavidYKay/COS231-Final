@@ -33,7 +33,7 @@ fn	DB	"balls.txt", 0     ; indicates we're zero-terminating our name, instead of
 fhandle	DW	?
 emsg	DB	"I/O Error.", 13, 10, "$"
 buffer2	DB		512 DUP (04) ; dedicate 64000 bytes for our buffer
-tempBall DB     8 DUP (05)    ; temporary ball
+tempBall DB     9 DUP (05)    ; temporary ball
 
 _DATA   ENDS
 EGROUP  GROUP   _BUFF1, _BALLS
@@ -109,16 +109,16 @@ set_mode13h:
 init_balls_from_input:				;subroutine to initialize all balls from input
 		xor		di, di				;byte counter
 start_readinput:
+		xor		si, si				;Tempball ring counter, marks which bytes to write to 
 		mov		tempBall, 0			;zero out tempball
 		xor		cx, cx				;CL - 10^x counter CH - stack counter
 		xor		bx, bx				;BX - running total
-		xor		si, si				;Tempball ring counter, marks which bytes to write to 
 readloop:			;read parameters from buffer
 		mov		al, buffer2[di]
 		cmp		al, 20h				;Is character a space?
 		je		end_number
-		cmp     al, 0Dh				;is character a carriage return?
-		je		next_line
+		;cmp     al, 0Dh				;is character a carriage return?
+		;je		next_line
 		cmp     al, 0Ah 			;is character a newline?
 		je		next_line
 		cmp		al, "$"				;$ signifies end of input
