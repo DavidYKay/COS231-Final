@@ -120,30 +120,15 @@ set_mode13h:
 ;******************************
 ;Animation Functions
 ;******************************
-animate_box:
-		mov     cx, 16000			;screen width
-		;les		di, buffer1
-		;mov		ax, OFFSET buffer1
-		;mov		es, ax
-		;xor		di, di
-animboxloop:
-		call	draw_box
-		;call	delay_frame
-		;call	delay_second
-		call	write_to_screen
-		call	clear_buffer
-		inc		di
-		loop    animboxloop           ;loops while decrementing CX for us
-		ret
 init_ball:		;subroutine to initialize one ball to bounce around
 		push	di
 		mov		di, es:OFFSET balls
 		ASSUME	di:PTR BALL
 		mov		es:[di].colliding, 0
-		mov 	es:[di].Xpos, 10
+		mov 	es:[di].Xpos, 220
 		mov 	es:[di].Ypos, 10
 		mov 	es:[di].deltaX, 1
-		mov 	es:[di].deltaY, 1
+		mov 	es:[di].deltaY, 0
 		mov 	es:[di].color,  5
 		add		di, BALL_BYTES		;slide to next ball
 		mov		es:[di].colliding, 0
@@ -156,7 +141,8 @@ init_ball:		;subroutine to initialize one ball to bounce around
 		pop		di
 		ret
 animate_ball:
-		mov     cx, 16000			;screen width
+		;mov     cx, 16000			;screen width
+		mov     cx, 640			;screen width
 		;les		di, buffer1
 		;mov		ax, OFFSET buffer1
 		;mov		es, ax
@@ -173,9 +159,10 @@ animballloop:
 		mov		di, ax					;point to the right pixel
 		call	draw_circle
 		call	write_to_screen
-		call	clear_buffer
+		;call	clear_buffer
 		;;call	clear_screen
-		;;call	delay_frame
+		;call	delay_second
+		;call	check_key
 		loop    animballloop           ;loops while decrementing CX for us
 		ret
 ;******************************
@@ -203,12 +190,10 @@ detect_collision:			;subroutine to detect a collision and correct the deltaX/del
 x_collision:				;if X is < 5 or > 315
 		neg		es:[di].deltaX
 		call	increment_ball_color;
-		;inc		es:[di].color 	;change color
 		jmp		done_collision
 y_collision:				;if Y is < 5 or > 195
 		neg		es:[di].deltaY
 		call	increment_ball_color;
-		;inc		es:[di].color 	;change color
 done_collision:
 		ASSUME	di:nothing
 		pop		bx
@@ -477,13 +462,19 @@ del_zero:
 	mov		ax, dx				;If negative, add 100 to newtime and repeat
 	add		al, 60
 	jmp del_sub
+
+check_key:
+	mov     ah, 06h         ;
+	int     21h             ;interrupt DOS, 'direct console input'
+	jnz		done
+	ret
 done:
-        mov     ah, 08h         ;after loop
-        int     21h             ;interrupt DOS, 'wait for keypress'
-        mov     ah, 00h
-        mov     al, oldmode
-        int     10h
-        mov     ax, 4c00h
-        int     21h     ; waiting for key
+	mov     ah, 08h         ;after loop
+	int     21h             ;interrupt DOS, 'wait for keypress'
+	mov     ah, 00h
+	mov     al, oldmode
+	int     10h
+	mov     ax, 4c00h
+	int     21h     ; waiting for key
 _TEXT   ENDS            ; program ends
         END     start
