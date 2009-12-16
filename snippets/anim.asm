@@ -27,6 +27,25 @@ oldmode DB      ?
 EOrigSegment  DW      ?  
 EGroupSegment DW      ?  
 DGroupSegment DW      ?  
+;circ_bitmap   DB	13 DUP (0E0631014018030050118C0E00h)
+
+circLine1	DW		0000111000000000b
+circLine2	DW		0011000110000000b
+circLine3	DW		0100000001000000b
+circLine4	DW		1000000000100000b
+
+;LINE 1;00001110000
+;LINE 2;00110001100
+;LINE 3;01000000010
+;LINE 3;01000000010
+;LINE 4;10000000001
+;LINE 4;10000000001
+;LINE 4;10000000001
+;LINE 3;01000000010
+;LINE 3;01000000010
+;LINE 2;00110001100
+;LINE 1;00001110000
+
 _DATA   ENDS
 EGROUP  GROUP   _BUFF1, _BALLS
 _BUFF1	SEGMENT PARA PUBLIC 'BUFF1'
@@ -109,6 +128,7 @@ animate_box:
 		;xor		di, di
 animboxloop:
 		call	draw_box
+		;call	draw_circle
 		;call	delay_frame
 		;call	delay_second
 		call	write_to_screen
@@ -147,8 +167,8 @@ animballloop:
 		mov		di, ax					;point to the right pixel
 		;inc		di
 		;add		di, 160
-		call	draw_box
-		;;call	draw_ball
+		;call	draw_box
+		call	draw_circle
 		call	write_to_screen
 		call	clear_buffer
 		;;call	clear_screen
@@ -303,6 +323,60 @@ wloop:
 		pop		cx
 		pop		di
 		ret
+draw_circle: ;draws a circle using its offset? using its color?
+		push	di				;store this for safekeeping
+		sub		di, 1605		;slide it back to the start of the line, 5 lines up (5 + 1600)
+		call	draw_circ1
+		call	circ_newline
+		call	draw_circ2
+		call	circ_newline
+		call	draw_circ3
+		call	circ_newline
+		call	draw_circ3
+		call	circ_newline
+		call	draw_circ4
+		call	circ_newline
+		call	draw_circ4
+		call	circ_newline
+		call	draw_circ4
+		call	circ_newline
+		call	draw_circ3
+		call	circ_newline
+		call	draw_circ3
+		call	circ_newline
+		call	draw_circ2
+		call	circ_newline
+		call	draw_circ1
+		pop		di
+		ret
+draw_circ1: ;LINE 1;00001110000
+		add		di, 4
+		mov		es:[di],   05h	;TODO: COLOR HERE
+		mov		es:[di+1], 05h	;TODO: COLOR HERE
+		mov		es:[di+2], 05h	;TODO: COLOR HERE
+		add		di, 6
+		ret
+draw_circ2: ;LINE 2;00110001100
+		add		di, 2
+		mov		es:[di],   05h	;TODO: COLOR HERE
+		mov		es:[di+1], 05h	;TODO: COLOR HERE
+		add		di, 5
+		mov		es:[di], 05h	;TODO: COLOR HERE
+		mov		es:[di+1], 05h	;TODO: COLOR HERE
+		add		di, 3
+		ret
+draw_circ3: ;LINE 3;01000000010
+		add		di, 1
+		mov		es:[di], 05h	;TODO: COLOR HERE
+		add		di, 8
+		mov		es:[di], 05h	;TODO: COLOR HERE
+		add		di, 1
+		ret
+draw_circ4: ;LINE 4;10000000001
+		mov		es:[di], 05h	;TODO: COLOR HERE
+		add		di, 10
+		mov		es:[di], 05h	;TODO: COLOR HERE
+		ret
 draw_box:	
 		;parameters: DI - center of box
 		;ES - start of draw buffer
@@ -332,7 +406,8 @@ done_box:
 		ret						;we're done
 
 circ_newline:					;add 320 to move to next line
-		add		di, 309 		;remove 11 to move back to first position
+		;add		di, 309 		;remove 11 to move back to first position
+		add		di, 310 		;remove 10 to move back to first position
 		ret
 ;******************************
 ;Utility Functions

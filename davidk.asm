@@ -235,9 +235,7 @@ circ_newline:
 		add		di, 309
 		;add		di, 320
 		ret
-circle1:
-        ;mov     cx, 11			;line length
-		
+circle1:	;draws top line, 00001110000
         mov     es:[di], 0000    ;move an 02hex into wherever offset of di points
         mov     es:[di + 2], 0000    ;move an 02hex into wherever offset of di points
         mov     es:[di + 4], 0000    ;move an 02hex into wherever offset of di points
