@@ -137,6 +137,9 @@ digit_found:		;store the digit on the stack
 		inc		ch					;ch counts how many items we have on the stack
 		jmp		next_char
 end_number:			;found a whole number. convert it from base 10 and store it 
+		call	handle_number
+		jmp		next_char
+handle_number:
 		xor		bx, bx
 		mov		bp, 1				;use BL as a 10^x counter
 		mov		cl, 10				;base 10 multiplier
@@ -154,10 +157,12 @@ base10loop:			;use BH as a counter of items on the stack
 		;jle		base10loop
 		call	store_in_tempball	;store the finished product in tempball
 		;fall into next_char
+		ret
 next_char:
 		inc		di					;next byte
 		jmp		readloop
 next_line:		;next line, so let's try to init a ball from what we have
+		call	handle_number
 ball_found:
 		call	init_ball_from_temp
 		add		di, BALL_BYTES		;slide to next ball bucket
