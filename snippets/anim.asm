@@ -128,12 +128,10 @@ animate_box:
 		;xor		di, di
 animboxloop:
 		call	draw_box
-		;call	draw_circle
 		;call	delay_frame
 		;call	delay_second
 		call	write_to_screen
 		call	clear_buffer
-		;call	clear_screen
 		inc		di
 		loop    animboxloop           ;loops while decrementing CX for us
 		ret
@@ -147,7 +145,7 @@ init_ball:		;subroutine to initialize one ball to bounce around
 		mov 	es:[di].deltaX, 1
 		mov 	es:[di].deltaY, 1
 		mov 	es:[di].color,  1
-		add		di, BALL_BYTES
+		add		di, BALL_BYTES		;slide to next ball
 		mov		es:[di].colliding, 0
 		mov 	es:[di].Xpos, 80
 		mov 	es:[di].Ypos, 80
@@ -170,16 +168,13 @@ animballloop:
 		mov		ax, 0					;load offset of ball in ax
 		call	detect_collision
 		call	move_ball				;move ball and handle collision
-		call	get_ball_pixel			;get current DI based on x,y
+		call	get_ball_color			;put color in bl
+		call	get_ball_pixel			;put current pixel offset in AX
 		mov		di, ax					;point to the right pixel
-		;inc		di
-		;add		di, 160
-		;call	draw_box
 		call	draw_circle
 		call	write_to_screen
 		call	clear_buffer
 		;;call	clear_screen
-
 		;;call	delay_frame
 		loop    animballloop           ;loops while decrementing CX for us
 		ret
@@ -216,7 +211,6 @@ done_collision:
 		pop		ax
 		pop		di
 		ret
-
 get_xy_coord: 
 ;parameters: AX: ball's offset in array
 ;return:     BX: x-coord AX:y-coord
@@ -261,6 +255,17 @@ get_delta_pixel: ;returns the ball's pixel displacement based on coordinates
 
 		add		ax, bx				;deltaPixel = X-coord + Y-coord * 320
 		pop		dx
+		ret
+get_ball_color:
+;parameters: AX:ball offset in array
+;returns: BL: Ball color
+		push	di
+		mov		di, es:OFFSET balls
+		add		di, ax
+		ASSUME	di:PTR BALL
+		mov		bl, es:[di].color	;lookup current color
+		ASSUME	di:nothing
+		pop		di
 		ret
 ;******************************
 ;Drawing subroutines
@@ -358,31 +363,31 @@ draw_circle: ;draws a circle using its offset? using its color?
 		ret
 draw_circ1: ;LINE 1;00001110000
 		add		di, 4
-		mov		es:[di],   04h	;TODO: COLOR HERE
-		mov		es:[di+1], 04h	;TODO: COLOR HERE
-		mov		es:[di+2], 04h	;TODO: COLOR HERE
+		mov		es:[di],   bl	;TODO: COLOR HERE
+		mov		es:[di+1], bl	;TODO: COLOR HERE
+		mov		es:[di+2], bl	;TODO: COLOR HERE
 		add		di, 6
 		ret
 draw_circ2: ;LINE 2;00110001100
 		add		di, 2
-		mov		es:[di],   04h	;TODO: COLOR HERE
-		mov		es:[di+1], 04h	;TODO: COLOR HERE
+		mov		es:[di],   bl	;TODO: COLOR HERE
+		mov		es:[di+1], bl	;TODO: COLOR HERE
 		add		di, 5
-		mov		es:[di], 04h	;TODO: COLOR HERE
-		mov		es:[di+1], 04h	;TODO: COLOR HERE
+		mov		es:[di], bl	;TODO: COLOR HERE
+		mov		es:[di+1], bl	;TODO: COLOR HERE
 		add		di, 3
 		ret
 draw_circ3: ;LINE 3;01000000010
 		add		di, 1
-		mov		es:[di], 04h	;TODO: COLOR HERE
+		mov		es:[di], bl	;TODO: COLOR HERE
 		add		di, 8
-		mov		es:[di], 04h	;TODO: COLOR HERE
+		mov		es:[di], bl	;TODO: COLOR HERE
 		add		di, 1
 		ret
 draw_circ4: ;LINE 4;10000000001
-		mov		es:[di], 04h	;TODO: COLOR HERE
+		mov		es:[di], bl	;TODO: COLOR HERE
 		add		di, 10
-		mov		es:[di], 04h	;TODO: COLOR HERE
+		mov		es:[di], bl	;TODO: COLOR HERE
 		ret
 draw_box:	
 		;parameters: DI - center of box
