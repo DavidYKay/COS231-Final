@@ -110,7 +110,7 @@ init_balls_from_input:				;subroutine to initialize all balls from input
 		xor		di, di				;byte counter
 start_readinput:
 		mov		tempBall, 0			;zero out tempball
-		xor		cx, cx				;DL - 10^x counter DH - stack counter
+		xor		cx, cx				;CL - 10^x counter CH - stack counter
 		xor		bx, bx				;BX - running total
 		xor		si, si				;Tempball ring counter, marks which bytes to write to 
 readloop:			;read parameters from buffer
@@ -137,6 +137,7 @@ digit_found:		;store the digit on the stack
 		inc		ch					;ch counts how many items we have on the stack
 		jmp		next_char
 end_number:			;found a whole number. convert it from base 10 and store it 
+		xor		bx, bx
 		mov		bp, 1				;use BL as a 10^x counter
 		mov		cl, 10				;base 10 multiplier
 base10loop:			;use BH as a counter of items on the stack
