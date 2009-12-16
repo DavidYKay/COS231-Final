@@ -28,12 +28,11 @@ numballs DW     ?  ;number of balls in the array. A word since we'll be using it
 EOrigSegment  DW      ?  
 EGroupSegment DW      ?  
 DGroupSegment DW      ?  
-;circ_bitmap   DB	13 DUP (0E0631014018030050118C0E00h)
 
-circLine1	DW		0000111000000000b
-circLine2	DW		0011000110000000b
-circLine3	DW		0100000001000000b
-circLine4	DW		1000000000100000b
+;circLine1	DW		0000111000000000b
+;circLine2	DW		0011000110000000b
+;circLine3	DW		0100000001000000b
+;circLine4	DW		1000000000100000b
 
 ;LINE 1;00001110000
 ;LINE 2;00110001100
@@ -61,46 +60,33 @@ _BALLS  ENDS
 _TEXT   SEGMENT PARA PUBLIC 'CODE'
         ASSUME  cs:_TEXT, ds:DGROUP, ss:DGROUP, es:EGROUP
 start:
-        mov     ax, DGROUP
-        mov     ds, ax
-		mov		DGroupSegment, ax
-		mov		ax, es
 		mov		EOrigSegment, ax			;backup the original segment
         mov     ax, EGROUP
         mov     es, ax
 		mov		EGroupSegment, ax			;store the EGROUp segment
 
+		;fetch the command line parameters
+		
+		;based on the parameters, open a file
+		;from the file, read the data into the buffer
+
+        mov     ax, DGROUP					;set Dsegment to the DGROUP
+        mov     ds, ax
+		mov		DGroupSegment, ax
+		mov		ax, es
+		
 		call	save_oldmode				;save initial video mode
 		call	set_mode13h					;set to 256-color 320x200
 
 		mov		ax, _BUFF1
 		mov		es, ax						;set ES to buffer1 segment
 		mov		di, offset buffer1			; start at element 1
-		;mov		di, 32500
-		mov		di, 1700
 
-		;call	clear_buffer
-		;call	clear_screen
-		
-		;call	animate_box
-		
+		call	clear_buffer				;clear out the text from the buffer 
+		call	clear_screen
+
 		call	init_ball
-		mov		ax, 00
-		call	get_ball_pixel
-		call	animate_ball
-
-		;call	delay_test
-		;call	delay_second
-		;call	clear_screen
-		;call	delay_test
-		;call	delay_frame
-		;call	clear_screen
-		;call	delay_test
-		;call	delay_frame
-		;call	clear_screen
-		;call	delay_test
-		;call	delay_frame
-		;call	clear_screen
+		call	animate_ball				;this will loop until forever
 		jmp		done
 ;******************************
 ;VGA Mode Functions
@@ -148,15 +134,15 @@ init_ball:		;subroutine to initialize one ball to bounce around
 		mov		es:[di].colliding, 0
 		mov 	es:[di].Xpos, 80
 		mov 	es:[di].Ypos, 80
-		mov 	es:[di].deltaX, 1
+		mov 	es:[di].deltaX, -1
 		mov 	es:[di].deltaY, 1
 		mov 	es:[di].color,  4
 		add		di, BALL_BYTES		;slide to next ball
 		mov		es:[di].colliding, 0
 		mov 	es:[di].Xpos, 250
 		mov 	es:[di].Ypos, 180
-		mov 	es:[di].deltaX, 1
-		mov 	es:[di].deltaY, 1
+		mov 	es:[di].deltaX, -1
+		mov 	es:[di].deltaY, -1
 		mov 	es:[di].color,  4
 		ASSUME	di:nothing
 		pop		di
