@@ -1,44 +1,102 @@
 include davidk.inc
 		.DOSSEG
+
+;Ball struct, representing a bouncing ball
+BALL			struct	;6 bytes in size
+	colliding       DB 0
+	Xpos	        DW 160
+	Ypos	        DW 100 ;consider making this a byte?
+	deltaX          DB 0
+	deltaY			DB 0
+	color	        DB 0
+BALL			ends
+
 ;MEMORY RESERVATION
-;DB Reserves space in one Byte (1 byte) units.  
-;DW Reserves space in one Word (2 byte) units.  
+;DB Reserves space in one Byte	 (1 byte) units.  
+;DW Reserves space in one Word 	 (2 byte) units.  
 ;DD Reserves space in one Double (4 byte) units.  
-;DQ Reserves space in one Quad (8 byte) units.  
-;DT Reserves space in one Ten (10 byte) units.  
+;DQ Reserves space in one Quad   (8 byte) units.  
+;DT Reserves space in one Ten   (10 byte) units.  
 DGROUP  GROUP   _DATA, STACK
-BGROUP  GROUP   _BUFF1, _BUFF2
 STACK   SEGMENT PARA STACK 'STACK'
         DB      256 DUP (?) ;DUP for duplicate, ie 'fill the space with the following'
 STACK   ENDS
 _DATA   SEGMENT PARA PUBLIC 'DATA'
 screen  DD      0a0000000h
-deltx   DW      0000h
-delty   DW      0000h
-;screen  DD      0a0007D00h ; halfway down screen
-;screen  DD      0a0007D6Ah ; line in middle
 oldmode DB      ?  
+EOrigSegment  DW      ?  
+EGroupSegment DW      ?  
+DGroupSegment DW      ?  
+;circ_bitmap   DB	13 DUP (0E0631014018030050118C0E00h)
+
+circLine1	DW		0000111000000000b
+circLine2	DW		0011000110000000b
+circLine3	DW		0100000001000000b
+circLine4	DW		1000000000100000b
+
+;LINE 1;00001110000
+;LINE 2;00110001100
+;LINE 3;01000000010
+;LINE 3;01000000010
+;LINE 4;10000000001
+;LINE 4;10000000001
+;LINE 4;10000000001
+;LINE 3;01000000010
+;LINE 3;01000000010
+;LINE 2;00110001100
+;LINE 1;00001110000
+
 _DATA   ENDS
+EGROUP  GROUP   _BUFF1, _BALLS
 _BUFF1	SEGMENT PARA PUBLIC 'BUFF1'
-buffer1	DB		64000 DUP (?) ; dedicate 64000 bytes for our buffer
+;buffer1	DB		64000 DUP (?) ; dedicate 64000 bytes for our buffer
+buffer1	DB		64000 DUP (03) ; dedicate 64000 bytes for our buffer
 _BUFF1  ENDS
-_BUFF2	SEGMENT PARA PUBLIC 'BUFF2'
-buffer2	DB		64000 DUP (?) ; dedicate 64000 bytes for our buffer
-_BUFF2  ENDS
+
+_BALLS	SEGMENT PARA PUBLIC 'BALLS'
+balls	DB		256 DUP (07) ; 
+_BALLS  ENDS
+
 _TEXT   SEGMENT PARA PUBLIC 'CODE'
-        ASSUME  cs:_TEXT, ds:DGROUP, ss:DGROUP
+        ASSUME  cs:_TEXT, ds:DGROUP, ss:DGROUP, es:EGROUP
 start:
         mov     ax, DGROUP
         mov     ds, ax
-		call	save_oldmode
-		call	mode_13h
-		jmp		main
+		mov		DGroupSegment, ax
+		mov		ax, es
+		mov		EOrigSegment, ax			;backup the original segment
+        mov     ax, EGROUP
+        mov     es, ax
+		mov		EGroupSegment, ax			;store the EGROUp segment
+
+		call	save_oldmode				;save initial video mode
+		call	set_mode13h					;set to 256-color 320x200
+
+		mov		ax, _BUFF1
+		mov		es, ax						;set ES to buffer1 segment
+		mov		di, offset buffer1			; start at element 1
+		;mov		di, 32500
+		mov		di, 1700
+
+		;call	clear_buffer
+		;call	clear_screen
+		
+		;call	animate_box
+		
+		call	init_ball
+		mov		ax, 00
+		call	get_ball_pixel
+		call	animate_ball
+		jmp		done
+;******************************
+;VGA Mode Functions
+;******************************
 save_oldmode:
         mov     ah, 0fh     ;get video mode 
         int     10h
         mov		oldmode, al ;save it as the 'old mode'
 		ret
-mode_13h:
+set_mode13h:
         mov     ah, 00h     ;videomode interrupt
         mov     al, 13h     ;set new mode to 00h
         int     10h
@@ -58,136 +116,291 @@ mode_13h:
         out     dx, al
         mov     al, 3fh
         out     dx, al
-        les		di, screen      ;les - (reg16, mem32). loads mem32 into reg16 and the ES register
 		ret
-main:
-		;call	draw_line_horiz 
-		;call	draw_line_vert
-		;mov		di, 319			;top right corner
-		;call	draw_line_vert
-		;mov		di, 0
-		;call	draw_line_vert
-		;mov		di, 63680		;bottom left corner
-		;call	draw_line_horiz
-		;mov		di, 32160		;center of screen
-		mov		di, 32000		;center of screen
-		;call	draw_box
-		;call	get_time
-		call	animate_ball
-		
-		jmp		done
-
-;EXAMPLE GAME LOOP
-;const int FRAMES_PER_SECOND = 25;
-;const int SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
-;
-;DWORD next_game_tick = GetTickCount(); 
-;// GetTickCount() returns the current number of milliseconds
-;// that have elapsed since the system was started
-;
-;int sleep_time = 0;
-;
-;bool game_is_running = true;
-;
-;while( game_is_running ) {
-;	update_game();
-;	display_game();
-;
-;	next_game_tick += SKIP_TICKS;
-;	sleep_time      = next_game_tick - GetTickCount();
-;	if( sleep_time >= 0 ) {
-;		Sleep( sleep_time );
-;	}
-;	else {
-;		// Shit, we are running behind!
-;	}
-;}
-
 ;******************************
 ;Animation Functions
 ;******************************
+animate_box:
+		mov     cx, 16000			;screen width
+		;les		di, buffer1
+		;mov		ax, OFFSET buffer1
+		;mov		es, ax
+		;xor		di, di
+animboxloop:
+		call	draw_box
+		;call	delay_frame
+		;call	delay_second
+		call	write_to_screen
+		call	clear_buffer
+		inc		di
+		loop    animboxloop           ;loops while decrementing CX for us
+		ret
+init_ball:		;subroutine to initialize one ball to bounce around
+		push	di
+		mov		di, es:OFFSET balls
+		ASSUME	di:PTR BALL
+		mov		es:[di].colliding, 0
+		mov 	es:[di].Xpos, 10
+		mov 	es:[di].Ypos, 10
+		mov 	es:[di].deltaX, 1
+		mov 	es:[di].deltaY, 1
+		mov 	es:[di].color,  5
+		add		di, BALL_BYTES		;slide to next ball
+		mov		es:[di].colliding, 0
+		mov 	es:[di].Xpos, 80
+		mov 	es:[di].Ypos, 80
+		mov 	es:[di].deltaX, -1
+		mov 	es:[di].deltaY, -1
+		mov 	es:[di].color,  4
+		ASSUME	di:nothing
+		pop		di
+		ret
 animate_ball:
-	;mov     cx, 320			;pixels to animate
-	mov     cx, 32000			;screen width
-animbloop:
-	inc		di
-	call	reset_screen
-	call	draw_box
-	call	delay_frame
-	loop    animbloop           ;loops while decrementing CX for us
-	ret
-delay_frame:		;subroutine to delay until the next frame
-	push	dx ;dx - backup of ax, holding newtime
-	push	bx ;bh - holds deltaTotal ;bl - holds oldTime
-	xor		bx, bx				;used for counting delta time(ch) and oldtime (cl)
-del_loop:
-	call	get_time
-	mov		dx, ax				;in case we need it again
-	;mov	bx, ax				;in case we need it again
-del_sub:			
-	sub		al, bl				;delta = newtime - oldtime
-	cmp		al, 0
-	jl		del_zero			;we overflowed
-	add		bh, al				;add new delta to running delta total
-	mov		bl, dl				;store newTime in oldTime
-	;check - is deltatime greater than our threshold?
-	;cmp		bh, 50				;FRAME_THRESHOLD (30ms)
-	cmp		bh, FRAME_THRESHOLD				;FRAME_THRESHOLD (30ms)
-	;cmp		bh, 10				;FRAME_THRESHOLD (30ms)
-	;cmp		bh, 0FFFFh				;FRAME_THRESHOLD (30ms)
-	jge		del_fin
-	jmp		del_loop
-del_fin:
-	pop		bx
-	pop		dx
-	ret
-del_zero:
-	;mov		al, dl				;If negative, add 100 to newtime and repeat
-	mov		ax, dx				;If negative, add 100 to newtime and repeat
-	add		al, 100
-	jmp del_sub
+		mov     cx, 16000			;screen width
+		;les		di, buffer1
+		;mov		ax, OFFSET buffer1
+		;mov		es, ax
+		;xor		di, di
+
+		;mov		ax, EGroupSegment
+		;mov		es, ax
+animballloop:
+		mov		ax, 0					;load offset of ball in ax
+		call	detect_collision
+		call	move_ball				;move ball and handle collision
+		call	get_ball_color			;put color in bl
+		call	get_ball_pixel			;put current pixel offset in AX
+		mov		di, ax					;point to the right pixel
+		call	draw_circle
+		call	write_to_screen
+		call	clear_buffer
+		;;call	clear_screen
+		;;call	delay_frame
+		loop    animballloop           ;loops while decrementing CX for us
+		ret
 ;******************************
-;Drawing Functions
+;Physics Functions
 ;******************************
-reset_screen:
+detect_collision:			;subroutine to detect a collision and correct the deltaX/deltaY
+		;PARAMETERS: AX: ball's offset in array
+		push	di
 		push	ax
-        mov     ah, 06h     ;"scroll up window"
-        mov     al, 00h     ;erases the background (can wipe screen)
-        int     10h
+		push	bx
+		mov		di, es:OFFSET balls
+		add		di, ax
+		ASSUME	di:PTR BALL
+		mov		bx, es:[di].Xpos	;lookup x pos
+		mov		ax, es:[di].Ypos 	;lookup y pos
+		cmp		ax, 5
+		jl		y_collision
+		cmp		ax, 195
+		jg		y_collision
+		cmp		bx, 5
+		jl		x_collision
+		cmp		bx, 315
+		jg		x_collision
+		jmp		done_collision		;no collisions found
+x_collision:				;if X is < 5 or > 315
+		neg		es:[di].deltaX
+		inc		es:[di].color 	;change color
+		jmp		done_collision
+y_collision:				;if Y is < 5 or > 195
+		neg		es:[di].deltaY
+		inc		es:[di].color 	;change color
+done_collision:
+		ASSUME	di:nothing
+		pop		bx
 		pop		ax
+		pop		di
 		ret
-draw_line_horiz:		;draws a line, left to right, the width of the screen
-        mov     cx, 320			;screen width
-        ;les		di, screen      ;les - (reg16, mem32). loads mem32 into reg16 and the ES register
-hloop:      ;this loop is decrementing CX for us for free!
-        mov     es:[di], 02h    ;move an 02hex into wherever offset of di points
-        inc		di
-        loop    hloop           ;loops while decrementing CX for us
+get_xy_coord: 
+;parameters: AX: ball's offset in array
+;return:     BX: x-coord AX:y-coord
+;presumes es points to EGroupSegment
+		push	di
+		mov		di, es:OFFSET balls
+		add		di, ax
+		ASSUME	di:PTR BALL
+		mov		bx, es:[di].Xpos	;lookup current x
+		mov		ax, es:[di].Ypos	;lookup current y
+		ASSUME	di:nothing
+		pop		di
 		ret
-draw_line_vert:			;draws a line, top to bottom, the height of the screen
-        mov     cx, 200			;screen length
-        ;les		di, screen      ;les - (reg16, mem32). loads mem32 into reg16 and the ES register
-vloop:      ;this loop is decrementing CX for us for free!
-        mov     es:[di], 02h    ;move an 02hex into wherever offset of di points
-        ;inc		di
-		add		di, 320
-        loop    vloop           ;loops while decrementing CX for us
+move_ball: ;adjusts ball's position based on deltaX, deltaY
+;parameters: AX: ball's offset in array
+		push	di
+		push	ax
+		mov		di, es:OFFSET balls
+		add		di, ax
+		ASSUME	di:PTR BALL
+		mov		al, es:[di].deltaX	;lookup delta x
+		cbw
+		add		es:[di].Xpos, ax
+		mov		al, es:[di].deltaY 	;lookup delta y
+		cbw
+		add		es:[di].Ypos, ax		
+		pop		ax
+		pop		di
+		ASSUME	di:nothing
 		ret
-draw_borders:	;draws the borders around the edge of the screen
-dloop:      ;this loop is decrementing CX for us for free!
-        mov     es:[di], 02h    ;move an 02hex into wherever offset of di points
-        inc		di
-        loop    dloop           
+get_ball_pixel: ;returns the ball's pixel positioning based on coordinates
+;INPUT: AX: Ball displacement in array
+		call	get_xy_coord
+		call	get_delta_pixel
 		ret
-draw_box:	;draws the borders around the edge of the screen
-		push	cx				;store this for safekeeping
-		push	dx				;store this for safekeeping
+get_delta_pixel: ;returns the ball's pixel displacement based on coordinates
+				;INPUT: BX:X-coord AX:Y-coord
+				;RETURN: AX: pixel displacement
+		push	dx
+		mov		dx, 320
+		mul		dx					;multiply deltY by 320
+
+		add		ax, bx				;deltaPixel = X-coord + Y-coord * 320
+		pop		dx
+		ret
+get_ball_color:
+;parameters: AX:ball offset in array
+;returns: DL: Ball color
+		push	di
+		mov		di, es:OFFSET balls
+		add		di, ax
+		ASSUME	di:PTR BALL
+		mov		dl, es:[di].color	;lookup current color
+		ASSUME	di:nothing
+		pop		di
+		ret
+;******************************
+;Drawing subroutines
+;******************************
+draw_pixels:
+		push	cx
+		cbw		
+		mov		cx, ax
+		les		di, screen
+pix_loop:
+		mov		es:[di], 1 ;draw to buffer
+		add		di, 100
+		loop	pix_loop
+		;call	write_to_screen
+		pop		cx
+		ret
+clear_screen:
+		push	es
+		les		di, screen
+		jmp		clear_main
+clear_buffer:			;move all zeroes into the background
+		push	es
+		mov		ax, _BUFF1
+		mov		es, ax
+		;mov		ax, OFFSET buffer1
+		;mov		ax, es
+clear_main:
+		push	di
+		push	cx
+		xor		di, di
+		mov		cx, SCREEN_SIZE
+cloop:
+        ;mov     es:[di], 0    ;move an 02hex into wherever offset of di points
+        mov byte ptr es:[di], 3    ;move an 02hex into wherever offset of di points
+		inc		di
+		loop cloop
+		pop		cx
+		pop		di
+		pop		es
+		ret
+write_to_screen:			;move all zeroes into the background
+		push	di
+		push	cx
+		push	bx
+		mov		bx, ds
+		;Use ES:DI and DS:SI to copy from one and write to the other
+		;mov		ax, _BUFF1
+		;mov		es, ax						;set ES to buffer1 segment
+		;mov		di, OFFSET buffer1			; start at element 1
+		xor		di, di						;di=0
+		
+		;les		di, screen 
+		lds		si, screen					;point ds:[si] to vga
+		mov		cx, SCREEN_SIZE				;loop thru each pixel
+wloop:
+		;mov		al, byte ptr buffer1[di]	;fetch
+		mov		al, byte ptr es:[di]	;fetch
+        ;mov     es:[di], al					;copy byte from buffer to screen
+        ;mov     es:[di], 02h					;copy byte from buffer to screen
+        ;mov     ds:[si], 02h					;copy byte from buffer to screen
+        mov     ds:[si], al					;copy byte from buffer to screen
+		inc		di
+		inc		si
+		loop	wloop
+		mov		ds, bx
+		pop		bx
+		pop		cx
+		pop		di
+		ret
+draw_circle: ;draws a circle using its offset? using its color?
 		push	di				;store this for safekeeping
-		sub		di, 1605		;slide it back to the start of the line, 5 lines up (5 + 1605)
+		sub		di, 1605		;slide it back to the start of the line, 5 lines up (5 + 1600)
+		call	draw_circ1
+		call	circ_newline
+		call	draw_circ2
+		call	circ_newline
+		call	draw_circ3
+		call	circ_newline
+		call	draw_circ3
+		call	circ_newline
+		call	draw_circ4
+		call	circ_newline
+		call	draw_circ4
+		call	circ_newline
+		call	draw_circ4
+		call	circ_newline
+		call	draw_circ3
+		call	circ_newline
+		call	draw_circ3
+		call	circ_newline
+		call	draw_circ2
+		call	circ_newline
+		call	draw_circ1
+		pop		di
+		ret
+draw_circ1: ;LINE 1;00001110000
+		add		di, 4
+		mov		es:[di],   dl	;TODO: COLOR HERE
+		mov		es:[di+1], dl	;TODO: COLOR HERE
+		mov		es:[di+2], dl	;TODO: COLOR HERE
+		add		di, 6
+		ret
+draw_circ2: ;LINE 2;00110001100
+		add		di, 2
+		mov		es:[di],   dl	;TODO: COLOR HERE
+		mov		es:[di+1], dl	;TODO: COLOR HERE
+		add		di, 5
+		mov		es:[di],   dl	;TODO: COLOR HERE
+		mov		es:[di+1], dl	;TODO: COLOR HERE
+		add		di, 3
+		ret
+draw_circ3: ;LINE 3;01000000010
+		add		di, 1
+		mov		es:[di], dl	;TODO: COLOR HERE
+		add		di, 8
+		mov		es:[di], dl	;TODO: COLOR HERE
+		add		di, 1
+		ret
+draw_circ4: ;LINE 4;10000000001
+		mov		es:[di], dl	;TODO: COLOR HERE
+		add		di, 10
+		mov		es:[di], dl	;TODO: COLOR HERE
+		ret
+draw_box:	
+		;parameters: DI - center of box
+		;ES - start of draw buffer
+		push	cx				;store this for safekeeping
+		push	di				;store this for safekeeping
+		push	dx				;store this for safekeeping
+		sub		di, 1605		;slide it back to the start of the line, 5 lines up (5 + 1600)
         mov     cx, 121			;11 x 11
-		jmp		bloop
 bloop:      ;this loop is decrementing CX for us for free!
-        mov     es:[di], 02h    ;move an 02hex into wherever offset of di points
+        mov     es:[di], 04h    ;move an 02hex into wherever offset of di points
         inc		di
 		mov		ax, cx			
 		dec		ax				;decrement by one to adjust timing
@@ -201,79 +414,18 @@ aloop:
 		call	circ_newline	;bump us down by one line
 		loop	bloop
 done_box:
-		pop		di
 		pop		dx
+		pop		di
 		pop		cx
 		ret						;we're done
-draw_circle:	;draws a bitmap, centered at the point passed in ax
-;later, replace this with bitmap draw
-		call	find_topleft
-		call	draw_box
-		;call	circle1
-		;call	circ_newline
-		;call	circle2
-		;call	circ_newline
-		;call	circle3
-		;call	circ_newline
-		;call	circle4
-		;call	circ_newline
-		;call	circle4
-		;call	circ_newline
-		;call	circle4
-		;call	circ_newline
-		;call	circle3
-		;call	circ_newline
-		;call	circle2
-		;call	circ_newline
-		;call	circle1
-		;first -5 to shift left
-		;then -(5 * 320)=1600 to shift up
+
+circ_newline:					;add 320 to move to next line
+		;add		di, 309 		;remove 11 to move back to first position
+		add		di, 310 		;remove 10 to move back to first position
 		ret
-circ_newline:
-		;remove 11 to move back to first position
-		;add 320 to move to next line
-		add		di, 309
-		;add		di, 320
-		ret
-circle1:	;draws top line, 00001110000
-        mov     es:[di], 0000    ;move an 02hex into wherever offset of di points
-        mov     es:[di + 2], 0000    ;move an 02hex into wherever offset of di points
-        mov     es:[di + 4], 0000    ;move an 02hex into wherever offset of di points
-        mov     es:[di + 6], 0000    ;move an 02hex into wherever offset of di points
-        mov     es:[di + 8], 0000    ;move an 02hex into wherever offset of di points
-        mov     es:[di + 10], 0000    ;move an 02hex into wherever offset of di points
-		ret
-circle2:
-        mov     es:[di], 0022h    ;move an 02hex into wherever offset of di points
-        mov     es:[di + 4], 0002h    ;move an 02hex into wherever offset of di points
-        mov     es:[di + 8], 2000h    ;move an 02hex into wherever offset of di points
-		ret
-circle3:
-        mov     es:[di], 0200h    ;move an 02hex into wherever offset of di points
-        mov     es:[di + 4], 0000h    ;move an 02hex into wherever offset of di points
-        mov     es:[di + 8], 0200h    ;move an 02hex into wherever offset of di points
-		ret
-circle4:
-        mov     es:[di], 2000h    ;move an 02hex into wherever offset of di points
-        mov     es:[di + 4], 0000h    ;move an 02hex into wherever offset of di points
-        mov     es:[di + 8], 0200h    ;move an 02hex into wherever offset of di points
-		ret
-;circle 
-;00001110000
-;00110001100
-;01000000010
-;10000000001
-;10000000001
-;10000000001
-;01000000010
-;00110001100
-;00001110000
 ;******************************
-;UTILITY FUNCTIONS
+;Utility Functions
 ;******************************
-find_topleft:
-		sub		di, 1605		;slide it back to the start of the line, 5 lines up (5 + 1605)
-		ret
 get_time:
 		push	cx
 		push	dx
@@ -282,75 +434,41 @@ get_time:
 ;	CH = hour CL = minute DH = second DL = 1/100 seconds
 ;   Function actually returns values in AH/AL at the moment
         mov     ah, 2Ch     ;
-        mov     al, 00h     ;
+        ;mov     al, 00h     ;
         int     21h
 		mov		ax, dx		;move to accumulator for output
 		pop		dx
 		pop		cx
 		ret
-;******************************
-;MATH FUNCTIONS
-;******************************
-pythagorean:	;returns distance in the AX register, takes a and b in AL and AH
-		;push	dx
-		;mov		dl, al
-		;mov		dh, ah			;make backups
-
-		;imul					;find a^2
-
-		;imul					;find b^2
-								;square root
-		;pop		dx
-		ret
-
-;squareroot:		;takes a word argument in ax and returns the square root in ax
-
-; ---------------------------------------------------------------
-; REAL FUNCTION  MySqrt()
-;    This function uses Newton's method to compute an approximate
-; of a positive number.  If the input value is zero, then zero is
-; returned immediately.  For convenience, the absolute value of
-; the input is used rather than kill the program when the input
-; is negative.
-; ---------------------------------------------------------------
-      
-	  ;REAL, INTENT(IN) :: Input
-      ;REAL             :: X, NewX
-      ;REAL, PARAMETER  :: Tolerance = 0.00001
-	;	cmp		ax, 0					; if the input is zero
-	;	je		done_root               ;    returns zero      
-	;									
-    ;  ELSE                              ; otherwise,
-    ;     ;X = ABS(Input)                 ;    use absolute value
-    ;     DO                             ;    for each iteration
-    ;        ;NewX  = 0.5*(X + Input/X)   ;       compute a new approximation
-	;		
-	;		
-    ;        IF (ABS(X - NewX) < Tolerance)  ; if very close, exit
-	;		jmp		done_root
-    ;        ;X = NewX                    ;       otherwise, keep the new one
-    ;     END DO
-    ;     MySqrt = NewX
-    ;  END IF
-;done_root:
-;		ret
-   ;END FUNCTION  MySqrt
-;END PROGRAM  SquareRoot
-
-absolute_value:		;takes a word in ax and returns the absolute value in ax
-		push	dx				;store this for safekeeping
-		mov		dx, ax
-		cmp		dx, 0			;test the far left bit. 
-		jge		done_abs		;if it was positive
-		call	twos_complement ;if negative, make it positive
-done_abs:
-		pop		dx
-		ret
-twos_complement:
-		not		ax
-		inc		ax				;2's complement the number in ax
-		ret
-;******************************
+delay_test:		;test the delay method by delaying then drawing some stuff on the screen
+	call	get_time
+	call	draw_pixels
+	call	circ_newline
+	ret
+delay_second:		;subroutine to delay until the next frame
+	push	dx ;dx - backup of ax, holding newtime
+	push	bx ;bl - holds deltaTotal ;bh - holds oldTime
+	xor		bx, bx				;used for counting delta time(ch) and oldtime (cl)
+del_loop:
+	call	get_time
+	mov		dx, ax				;in case we need it again
+del_sub:			
+	sub		ah, bh				;delta = newtime - oldtime
+	cmp		ah, 0
+	jl		del_zero			;we overflowed
+	add		bl, ah				;add new delta to running delta total
+	mov		bh, dh				;store newTime in oldTime
+	cmp		bl, 3				;has it been 3 seconds?
+	jge		del_fin
+	jmp		del_loop
+del_fin:
+	pop		bx
+	pop		dx
+	ret
+del_zero:
+	mov		ax, dx				;If negative, add 100 to newtime and repeat
+	add		al, 60
+	jmp del_sub
 done:
         mov     ah, 08h         ;after loop
         int     21h             ;interrupt DOS, 'wait for keypress'
