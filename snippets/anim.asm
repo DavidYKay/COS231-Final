@@ -131,7 +131,7 @@ init_ball:		;subroutine to initialize one ball to bounce around
 		pop		di
 		ret
 animate_ball:
-		mov     cx, 120			;screen width
+		mov     cx, 16000			;screen width
 		;les		di, buffer1
 		;mov		ax, OFFSET buffer1
 		;mov		es, ax
@@ -141,6 +141,7 @@ animate_ball:
 		;mov		es, ax
 animballloop:
 		mov		ax, 0					;load offset of ball in ax
+		call	detect_collision
 		call	move_ball				;move ball and handle collision
 		call	get_ball_pixel			;get current DI based on x,y
 		mov		di, ax					;point to the right pixel
@@ -178,10 +179,10 @@ detect_collision:			;subroutine to detect a collision and correct the deltaX/del
 		jg		x_collision
 		jmp		done_collision		;no collisions found
 x_collision:				;if X is < 5 or > 315
-		neg		es:[di].Xpos
+		neg		es:[di].deltaX
 		jmp		done_collision
 y_collision:				;if Y is < 5 or > 195
-		neg		es:[di].Ypos
+		neg		es:[di].deltaY
 done_collision:
 		ASSUME	di:nothing
 		pop		bx
