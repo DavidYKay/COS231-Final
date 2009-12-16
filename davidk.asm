@@ -83,10 +83,13 @@ start:
 		
 		;call	animate_box
 		
-		call	init_ball
-		mov		ax, 00
-		call	get_ball_pixel
-		call	animate_ball
+		;call	init_ball
+		;mov		ax, 00
+		;call	get_ball_pixel
+		;call	animate_ball
+
+		call	delay_test
+		call	delay_frame
 		jmp		done
 ;******************************
 ;VGA Mode Functions
@@ -126,9 +129,9 @@ init_ball:		;subroutine to initialize one ball to bounce around
 		ASSUME	di:PTR BALL
 		mov		es:[di].colliding, 0
 		mov 	es:[di].Xpos, 220
-		mov 	es:[di].Ypos, 194
+		mov 	es:[di].Ypos, 100
 		mov 	es:[di].deltaX, 0
-		mov 	es:[di].deltaY, 1
+		mov 	es:[di].deltaY, 3
 		mov 	es:[di].color,  5
 		add		di, BALL_BYTES		;slide to next ball
 		mov		es:[di].colliding, 0
@@ -142,6 +145,7 @@ init_ball:		;subroutine to initialize one ball to bounce around
 		ret
 animate_ball:
 		;mov     cx, 16000			;screen width
+		;mov     cx, 1600			;screen width
 		mov     cx, 640			;screen width
 		;les		di, buffer1
 		;mov		ax, OFFSET buffer1
@@ -159,7 +163,7 @@ animballloop:
 		mov		di, ax					;point to the right pixel
 		call	draw_circle
 		call	write_to_screen
-		;call	clear_buffer
+		call	clear_buffer
 		;;call	clear_screen
 		;call	delay_second
 		;call	check_key
@@ -272,7 +276,7 @@ draw_pixels:
 		les		di, screen
 pix_loop:
 		mov		es:[di], 1 ;draw to buffer
-		add		di, 100
+		add		di, 10
 		loop	pix_loop
 		;call	write_to_screen
 		pop		cx
@@ -425,11 +429,13 @@ get_time:
 ;Get System Time			21h		2Ch
 ;	RETURN:
 ;	CH = hour CL = minute DH = second DL = 1/100 seconds
-;   Function actually returns values in AH/AL at the moment
+;   Function actually returns DX values in AH/AL at the moment
         mov     ah, 2Ch     ;
         ;mov     al, 00h     ;
         int     21h
+		;mov		ax, cx
 		mov		ax, dx		;move to accumulator for output
+
 		pop		dx
 		pop		cx
 		ret
@@ -438,7 +444,16 @@ delay_test:		;test the delay method by delaying then drawing some stuff on the s
 	call	draw_pixels
 	call	circ_newline
 	ret
-delay_second:		;subroutine to delay until the next frame
+delay_frame:		;subroutine to delay until the next frame
+frame_loop:
+	call	get_time
+	cmp		ah, 30
+	;jle		frame_done
+	jg		frame_loop
+frame_done:
+	ret
+	
+delay_second:		;subroutine to delay until the next second
 	push	dx ;dx - backup of ax, holding newtime
 	push	bx ;bl - holds deltaTotal ;bh - holds oldTime
 	xor		bx, bx				;used for counting delta time(ch) and oldtime (cl)
