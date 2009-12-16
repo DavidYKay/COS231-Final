@@ -86,10 +86,10 @@ start:
 		;call	init_ball
 		;mov		ax, 00
 		;call	get_ball_pixel
-		;call	animate_ball
+		call	animate_ball
 
-		call	delay_test
-		call	delay_second
+		;call	delay_test
+		;call	delay_second
 		;call	clear_screen
 		;call	delay_test
 		;call	delay_frame
@@ -140,8 +140,8 @@ init_ball:		;subroutine to initialize one ball to bounce around
 		mov		es:[di].colliding, 0
 		mov 	es:[di].Xpos, 220
 		mov 	es:[di].Ypos, 100
-		mov 	es:[di].deltaX, 0
-		mov 	es:[di].deltaY, 3
+		mov 	es:[di].deltaX, 1
+		mov 	es:[di].deltaY, 1
 		mov 	es:[di].color,  5
 		add		di, BALL_BYTES		;slide to next ball
 		mov		es:[di].colliding, 0
@@ -175,7 +175,7 @@ animballloop:
 		call	write_to_screen
 		call	clear_buffer
 		;;call	clear_screen
-		;call	delay_second
+		call	delay_second
 		;call	check_key
 		loop    animballloop           ;loops while decrementing CX for us
 		ret
@@ -489,7 +489,7 @@ del_sub:
 	jl		del_zero			;we overflowed
 	add		bl, al				;add new delta to running total
 	mov		bh, dl				;store newTime in oldTime
-	cmp		bl, 50				;has it been 3 seconds?
+	cmp		bl, 3				;has it been 3 seconds?
 	jge		del_fin
 	jmp		del_loop
 del_fin:
