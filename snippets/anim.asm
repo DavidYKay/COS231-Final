@@ -147,6 +147,13 @@ init_ball:		;subroutine to initialize one ball to bounce around
 		mov 	es:[di].deltaX, 1
 		mov 	es:[di].deltaY, 1
 		mov 	es:[di].color,  1
+		add		di, BALL_BYTES
+		mov		es:[di].colliding, 0
+		mov 	es:[di].Xpos, 80
+		mov 	es:[di].Ypos, 80
+		mov 	es:[di].deltaX, -1
+		mov 	es:[di].deltaY, -1
+		mov 	es:[di].color,  1
 		ASSUME	di:nothing
 		pop		di
 		ret
@@ -351,31 +358,31 @@ draw_circle: ;draws a circle using its offset? using its color?
 		ret
 draw_circ1: ;LINE 1;00001110000
 		add		di, 4
-		mov		es:[di],   05h	;TODO: COLOR HERE
-		mov		es:[di+1], 05h	;TODO: COLOR HERE
-		mov		es:[di+2], 05h	;TODO: COLOR HERE
+		mov		es:[di],   04h	;TODO: COLOR HERE
+		mov		es:[di+1], 04h	;TODO: COLOR HERE
+		mov		es:[di+2], 04h	;TODO: COLOR HERE
 		add		di, 6
 		ret
 draw_circ2: ;LINE 2;00110001100
 		add		di, 2
-		mov		es:[di],   05h	;TODO: COLOR HERE
-		mov		es:[di+1], 05h	;TODO: COLOR HERE
+		mov		es:[di],   04h	;TODO: COLOR HERE
+		mov		es:[di+1], 04h	;TODO: COLOR HERE
 		add		di, 5
-		mov		es:[di], 05h	;TODO: COLOR HERE
-		mov		es:[di+1], 05h	;TODO: COLOR HERE
+		mov		es:[di], 04h	;TODO: COLOR HERE
+		mov		es:[di+1], 04h	;TODO: COLOR HERE
 		add		di, 3
 		ret
 draw_circ3: ;LINE 3;01000000010
 		add		di, 1
-		mov		es:[di], 05h	;TODO: COLOR HERE
+		mov		es:[di], 04h	;TODO: COLOR HERE
 		add		di, 8
-		mov		es:[di], 05h	;TODO: COLOR HERE
+		mov		es:[di], 04h	;TODO: COLOR HERE
 		add		di, 1
 		ret
 draw_circ4: ;LINE 4;10000000001
-		mov		es:[di], 05h	;TODO: COLOR HERE
+		mov		es:[di], 04h	;TODO: COLOR HERE
 		add		di, 10
-		mov		es:[di], 05h	;TODO: COLOR HERE
+		mov		es:[di], 04h	;TODO: COLOR HERE
 		ret
 draw_box:	
 		;parameters: DI - center of box
