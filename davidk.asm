@@ -83,9 +83,9 @@ start:
 		
 		;call	animate_box
 		
-		;call	init_ball
-		;mov		ax, 00
-		;call	get_ball_pixel
+		call	init_ball
+		mov		ax, 00
+		call	get_ball_pixel
 		call	animate_ball
 
 		;call	delay_test
@@ -138,7 +138,7 @@ init_ball:		;subroutine to initialize one ball to bounce around
 		mov		di, es:OFFSET balls
 		ASSUME	di:PTR BALL
 		mov		es:[di].colliding, 0
-		mov 	es:[di].Xpos, 220
+		mov 	es:[di].Xpos, 160
 		mov 	es:[di].Ypos, 100
 		mov 	es:[di].deltaX, 1
 		mov 	es:[di].deltaY, 1
@@ -346,7 +346,9 @@ wloop:
 		ret
 draw_circle: ;draws a circle using its offset? using its color?
 		push	di				;store this for safekeeping
-		sub		di, 1605		;slide it back to the start of the line, 5 lines up (5 + 1600)
+		;sub		di, 3531		;draw from the top left (11 + 11*320)
+		;sub		di, 1605		;draw from the top left (11 + 11*320)
+		sub		di, 1606		;draw from the top left (11 + 11*320)
 		call	draw_circ1
 		call	circ_newline
 		call	draw_circ2
@@ -489,7 +491,7 @@ del_sub:
 	jl		del_zero			;we overflowed
 	add		bl, al				;add new delta to running total
 	mov		bh, dl				;store newTime in oldTime
-	cmp		bl, 3				;has it been 3 seconds?
+	cmp		bl, 01				;has it been 3/100 seconds?
 	jge		del_fin
 	jmp		del_loop
 del_fin:
