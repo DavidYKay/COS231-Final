@@ -32,8 +32,8 @@ DGroupSegment DW      ?
 fn	DB	"balls.txt", 0     ; indicates we're zero-terminating our name, instead of '$'-terminating
 fhandle	DW	?
 emsg	DB	"I/O Error.", 13, 10, "$"
-buffer2	DB		512 DUP (03) ; dedicate 64000 bytes for our buffer
-tempBall DB     8 DUP (?)    ; temporary ball
+buffer2	DB		512 DUP (04) ; dedicate 64000 bytes for our buffer
+tempBall DB     8 DUP (05)    ; temporary ball
 
 _DATA   ENDS
 EGROUP  GROUP   _BUFF1, _BALLS
