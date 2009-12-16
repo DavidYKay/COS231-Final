@@ -4,8 +4,8 @@ include ..\davidk.inc
 ;Ball struct, representing a bouncing ball
 BALL			struct	;6 bytes in size
 	colliding       DB 0
-	Xpos	        DB 160
-	Ypos	        DB 100
+	Xpos	        DW 160
+	Ypos	        DW 100 ;consider making this a byte?
 	deltaX          DB 0
 	deltaY			DB 0
 	color	        DB 0
@@ -122,16 +122,16 @@ init_ball:		;subroutine to initialize one ball to bounce around
 		mov		di, es:OFFSET balls
 		ASSUME	di:PTR BALL
 		mov		es:[di].colliding, 0
-		mov 	es:[di].Xpos, 160
-		mov 	es:[di].Ypos, 100
-		mov 	es:[di].deltaX, 10
-		mov 	es:[di].deltaY, 10
-		mov 	es:[di].color, 1
+		mov 	es:[di].Xpos, 10
+		mov 	es:[di].Ypos, 10
+		mov 	es:[di].deltaX, 1
+		mov 	es:[di].deltaY, 1
+		mov 	es:[di].color,  1
 		ASSUME	di:nothing
 		pop		di
 		ret
 animate_ball:
-		mov     cx, 1600			;screen width
+		mov     cx, 120			;screen width
 		;les		di, buffer1
 		;mov		ax, OFFSET buffer1
 		;mov		es, ax
@@ -145,6 +145,7 @@ animballloop:
 		call	get_ball_pixel			;get current DI based on x,y
 		mov		di, ax					;point to the right pixel
 		;inc		di
+		;add		di, 160
 		call	draw_box
 		;;call	draw_ball
 		call	write_to_screen
@@ -154,16 +155,50 @@ animballloop:
 		;;call	delay_frame
 		loop    animballloop           ;loops while decrementing CX for us
 		ret
+;******************************
+;Physics Functions
+;******************************
+detect_collision:			;subroutine to detect a collision and correct the deltaX/deltaY
+		;PARAMETERS: AX: ball's offset in array
+		push	di
+		push	ax
+		push	bx
+		mov		di, es:OFFSET balls
+		add		di, ax
+		ASSUME	di:PTR BALL
+		mov		bx, es:[di].Xpos	;lookup x pos
+		mov		ax, es:[di].Ypos 	;lookup y pos
+		cmp		ax, 5
+		jl		y_collision
+		cmp		ax, 195
+		jg		y_collision
+		cmp		bx, 5
+		jl		x_collision
+		cmp		bx, 315
+		jg		x_collision
+		jmp		done_collision		;no collisions found
+x_collision:				;if X is < 5 or > 315
+		neg		es:[di].Xpos
+		jmp		done_collision
+y_collision:				;if Y is < 5 or > 195
+		neg		es:[di].Ypos
+done_collision:
+		ASSUME	di:nothing
+		pop		bx
+		pop		ax
+		pop		di
+		ret
+
 get_xy_coord: 
 ;parameters: AX: ball's offset in array
-;return:     AH: x-coord AL:y-coord
+;return:     BX: x-coord AX:y-coord
 ;presumes es points to EGroupSegment
 		push	di
 		mov		di, es:OFFSET balls
 		add		di, ax
 		ASSUME	di:PTR BALL
-		mov		ah, es:[di].Xpos	;lookup current x
-		mov		al, es:[di].Ypos	;lookup current y
+		mov		bx, es:[di].Xpos	;lookup current x
+		mov		ax, es:[di].Ypos	;lookup current y
 		ASSUME	di:nothing
 		pop		di
 		ret
@@ -175,9 +210,11 @@ move_ball: ;adjusts ball's position based on deltaX, deltaY
 		add		di, ax
 		ASSUME	di:PTR BALL
 		mov		al, es:[di].deltaX	;lookup delta x
-		add		es:[di].Xpos, al
+		cbw
+		add		es:[di].Xpos, ax
 		mov		al, es:[di].deltaY 	;lookup delta y
-		add		es:[di].Ypos,	al		
+		cbw
+		add		es:[di].Ypos, ax		
 		pop		ax
 		pop		di
 		ASSUME	di:nothing
@@ -188,41 +225,15 @@ get_ball_pixel: ;returns the ball's pixel positioning based on coordinates
 		call	get_delta_pixel
 		ret
 get_delta_pixel: ;returns the ball's pixel displacement based on coordinates
-				;INPUT: AH:X-coord AL:Y-coord
+				;INPUT: BX:X-coord AX:Y-coord
 				;RETURN: AX: pixel displacement
-		push	bx
 		push	dx
-		mov		bx, ax				;BH: X BL: Y
-
 		mov		dx, 320
-		cbw							;Y-coord to 16 bits
 		mul		dx					;multiply deltY by 320
-		mov		dx, ax				;store low-order result in dx
 
-		mov		al, bh				;convert delta-X to 16bit
-		cbw
-
-		;add		dx, ax				;deltaPixel = X-coord + Y-coord * 320
-		add		ax, dx				;deltaPixel = X-coord + Y-coord * 320
+		add		ax, bx				;deltaPixel = X-coord + Y-coord * 320
 		pop		dx
-		pop		bx
 		ret
-;get_coordinate_change: ;returns the change in ball's pixel placement based on deltaX, deltaY
-;		push	es
-;		push	bx
-;		push	dx
-;		xor		bx, bx				;we'll hold our temp value in here
-;
-;		mov		EGroupSegment, ax
-;		mov		es, ax
-;		mov		al, balls.deltaX	;lookup delta x
-;		add		bx, al
-;		mov		al, balls.deltaY 	;lookup delta y
-;
-;		pop		dx
-;		pop		bx
-;		pop		es
-;		ret
 ;******************************
 ;Drawing subroutines
 ;******************************
