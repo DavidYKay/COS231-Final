@@ -140,6 +140,7 @@ end_number:			;found a whole number. convert it from base 10 and store it
 		xor		dl, dl				;use BL as a 10^x counter
 base10loop:			;use BH as a counter of items on the stack
 		pop		ax 
+		inc		dl					;0th base is *1, 1st base is *10
 		mul		dl					;multiply it by the appropriate base
 		add		bx, ax				;running total
 
