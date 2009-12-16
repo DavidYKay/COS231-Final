@@ -150,7 +150,7 @@ base10loop:			;use BH as a counter of items on the stack
 		call	store_in_tempball	;store the finished product in tempball
 		;fall into next_char
 next_char:
-		inc		cx
+		inc		di					;next byte
 		jmp		readloop
 next_line:		;next line, so let's try to init a ball from what we have
 ball_found:
