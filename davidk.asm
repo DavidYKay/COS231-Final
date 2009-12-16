@@ -137,18 +137,22 @@ digit_found:		;store the digit on the stack
 		inc		dh					;dh counts how many items we have on the stack
 		jmp		next_char
 end_number:			;found a whole number. convert it from base 10 and store it 
-		xor		dl, dl				;use BL as a 10^x counter
+		push	si
+		mov		cx, 10				;base 10 multiplier
+		mov		si, 1				;use BL as a 10^x counter
 base10loop:			;use BH as a counter of items on the stack
-		pop		ax 
-		inc		dl					;0th base is *1, 1st base is *10
-		mul		dl					;multiply it by the appropriate base
+		pop		ax					;fetch our number to work on
+		mul		si					;multiply it by the appropriate base
 		add		bx, ax				;running total
 
-		inc		dl					;next power of ten
+		mov		ax, si				;next power of ten
+		mul		cx
+		mov		si, ax
 		dec		dh
 		cmp		dh, 0				;out of items?
-		jne		base10loop
+		jl		base10loop
 		call	store_in_tempball	;store the finished product in tempball
+		pop		si
 		;fall into next_char
 next_char:
 		inc		di					;next byte
