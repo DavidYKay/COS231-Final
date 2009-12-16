@@ -128,7 +128,7 @@ init_ball:		;subroutine to initialize one ball to bounce around
 		mov 	es:[di].Xpos, 220
 		mov 	es:[di].Ypos, 10
 		mov 	es:[di].deltaX, 1
-		mov 	es:[di].deltaY, 0
+		mov 	es:[di].deltaY, -1
 		mov 	es:[di].color,  5
 		add		di, BALL_BYTES		;slide to next ball
 		mov		es:[di].colliding, 0
@@ -466,7 +466,7 @@ del_zero:
 check_key:
 	mov     ah, 06h         ;
 	int     21h             ;interrupt DOS, 'direct console input'
-	jnz		done
+	jz		done
 	ret
 done:
 	mov     ah, 08h         ;after loop
