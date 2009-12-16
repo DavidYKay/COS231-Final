@@ -110,7 +110,7 @@ init_balls_from_input:				;subroutine to initialize all balls from input
 		xor		di, di				;byte counter
 start_readinput:
 		mov		tempBall, 0			;zero out tempball
-		xor		dx, dx				;DL - 10^x counter DH - stack counter
+		xor		cx, cx				;DL - 10^x counter DH - stack counter
 		xor		bx, bx				;BX - running total
 		xor		si, si				;Tempball ring counter, marks which bytes to write to 
 readloop:			;read parameters from buffer
@@ -134,21 +134,21 @@ digit_found:		;store the digit on the stack
 		sub		al, 30h				;remove 30hex to get an actual number
 		cbw
 		push	ax					;store the number on the stack
-		inc		dh					;dh counts how many items we have on the stack
+		inc		ch					;ch counts how many items we have on the stack
 		jmp		next_char
 end_number:			;found a whole number. convert it from base 10 and store it 
-		mov		cx, 10				;base 10 multiplier
 		mov		bp, 1				;use BL as a 10^x counter
+		mov		cl, 10				;base 10 multiplier
 base10loop:			;use BH as a counter of items on the stack
 		pop		ax					;fetch our number to work on
 		mul		bp					;multiply it by the appropriate base
 		add		bx, ax				;running total
 
 		mov		ax, bp				;next power of ten
-		mul		cx
+		mul		cl
 		mov		bp, ax
-		dec		dh
-		cmp		dh, 0				;out of items?
+		dec		ch
+		cmp		ch, 0				;out of items?
 		jg		base10loop
 		;jle		base10loop
 		call	store_in_tempball	;store the finished product in tempball
